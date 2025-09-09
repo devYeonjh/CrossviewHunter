@@ -6,6 +6,8 @@
 
 #include "LyraInventoryItemDefinition.generated.h"
 
+#define UE_API LYRAGAME_API
+
 template <typename T> class TSubclassOf;
 
 class ULyraInventoryItemInstance;
@@ -14,8 +16,8 @@ struct FFrame;
 //////////////////////////////////////////////////////////////////////
 
 // Represents a fragment of an item definition
-UCLASS(MinimalAPI, DefaultToInstanced, EditInlineNew, Abstract)
-class ULyraInventoryItemFragment : public UObject
+UCLASS(DefaultToInstanced, EditInlineNew, Abstract)
+class UE_API ULyraInventoryItemFragment : public UObject
 {
 	GENERATED_BODY()
 
@@ -29,7 +31,7 @@ public:
  * ULyraInventoryItemDefinition
  */
 UCLASS(Blueprintable, Const, Abstract)
-class ULyraInventoryItemDefinition : public UObject
+class UE_API ULyraInventoryItemDefinition : public UObject
 {
 	GENERATED_BODY()
 
@@ -48,10 +50,12 @@ public:
 
 //@TODO: Make into a subsystem instead?
 UCLASS()
-class ULyraInventoryFunctionLibrary : public UBlueprintFunctionLibrary
+class UE_API ULyraInventoryFunctionLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
 	UFUNCTION(BlueprintCallable, meta=(DeterminesOutputType=FragmentClass))
 	static const ULyraInventoryItemFragment* FindItemDefinitionFragment(TSubclassOf<ULyraInventoryItemDefinition> ItemDef, TSubclassOf<ULyraInventoryItemFragment> FragmentClass);
 };
+
+#undef UE_API

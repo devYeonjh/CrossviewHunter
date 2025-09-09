@@ -32,7 +32,7 @@ struct FLyraAppliedEquipmentEntry : public FFastArraySerializerItem
 
 	FString GetDebugString() const;
 
-private:
+protected:
 	friend FLyraEquipmentList;
 	friend ULyraEquipmentManagerComponent;
 
@@ -79,12 +79,11 @@ public:
 	ULyraEquipmentInstance* AddEntry(TSubclassOf<ULyraEquipmentDefinition> EquipmentDefinition);
 	void RemoveEntry(ULyraEquipmentInstance* Instance);
 
-private:
+protected:
 	ULyraAbilitySystemComponent* GetAbilitySystemComponent() const;
 
 	friend ULyraEquipmentManagerComponent;
 
-private:
 	// Replicated list of equipment entries
 	UPROPERTY()
 	TArray<FLyraAppliedEquipmentEntry> Entries;
@@ -150,7 +149,7 @@ public:
 		return (T*)GetFirstInstanceOfType(T::StaticClass());
 	}
 
-private:
+protected:
 	UPROPERTY(Replicated)
 	FLyraEquipmentList EquipmentList;
 };

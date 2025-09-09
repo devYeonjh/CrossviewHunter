@@ -5,6 +5,17 @@
 	"Description": "",
 	"Modules": [
 		{
+			"Name": "CrossviewHunter",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"DeveloperSettings",
+				"Engine",
+				"ModularGameplayActors",
+				"LyraGame"
+			]
+		},
+		{
 			"Name": "LyraGame",
 			"Type": "Runtime",
 			"LoadingPhase": "Default",

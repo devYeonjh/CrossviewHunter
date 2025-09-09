@@ -7,6 +7,8 @@
 
 #include "LyraInventoryItemInstance.generated.h"
 
+#define UE_API LYRAGAME_API
+
 class FLifetimeProperty;
 
 class ULyraInventoryItemDefinition;
@@ -18,7 +20,7 @@ struct FGameplayTag;
  * ULyraInventoryItemInstance
  */
 UCLASS(BlueprintType)
-class ULyraInventoryItemInstance : public UObject
+class UE_API ULyraInventoryItemInstance : public UObject
 {
 	GENERATED_BODY()
 
@@ -59,7 +61,7 @@ public:
 		return (ResultClass*)FindFragmentByClass(ResultClass::StaticClass());
 	}
 
-private:
+protected:
 #if UE_WITH_IRIS
 	/** Register all replication fragments */
 	virtual void RegisterReplicationFragments(UE::Net::FFragmentRegistrationContext& Context, UE::Net::EFragmentRegistrationFlags RegistrationFlags) override;
@@ -68,8 +70,7 @@ private:
 	void SetItemDef(TSubclassOf<ULyraInventoryItemDefinition> InDef);
 
 	friend struct FLyraInventoryList;
-
-private:
+	
 	UPROPERTY(Replicated)
 	FGameplayTagStackContainer StatTags;
 
@@ -77,3 +78,5 @@ private:
 	UPROPERTY(Replicated)
 	TSubclassOf<ULyraInventoryItemDefinition> ItemDef;
 };
+
+#undef UE_API

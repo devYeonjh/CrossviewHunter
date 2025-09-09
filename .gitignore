@@ -97,3 +97,8 @@ CrossviewHunter/.diversion/
 CrossviewHunter/Content/*
 CrossviewHunter/Plugins/*/Content/*
 CrossviewHunter/Plugins/GameFeatures/*/Content/*
+
+#Claude
+.claude/
+CrossviewHunter/.claude/
+CrossviewHunter/CLAUDE.md
