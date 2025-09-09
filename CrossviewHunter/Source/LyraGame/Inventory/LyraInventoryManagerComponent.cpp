@@ -6,6 +6,7 @@
 #include "Engine/World.h"
 #include "GameFramework/GameplayMessageSubsystem.h"
 #include "LyraInventoryItemDefinition.h"
+#include "InventoryFragment_Stackable.h"
 #include "LyraInventoryItemInstance.h"
 #include "NativeGameplayTags.h"
 #include "Net/UnrealNetwork.h"
@@ -77,20 +78,55 @@ void FLyraInventoryList::BroadcastChangeMessage(FLyraInventoryEntry& Entry, int3
 	MessageSystem.BroadcastMessage(TAG_Lyra_Inventory_Message_StackChanged, Message);
 }
 
-ULyraInventoryItemInstance* FLyraInventoryList::AddEntry(TSubclassOf<ULyraInventoryItemDefinition> ItemDef, int32 StackCount)
+ULyraInventoryItemInstance* FLyraInventoryList::AddEntry(
+	TSubclassOf<ULyraInventoryItemDefinition> ItemDef, int32 StackCount)
 {
 	ULyraInventoryItemInstance* Result = nullptr;
 
 	check(ItemDef != nullptr);
- 	check(OwnerComponent);
+	check(OwnerComponent);
 
 	AActor* OwningActor = OwnerComponent->GetOwner();
 	check(OwningActor->HasAuthority());
+	
+	for (FLyraInventoryEntry& Entry : Entries)
+	{
+		if (Entry.Instance && Entry.Instance->GetItemDef() == ItemDef)
+		{
+			// 🔹 Stackable 프래그먼트 확인
+			if (const UInventoryFragment_Stackable* StackableFrag = Entry.Instance->FindFragmentByClass<UInventoryFragment_Stackable>())
+			{
+				// 현재 수량 + 추가 수량
+				int32 NewCount = Entry.StackCount + StackCount;
 
+				if (NewCount > StackableFrag->MaxStackSize)
+				{
+					// 최대치까지만 채움
+					int32 Overflow = NewCount - StackableFrag->MaxStackSize;
+					Entry.StackCount = StackableFrag->MaxStackSize;
+					MarkItemDirty(Entry);
 
+					// 남은 개수는 새로 생성 루틴으로 넘김
+					StackCount = Overflow;
+					continue;// 다음 Entry 검사 (혹은 for문 끝나고 새 Entry 생성)
+				}
+				else
+				{
+					// 아직 최대치 이하 → 그냥 누적
+					Entry.StackCount = NewCount;
+					MarkItemDirty(Entry);
+					return Entry.Instance;
+				}
+			}
+		}
+	}
+	
 	FLyraInventoryEntry& NewEntry = Entries.AddDefaulted_GetRef();
-	NewEntry.Instance = NewObject<ULyraInventoryItemInstance>(OwnerComponent->GetOwner());  //@TODO: Using the actor instead of component as the outer due to UE-127172
+	NewEntry.Instance = NewObject<ULyraInventoryItemInstance>(
+		OwnerComponent->GetOwner());  //@TODO: Using the actor instead of component as the outer due to UE-127172
+
 	NewEntry.Instance->SetItemDef(ItemDef);
+	
 	for (ULyraInventoryItemFragment* Fragment : GetDefault<ULyraInventoryItemDefinition>(ItemDef)->Fragments)
 	{
 		if (Fragment != nullptr)

@@ -49,15 +49,19 @@ struct FLyraInventoryEntry : public FFastArraySerializerItem
 
 	FString GetDebugString() const;
 
+public:
+	UPROPERTY(BlueprintReadOnly, Category = "Inventory")
+	TObjectPtr<ULyraInventoryItemInstance> Instance = nullptr;
+
+	UPROPERTY(BlueprintReadOnly, Category = "Inventory")
+	int32 StackCount = 0;
+
+
 private:
 	friend FLyraInventoryList;
 	friend ULyraInventoryManagerComponent;
-
-	UPROPERTY()
-	TObjectPtr<ULyraInventoryItemInstance> Instance = nullptr;
-
-	UPROPERTY()
-	int32 StackCount = 0;
+	
+	
 
 	UPROPERTY(NotReplicated)
 	int32 LastObservedCount = INDEX_NONE;
@@ -139,6 +143,12 @@ class ULyraInventoryManagerComponent : public UActorComponent
 public:
 	UE_API ULyraInventoryManagerComponent(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+	UFUNCTION(BlueprintCallable, Category="Inventory")
+	const TArray<FLyraInventoryEntry>& GetInventoryList() const
+	{
+		return InventoryList.Entries;
+	}
+	
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category=Inventory)
 	UE_API bool CanAddItemDefinition(TSubclassOf<ULyraInventoryItemDefinition> ItemDef, int32 StackCount = 1);
 
