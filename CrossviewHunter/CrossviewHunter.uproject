@@ -10,8 +10,7 @@
 			"LoadingPhase": "Default",
 			"AdditionalDependencies": [
 				"DeveloperSettings",
-				"Engine",
-				"UMG"
+				"Engine"
 			]
 		},
 		{
