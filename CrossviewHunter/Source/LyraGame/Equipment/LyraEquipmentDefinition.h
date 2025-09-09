@@ -6,6 +6,8 @@
 
 #include "LyraEquipmentDefinition.generated.h"
 
+#define UE_API LYRAGAME_API
+
 class AActor;
 class ULyraAbilitySet;
 class ULyraEquipmentInstance;
@@ -34,13 +36,13 @@ struct FLyraEquipmentActorToSpawn
  *
  * Definition of a piece of equipment that can be applied to a pawn
  */
-UCLASS(Blueprintable, Const, Abstract, BlueprintType)
+UCLASS(Blueprintable, Const, Abstract, BlueprintType, MinimalAPI)
 class ULyraEquipmentDefinition : public UObject
 {
 	GENERATED_BODY()
 
 public:
-	ULyraEquipmentDefinition(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
+	UE_API ULyraEquipmentDefinition(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	// Class to spawn
 	UPROPERTY(EditDefaultsOnly, Category=Equipment)
@@ -54,3 +56,5 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category=Equipment)
 	TArray<FLyraEquipmentActorToSpawn> ActorsToSpawn;
 };
+
+#undef UE_API

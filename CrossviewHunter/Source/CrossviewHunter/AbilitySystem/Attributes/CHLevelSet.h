@@ -5,7 +5,7 @@
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/Attributes/LyraAttributeSet.h"
 
-#include "LevelSet.generated.h"
+#include "CHLevelSet.generated.h"
 
 class UObject;
 struct FFrame;
@@ -17,16 +17,16 @@ struct FFrame;
  *	Attribute 예시: 레벨, 경험치
  */
 UCLASS(BlueprintType)
-class CROSSVIEWHUNTER_API ULevelSet : public ULyraAttributeSet
+class CROSSVIEWHUNTER_API UCHLevelSet : public ULyraAttributeSet
 {
 	GENERATED_BODY()
 	
 public:
 
-	ULevelSet();
+	UCHLevelSet();
 
-	ATTRIBUTE_ACCESSORS(ULevelSet, Level);
-	ATTRIBUTE_ACCESSORS(ULevelSet, EXP);
+	ATTRIBUTE_ACCESSORS(UCHLevelSet, Level);
+	ATTRIBUTE_ACCESSORS(UCHLevelSet, EXP);
 
 protected:
 	

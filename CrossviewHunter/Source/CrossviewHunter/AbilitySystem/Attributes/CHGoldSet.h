@@ -5,7 +5,7 @@
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/Attributes/LyraAttributeSet.h"
 
-#include "GoldSet.generated.h"
+#include "CHGoldSet.generated.h"
 
 class UObject;
 struct FFrame;
@@ -17,15 +17,15 @@ struct FFrame;
  *	Attribute 예시: 골드
  */
 UCLASS(BlueprintType)
-class CROSSVIEWHUNTER_API UGoldSet : public ULyraAttributeSet
+class CROSSVIEWHUNTER_API UCHGoldSet : public ULyraAttributeSet
 {
 	GENERATED_BODY()
 	
 public:
 
-	UGoldSet();
+	UCHGoldSet();
 
-	ATTRIBUTE_ACCESSORS(UGoldSet, Gold);
+	ATTRIBUTE_ACCESSORS(UCHGoldSet, Gold);
 
 protected:
 	

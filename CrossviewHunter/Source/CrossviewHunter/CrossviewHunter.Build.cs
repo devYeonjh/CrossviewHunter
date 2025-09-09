@@ -16,6 +16,7 @@ public class CrossviewHunter : ModuleRules
 
 		PrivateIncludePaths.AddRange(
 			new string[] {
+				"CrossviewHunter"
 			}
 		);
 
@@ -43,7 +44,8 @@ public class CrossviewHunter : ModuleRules
 				"AsyncMixin",
 				"ControlFlows",
 				"PropertyPath",
-				"LyraGame"
+				"LyraGame",
+				"UMG"
 			}
 		);
 
@@ -75,6 +77,8 @@ public class CrossviewHunter : ModuleRules
 				"EngineSettings",
 				"DTLSHandlerComponent",
 				"Json",
+				"GameplayAbilities",
+				"GameplayTags",
 				"LyraGame"
 			}
 		);
