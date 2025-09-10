@@ -30,11 +30,39 @@
 			"Enabled": true
 		},
 		{
+			"Name": "ModularGameplay",
+			"Enabled": true
+		},
+		{
+			"Name": "GameplayMessageRouter",
+			"Enabled": true
+		},
+		{
+			"Name": "AsyncMixin",
+			"Enabled": true
+		},
+		{
+			"Name": "CommonUI",
+			"Enabled": true
+		},
+		{
+			"Name": "CommonGame",
+			"Enabled": true
+		},
+		{
+			"Name": "GameSubtitles",
+			"Enabled": true
+		},
+		{
+			"Name": "EnhancedInput",
+			"Enabled": true
+		},
+		{
 			"Name": "LyraExampleContent",
 			"Enabled": true
 		},
 		{
-			"Name": "Niagara",
+			"Name": "ShooterCore",
 			"Enabled": true
 		}
 	]

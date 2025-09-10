@@ -4,6 +4,7 @@
 
 #include "Components/GameStateComponent.h"
 #include "AbilitySystem/ChAttributeTypes.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
 
 #include "CHItemCreationComponent.generated.h"
 
@@ -14,7 +15,7 @@ class ULyraInventoryItemInstance;
 struct FItemDataTableRow;
 
 
-UCLASS(Blueprintable, Abstract)
+UCLASS(BlueprintType, Blueprintable, Abstract)
 class CROSSVIEWHUNTER_API UCHItemCreationComponent : public UGameStateComponent
 {
 	GENERATED_BODY()
@@ -28,11 +29,17 @@ public:
 
 	/** Finds item data in DataTable by ItemID */
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = ItemCreation)
-	bool FindItemDataByID(int32 ItemID, FItemDataTableRow& OutItemData);
+	FItemDataTableRow& FindItemDataByID(FName ItemID) const;
 	
 	/** Creates item instance based on ItemID from DataTable */
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = ItemCreation)
-	ULyraInventoryItemInstance* CreateItemInstance(int32 ItemID);
+	ULyraInventoryItemInstance* CreateItemInstance(FName ItemID);
+
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = ItemCreation)
+	void LogCreatedItem();
+
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = ItemCreation)
+	void EquipOn();
 
 private:
 	void OnExperienceLoaded(const ULyraExperienceDefinition* Experience);

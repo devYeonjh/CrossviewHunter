@@ -16,9 +16,8 @@ class CROSSVIEWHUNTER_API UCHItemInstance : public ULyraInventoryItemInstance
 	GENERATED_BODY()
 
 public:
-	bool SetItemDefinitionData(
+	void SetItemDefinitionData(
 		const TArray<TObjectPtr<ULyraInventoryItemFragment>>& FragmentClasses,
 		const TMap<ECHStatID, float>& Modifiers );
-	
 	
 };

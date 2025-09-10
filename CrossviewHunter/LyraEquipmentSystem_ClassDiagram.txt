@@ -1,0 +1,200 @@
+classDiagram
+    %% Core Equipment System Classes
+    class UObject {
+        <<Engine Base>>
+    }
+    
+    class UPawnComponent {
+        <<Engine Component>>
+    }
+    
+    class UControllerComponent {
+        <<Engine Component>>
+    }
+    
+    class ULyraGameplayAbility {
+        <<Base Ability>>
+    }
+    
+    %% Equipment Manager Component
+    class ULyraEquipmentManagerComponent {
+        -FLyraEquipmentList EquipmentList
+        +EquipItem(EquipmentDefinition) ULyraEquipmentInstance
+        +UnequipItem(ItemInstance)
+        +GetFirstInstanceOfType(InstanceType) ULyraEquipmentInstance
+        +GetEquipmentInstancesOfType(InstanceType) Array~ULyraEquipmentInstance~
+        +ReplicateSubobjects()
+        +InitializeComponent()
+        +UninitializeComponent()
+    }
+    
+    %% Equipment List Structure
+    class FLyraEquipmentList {
+        <<struct>>
+        -TArray~FLyraAppliedEquipmentEntry~ Entries
+        -UActorComponent* OwnerComponent
+        +AddEntry(EquipmentDefinition) ULyraEquipmentInstance
+        +RemoveEntry(Instance)
+        +PreReplicatedRemove()
+        +PostReplicatedAdd()
+        +NetDeltaSerialize()
+        -GetAbilitySystemComponent() ULyraAbilitySystemComponent
+    }
+    
+    %% Equipment Entry Structure
+    class FLyraAppliedEquipmentEntry {
+        <<struct>>
+        -TSubclassOf~ULyraEquipmentDefinition~ EquipmentDefinition
+        -ULyraEquipmentInstance* Instance
+        -FLyraAbilitySet_GrantedHandles GrantedHandles
+        +GetDebugString() String
+    }
+    
+    %% Equipment Definition
+    class ULyraEquipmentDefinition {
+        +TSubclassOf~ULyraEquipmentInstance~ InstanceType
+        +TArray~ULyraAbilitySet~ AbilitySetsToGrant
+        +TArray~FLyraEquipmentActorToSpawn~ ActorsToSpawn
+    }
+    
+    %% Equipment Instance
+    class ULyraEquipmentInstance {
+        -UObject* Instigator
+        -TArray~AActor~ SpawnedActors
+        +GetInstigator() UObject
+        +SetInstigator(InInstigator)
+        +GetPawn() APawn
+        +GetTypedPawn(PawnType) APawn
+        +GetSpawnedActors() TArray~AActor~
+        +SpawnEquipmentActors(ActorsToSpawn)
+        +DestroyEquipmentActors()
+        +OnEquipped()
+        +OnUnequipped()
+        #K2_OnEquipped()
+        #K2_OnUnequipped()
+        -OnRep_Instigator()
+    }
+    
+    %% Weapon Instance (Specialized Equipment)
+    class ULyraWeaponInstance {
+        #FLyraAnimLayerSelectionSet EquippedAnimSet
+        #FLyraAnimLayerSelectionSet UnequippedAnimSet
+        +UpdateFiringTime()
+        +GetTimeSinceLastInteractedWith() float
+        +OnEquipped() override
+        +OnUnequipped() override
+    }
+    
+    %% Equipment Actor Spawn Info
+    class FLyraEquipmentActorToSpawn {
+        <<struct>>
+        +TSubclassOf~AActor~ ActorToSpawn
+        +FName AttachSocket
+        +FTransform AttachTransform
+    }
+    
+    %% Ability System Integration
+    class FLyraAbilitySet_GrantedHandles {
+        <<struct>>
+        -TArray~FGameplayAbilitySpecHandle~ AbilitySpecHandles
+        -TArray~FActiveGameplayEffectHandle~ GameplayEffectHandles
+        -TArray~UAttributeSet~ GrantedAttributeSets
+        +AddAbilitySpecHandle(Handle)
+        +AddGameplayEffectHandle(Handle)
+        +AddAttributeSet(Set)
+        +TakeFromAbilitySystem(LyraASC)
+    }
+    
+    class ULyraAbilitySet {
+        #TArray~FLyraAbilitySet_GameplayAbility~ GrantedGameplayAbilities
+        #TArray~FLyraAbilitySet_GameplayEffect~ GrantedGameplayEffects
+        #TArray~FLyraAbilitySet_AttributeSet~ GrantedAttributes
+        +GiveToAbilitySystem(LyraASC, OutGrantedHandles, SourceObject)
+    }
+    
+    %% Equipment-based Abilities
+    class ULyraGameplayAbility_FromEquipment {
+        +GetAssociatedEquipment() ULyraEquipmentInstance
+        +GetAssociatedItem() ULyraInventoryItemInstance
+    }
+    
+    class ULyraGameplayAbility_RangedWeapon {
+        %% Specialized ranged weapon abilities
+    }
+    
+    %% Quick Bar System
+    class ULyraQuickBarComponent {
+        -TArray~ULyraInventoryItemInstance~ Slots
+        -int32 ActiveSlotIndex
+        -ULyraEquipmentInstance* EquippedItem
+        +CycleActiveSlotForward()
+        +CycleActiveSlotBackward()
+        +SetActiveSlotIndex(NewIndex)
+        +GetSlots() TArray~ULyraInventoryItemInstance~
+        +GetActiveSlotIndex() int32
+        +GetActiveSlotItem() ULyraInventoryItemInstance
+        +AddItemToSlot(SlotIndex, Item)
+        +RemoveItemFromSlot(SlotIndex) ULyraInventoryItemInstance
+        -UnequipItemInSlot()
+        -EquipItemInSlot()
+        -FindEquipmentManager() ULyraEquipmentManagerComponent
+    }
+    
+    %% Inventory System Integration
+    class ULyraInventoryItemInstance {
+        -TSubclassOf~ULyraInventoryItemDefinition~ ItemDef
+        -FGameplayTagStackContainer StatTags
+        +AddStatTagStack(Tag, StackCount)
+        +RemoveStatTagStack(Tag, StackCount)
+        +GetStatTagStackCount(Tag) int32
+        +HasStatTag(Tag) bool
+        +FindFragmentByClass(FragmentClass) ULyraInventoryItemFragment
+    }
+    
+    class ULyraInventoryItemDefinition {
+        +TArray~ULyraInventoryItemFragment~ Fragments
+    }
+    
+    class ULyraInventoryItemFragment {
+        <<abstract>>
+    }
+    
+    class UInventoryFragment_EquippableItem {
+        +TSubclassOf~ULyraEquipmentDefinition~ EquipmentDefinition
+    }
+    
+    %% Relationships - Inheritance
+    UObject <|-- ULyraEquipmentDefinition
+    UObject <|-- ULyraEquipmentInstance
+    UObject <|-- ULyraInventoryItemInstance
+    UObject <|-- ULyraInventoryItemDefinition
+    UObject <|-- ULyraAbilitySet
+    ULyraEquipmentInstance <|-- ULyraWeaponInstance
+    UPawnComponent <|-- ULyraEquipmentManagerComponent
+    UControllerComponent <|-- ULyraQuickBarComponent
+    ULyraGameplayAbility <|-- ULyraGameplayAbility_FromEquipment
+    ULyraGameplayAbility_FromEquipment <|-- ULyraGameplayAbility_RangedWeapon
+    ULyraInventoryItemFragment <|-- UInventoryFragment_EquippableItem
+    
+    %% Relationships - Composition
+    ULyraEquipmentManagerComponent *-- "1" FLyraEquipmentList : contains
+    FLyraEquipmentList *-- "0..*" FLyraAppliedEquipmentEntry : contains
+    FLyraAppliedEquipmentEntry *-- "1" ULyraEquipmentInstance : references
+    FLyraAppliedEquipmentEntry *-- "1" FLyraAbilitySet_GrantedHandles : contains
+    ULyraEquipmentDefinition *-- "0..*" FLyraEquipmentActorToSpawn : contains
+    ULyraEquipmentDefinition *-- "0..*" ULyraAbilitySet : references
+    ULyraQuickBarComponent *-- "0..*" ULyraInventoryItemInstance : manages
+    ULyraQuickBarComponent *-- "0..1" ULyraEquipmentInstance : equippedItem
+    ULyraInventoryItemDefinition *-- "0..*" ULyraInventoryItemFragment : contains
+    
+    %% Relationships - Association
+    FLyraAppliedEquipmentEntry ..> ULyraEquipmentDefinition : uses class
+    ULyraEquipmentDefinition ..> ULyraEquipmentInstance : creates type
+    ULyraEquipmentInstance ..> APawn : owned by
+    ULyraEquipmentInstance ..> AActor : spawns actors
+    ULyraQuickBarComponent ..> ULyraEquipmentManagerComponent : uses
+    UInventoryFragment_EquippableItem ..> ULyraEquipmentDefinition : references
+    ULyraGameplayAbility_FromEquipment ..> ULyraEquipmentInstance : associated with
+    ULyraGameplayAbility_FromEquipment ..> ULyraInventoryItemInstance : associated with
+    FLyraAbilitySet_GrantedHandles ..> ULyraAbilitySystemComponent : interacts with
+    ULyraAbilitySet ..> FLyraAbilitySet_GrantedHandles : grants to

@@ -45,7 +45,12 @@ public class CrossviewHunter : ModuleRules
 				"ControlFlows",
 				"PropertyPath",
 				"LyraGame",
-				"UMG"
+				"UMG",
+				"StateTreeModule",
+				"GameplayStateTreeModule",
+				"InputCore",
+				"EnhancedInput",
+				"NavigationSystem"
 			}
 		);
 

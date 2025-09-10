@@ -3,12 +3,8 @@
 
 #include "CHItemDefinition.h"
 
-void UCHItemDefinition::SetFragments(const TArray<TObjectPtr<ULyraInventoryItemFragment>>& InFragmentClasses)
+void UCHItemDefinition::SetItemData(const FItemDataTableRow& DataTableRow)
 {
-	Fragments = InFragmentClasses;
-}
-
-void UCHItemDefinition::SetModifiers(const TMap<ECHStatID, float>& InModifiers)
-{
-	Modifiers = InModifiers;
+	DisplayName = DataTableRow.ItemName;
+	//Fragments = DataTableRow.Fragments;
 }

@@ -50,7 +50,7 @@ protected:
 
 /** List of applied equipment */
 USTRUCT(BlueprintType)
-struct FLyraEquipmentList : public FFastArraySerializer
+struct UE_API FLyraEquipmentList : public FFastArraySerializer
 {
 	GENERATED_BODY()
 

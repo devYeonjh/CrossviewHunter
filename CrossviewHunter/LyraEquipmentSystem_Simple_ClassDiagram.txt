@@ -1,0 +1,84 @@
+classDiagram
+    %% Core Equipment Classes
+    class ULyraEquipmentManagerComponent {
+        -FLyraEquipmentList EquipmentList
+        +EquipItem(EquipmentDefinition) ULyraEquipmentInstance
+        +UnequipItem(ItemInstance)
+        +GetFirstInstanceOfType() ULyraEquipmentInstance
+    }
+    
+    class FLyraEquipmentList {
+        <<struct>>
+        -TArray~FLyraAppliedEquipmentEntry~ Entries
+        +AddEntry(EquipmentDefinition) ULyraEquipmentInstance
+        +RemoveEntry(Instance)
+        +PostReplicatedAdd()
+        +PreReplicatedRemove()
+    }
+    
+    class FLyraAppliedEquipmentEntry {
+        <<struct>>
+        -EquipmentDefinition : TSubclassOf
+        -Instance : ULyraEquipmentInstance*
+        -GrantedHandles : FLyraAbilitySet_GrantedHandles
+    }
+    
+    class ULyraEquipmentDefinition {
+        <<DataAsset>>
+        +InstanceType : TSubclassOf~ULyraEquipmentInstance~
+        +AbilitySetsToGrant : TArray~ULyraAbilitySet~
+        +ActorsToSpawn : TArray~FLyraEquipmentActorToSpawn~
+    }
+    
+    class ULyraEquipmentInstance {
+        -Instigator : UObject*
+        -SpawnedActors : TArray~AActor~
+        +OnEquipped()
+        +OnUnequipped()
+        +SpawnEquipmentActors()
+        +DestroyEquipmentActors()
+        +GetPawn() APawn
+    }
+    
+    class ULyraWeaponInstance {
+        <<Specialized Equipment>>
+        +EquippedAnimSet
+        +UnequippedAnimSet
+    }
+    
+    class ULyraAbilitySet {
+        <<DataAsset>>
+        +GrantedGameplayAbilities
+        +GrantedGameplayEffects
+        +GrantedAttributes
+        +GiveToAbilitySystem()
+    }
+    
+    class ULyraQuickBarComponent {
+        -Slots : TArray~ULyraInventoryItemInstance~
+        -ActiveSlotIndex : int32
+        -EquippedItem : ULyraEquipmentInstance*
+        +SetActiveSlotIndex()
+        +EquipItemInSlot()
+        +UnequipItemInSlot()
+    }
+    
+    %% Inheritance
+    ULyraEquipmentInstance <|-- ULyraWeaponInstance : extends
+    
+    %% Composition (owns)
+    ULyraEquipmentManagerComponent *-- "1" FLyraEquipmentList : contains
+    FLyraEquipmentList *-- "*" FLyraAppliedEquipmentEntry : contains
+    FLyraAppliedEquipmentEntry *-- "1" ULyraEquipmentInstance : has
+    
+    %% Association (uses/references)
+    ULyraEquipmentDefinition ..> ULyraEquipmentInstance : creates
+    ULyraEquipmentDefinition ..> ULyraAbilitySet : grants
+    ULyraQuickBarComponent ..> ULyraEquipmentManagerComponent : uses
+    ULyraQuickBarComponent ..> ULyraEquipmentInstance : equips
+    
+    %% Notes
+    note for ULyraEquipmentManagerComponent "Pawn에 부착되는 컴포넌트\n장비 시스템의 핵심 관리자"
+    note for ULyraEquipmentDefinition "장비의 설계도 (Blueprint)\n어떤 Instance를 생성할지 정의"
+    note for ULyraEquipmentInstance "실제 생성된 장비 객체\nPawn이 소유"
+    note for FLyraEquipmentList "네트워크 복제를 위한\nFastArraySerializer 사용"

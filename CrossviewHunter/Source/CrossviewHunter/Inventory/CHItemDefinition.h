@@ -8,6 +8,19 @@
 
 #include "CHItemDefinition.generated.h"
 
+
+
+UENUM()
+enum class ECHItemType : uint8
+{
+	Equipment UMETA(DisplayName = "Equipment"),
+	
+	Consumable UMETA(DisplayName = "Consumable"),
+	
+	MAX UMETA(Hidden)
+};
+
+
 USTRUCT(BlueprintType)
 struct CROSSVIEWHUNTER_API FItemDataTableRow : public FTableRowBase
 {
@@ -15,34 +28,23 @@ struct CROSSVIEWHUNTER_API FItemDataTableRow : public FTableRowBase
 	
 public:
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Info")
-    int32 ItemID;
+    FName ItemID;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Info")
     FText ItemName;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Info")
-    FString ItemType;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Equipment")
-    FString EquipmentSlot;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Stats")
-    TMap<FString, float> BaseStats;
+    ECHItemType ItemType;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Display,
+		meta=(AllowedClasses="LyraInventoryItemFragment", ShowOnlyInnerProperties))
+	TArray<TObjectPtr<ULyraInventoryItemFragment>>  Fragments;
+	
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
+    FName PoolID;
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
-    FString PoolID;
-
-    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Effects")
-    FString SpecialEffectID;
-};
-
-
-UENUM()
-enum class EItemType
-{
-	Equipment UMETA(DisplayName = "Equipment"),
-	Consumable UMETA(DisplayName = "Consumable"),
-	MAX UMETA(Hidden)
+    FName SpecialEffectID;
 };
 
 
@@ -55,16 +57,5 @@ class CROSSVIEWHUNTER_API UCHItemDefinition : public ULyraInventoryItemDefinitio
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Info")
-	EItemType ItemType;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Info")
-	TMap<ECHStatID, float> Modifiers;
-
-public:
-	void SetFragments(const TArray<TObjectPtr<ULyraInventoryItemFragment>>& InFragmentClasses);
-	void SetModifiers(const TMap<ECHStatID, float>& InModifiers);
-
-	
-
+	void SetItemData(const FItemDataTableRow& DataTableRow);
 };
