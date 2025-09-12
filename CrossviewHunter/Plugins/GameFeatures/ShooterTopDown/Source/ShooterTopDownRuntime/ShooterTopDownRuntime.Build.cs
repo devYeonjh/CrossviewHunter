@@ -35,7 +35,9 @@ public class ShooterTopDownRuntime : ModuleRules
 				"GameplayStateTreeModule",
 				"Niagara",
 				"UMG",
-				"Slate"
+				"Slate",
+				"LyraGame",
+				"GameplayTags",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -48,6 +50,9 @@ public class ShooterTopDownRuntime : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
+				"LyraGame",
+				"GameplayTags",
+				"GameplayAbilities",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
