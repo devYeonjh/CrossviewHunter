@@ -1,0 +1,14 @@
+{
+  "WorkspaceID": "dv.ws.1de08d44-a845-4708-9ac5-b349cf158c79",
+  "RepoID": "dv.repo.88e511e8-c6fb-475a-88fa-7bbba9b5b700",
+  "Path": "C:\\UnrealProjects\\CrossviewHunter\\CrossviewHunter\\CrossviewHunter",
+  "AccountID": "Google_105747816060996244189",
+  "BranchID": "dv.branch.8",
+  "BranchName": "feature/Weapon",
+  "CommitID": "dv.commit.30",
+  "Paused": false,
+  "ShouldDownload": true,
+  "RepoName": "CrossviewHunter",
+  "ReadOnly": false,
+  "DigestMethod": "sha1"
+}

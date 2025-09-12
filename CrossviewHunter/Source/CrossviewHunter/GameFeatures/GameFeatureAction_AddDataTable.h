@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "GameFeatureAction.h"
 #include "Engine/DataTable.h"
-#include "CrossviewHunter/Inventory/InventoryItemFragment_StatTable.h"
 #include "GameFeatureAction_AddDataTable.generated.h"
 
 USTRUCT(BlueprintType)

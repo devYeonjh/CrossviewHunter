@@ -10,6 +10,7 @@
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/LyraGameplayAbilityTargetData_SingleTargetHit.h"
 #include "DrawDebugHelpers.h"
+#include "GameplayTagsManager.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(LyraGameplayAbility_RangedWeapon)
 
