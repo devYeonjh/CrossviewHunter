@@ -55,7 +55,8 @@ class CROSSVIEWHUNTER_API UCHEquipmentManagerComponent : public ULyraEquipmentMa
 	GENERATED_BODY()
 
 public:
-	ULyraEquipmentInstance* EquipItem(UCHItemInstance* ItemInstance);
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
+	ULyraEquipmentInstance* EquipItemInstance(UCHItemInstance* ItemInstance);
 
 	virtual void UnequipItem(ULyraEquipmentInstance* ItemInstance) override;
 

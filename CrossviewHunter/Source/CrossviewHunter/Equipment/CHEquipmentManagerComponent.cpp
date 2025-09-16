@@ -87,7 +87,7 @@ void FCHEquipmentList::RemoveEntry(ULyraEquipmentInstance* Instance)
 	}
 }
 
-ULyraEquipmentInstance* UCHEquipmentManagerComponent::EquipItem(UCHItemInstance* ItemInstance)
+ULyraEquipmentInstance* UCHEquipmentManagerComponent::EquipItemInstance(UCHItemInstance* ItemInstance)
 {
 	//EquipInfo Fragment 가져오기
 	const UInventoryFragment_CHEquipmentInfo* EquipInfoFragment = ItemInstance->FindFragmentByClass<UInventoryFragment_CHEquipmentInfo>();
