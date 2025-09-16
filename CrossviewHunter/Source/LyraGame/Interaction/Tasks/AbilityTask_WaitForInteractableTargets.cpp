@@ -42,6 +42,11 @@ void UAbilityTask_WaitForInteractableTargets::AimWithPlayerController(const AAct
 
 	//@TODO: Bots?
 	APlayerController* PC = Ability->GetCurrentActorInfo()->PlayerController.Get();
+	if (!PC)
+	{
+		return;
+	}
+
 	check(PC);
 
 	FVector ViewStart;

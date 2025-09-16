@@ -27,6 +27,27 @@ class UE_API ULyraInventoryItemInstance : public UObject
 public:
 	ULyraInventoryItemInstance(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
+
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Lyra|Inventory")
+	bool bIsLocked = false;
+
+public:
+	UFUNCTION(BlueprintCallable, Category = "Lyra|Inventory")
+	bool GetItemState()
+	{
+		return bIsLocked;
+	}
+
+	UFUNCTION(BlueprintCallable, Category = "Lyra|Inventory")
+	void SetItemState(bool ItemState)
+	{
+		bIsLocked = ItemState;
+	}
+
+
+
+	
 	//~UObject interface
 	virtual bool IsSupportedForNetworking() const override { return true; }
 	//~End of UObject interface

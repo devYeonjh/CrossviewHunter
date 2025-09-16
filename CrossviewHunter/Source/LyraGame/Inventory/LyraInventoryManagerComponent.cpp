@@ -175,6 +175,43 @@ TArray<ULyraInventoryItemInstance*> FLyraInventoryList::GetAllItems() const
 	return Results;
 }
 
+void FLyraInventoryList::SortByDefinition()
+{
+	Entries.Sort([](const FLyraInventoryEntry& A, const FLyraInventoryEntry& B)
+	{
+		auto GetItemDef = [](const FLyraInventoryEntry& Entry)
+		{
+			return Entry.Instance ? Entry.Instance->GetItemDef() : nullptr;
+		};
+
+		auto HasStackable = [](const FLyraInventoryEntry& Entry)
+		{
+			return (Entry.Instance && Entry.Instance->FindFragmentByClass<UInventoryFragment_Stackable>() != nullptr);
+		};
+
+		TSubclassOf<ULyraInventoryItemDefinition> DefA = GetItemDef(A);
+		TSubclassOf<ULyraInventoryItemDefinition> DefB = GetItemDef(B);
+
+		// 1. Stackable 없는 아이템 먼저, Stackable 있는 아이템 뒤로
+		bool A_HasStackable = HasStackable(A);
+		bool B_HasStackable = HasStackable(B);
+
+		if (A_HasStackable != B_HasStackable)
+		{
+			return !A_HasStackable; // A가 비-스택이면 A 먼저
+		}
+
+		// 2. 같은 정의라면 StackCount 많은 순
+		if (DefA == DefB)
+		{
+			return A.StackCount > B.StackCount;
+		}
+
+		// 3. 그 외에는 정렬 안 함 (원래 순서 유지)
+		return false;
+	});
+}
+
 //////////////////////////////////////////////////////////////////////
 // ULyraInventoryManagerComponent
 
@@ -335,6 +372,7 @@ bool ULyraInventoryManagerComponent::ReplicateSubobjects(UActorChannel* Channel,
 
 	return WroteSomething;
 }
+
 
 //////////////////////////////////////////////////////////////////////
 //

@@ -102,6 +102,8 @@ public:
 
 	void RemoveEntry(ULyraInventoryItemInstance* Instance);
 
+	void SortByDefinition();
+
 private:
 	void BroadcastChangeMessage(FLyraInventoryEntry& Entry, int32 OldCount, int32 NewCount);
 
@@ -147,6 +149,12 @@ public:
 	const TArray<FLyraInventoryEntry>& GetInventoryList() const
 	{
 		return InventoryList.Entries;
+	}
+
+	UFUNCTION(BlueprintCallable, Category="Inventory")
+	void SortInventory()
+	{
+		InventoryList.SortByDefinition();
 	}
 	
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category=Inventory)
