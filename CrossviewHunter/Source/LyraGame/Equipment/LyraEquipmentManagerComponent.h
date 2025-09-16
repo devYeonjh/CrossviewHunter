@@ -23,7 +23,7 @@ struct FReplicationFlags;
 
 /** A single piece of applied equipment */
 USTRUCT(BlueprintType)
-struct FLyraAppliedEquipmentEntry : public FFastArraySerializerItem
+struct UE_API FLyraAppliedEquipmentEntry : public FFastArraySerializerItem
 {
 	GENERATED_BODY()
 
@@ -122,7 +122,7 @@ public:
 	UE_API ULyraEquipmentInstance* EquipItem(TSubclassOf<ULyraEquipmentDefinition> EquipmentDefinition);
 
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly)
-	UE_API void UnequipItem(ULyraEquipmentInstance* ItemInstance);
+	UE_API virtual void UnequipItem(ULyraEquipmentInstance* ItemInstance);
 
 	//~UObject interface
 	UE_API virtual bool ReplicateSubobjects(class UActorChannel* Channel, class FOutBunch* Bunch, FReplicationFlags* RepFlags) override;

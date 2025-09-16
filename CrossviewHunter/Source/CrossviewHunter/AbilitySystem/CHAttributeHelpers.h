@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CHAttributeTypes.h"
+#include "CHStatID.h"
 #include "AttributeSet.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 

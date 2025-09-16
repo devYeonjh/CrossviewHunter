@@ -16,6 +16,7 @@ class ULyraAbilitySystemComponent;
 class ULyraGameplayAbility;
 class UObject;
 
+#define UE_API LYRAGAME_API
 
 /**
  * FLyraAbilitySet_GameplayAbility
@@ -87,7 +88,7 @@ public:
  *	Data used to store handles to what has been granted by the ability set.
  */
 USTRUCT(BlueprintType)
-struct FLyraAbilitySet_GrantedHandles
+struct UE_API FLyraAbilitySet_GrantedHandles
 {
 	GENERATED_BODY()
 
@@ -121,7 +122,7 @@ protected:
  *	Non-mutable data asset used to grant gameplay abilities and gameplay effects.
  */
 UCLASS(BlueprintType, Const)
-class ULyraAbilitySet : public UPrimaryDataAsset
+class UE_API ULyraAbilitySet : public UPrimaryDataAsset
 {
 	GENERATED_BODY()
 
@@ -147,3 +148,5 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Attribute Sets", meta=(TitleProperty=AttributeSet))
 	TArray<FLyraAbilitySet_AttributeSet> GrantedAttributes;
 };
+
+#undef UE_API

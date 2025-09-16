@@ -24,6 +24,7 @@ void ULyraInventoryItemInstance::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 
 	DOREPLIFETIME(ThisClass, StatTags);
 	DOREPLIFETIME(ThisClass, ItemDef);
+	DOREPLIFETIME(ThisClass, ItemDefInstance);
 }
 
 #if UE_WITH_IRIS
@@ -61,11 +62,20 @@ void ULyraInventoryItemInstance::SetItemDef(TSubclassOf<ULyraInventoryItemDefini
 	ItemDef = InDef;
 }
 
+void ULyraInventoryItemInstance::SetItemDefInstance(TObjectPtr<ULyraInventoryItemDefinition> InDefInstance)
+{
+	ItemDefInstance = InDefInstance;
+}
+
 const ULyraInventoryItemFragment* ULyraInventoryItemInstance::FindFragmentByClass(TSubclassOf<ULyraInventoryItemFragment> FragmentClass) const
 {
 	if ((ItemDef != nullptr) && (FragmentClass != nullptr))
 	{
 		return GetDefault<ULyraInventoryItemDefinition>(ItemDef)->FindFragmentByClass(FragmentClass);
+	}
+	if ((ItemDefInstance != nullptr) && (FragmentClass != nullptr))
+	{
+		return ItemDefInstance->FindFragmentByClass(FragmentClass);
 	}
 
 	return nullptr;

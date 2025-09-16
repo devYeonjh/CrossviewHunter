@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Inventory/LyraInventoryItemInstance.h"
-#include "AbilitySystem/CHAttributeTypes.h"
+
 #include "CHItemInstance.generated.h"
 
 /**
@@ -16,8 +16,6 @@ class CROSSVIEWHUNTER_API UCHItemInstance : public ULyraInventoryItemInstance
 	GENERATED_BODY()
 
 public:
-	void SetItemDefinitionData(
-		const TArray<TObjectPtr<ULyraInventoryItemFragment>>& FragmentClasses,
-		const TMap<ECHStatID, float>& Modifiers );
+	void SetItemDefinitionData(TObjectPtr<ULyraInventoryItemDefinition> ItemDefinition);
 	
 };

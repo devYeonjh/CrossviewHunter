@@ -7,11 +7,13 @@
 
 #include "InventoryFragment_EquippableItem.generated.h"
 
+#define UE_API LYRAGAME_API
+
 class ULyraEquipmentDefinition;
 class UObject;
 
 UCLASS()
-class UInventoryFragment_EquippableItem : public ULyraInventoryItemFragment
+class UE_API UInventoryFragment_EquippableItem : public ULyraInventoryItemFragment
 {
 	GENERATED_BODY()
 
@@ -19,3 +21,5 @@ public:
 	UPROPERTY(EditAnywhere, Category=Lyra)
 	TSubclassOf<ULyraEquipmentDefinition> EquipmentDefinition;
 };
+
+#undef UE_API

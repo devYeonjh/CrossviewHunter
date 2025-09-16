@@ -69,6 +69,8 @@ protected:
 
 	void SetItemDef(TSubclassOf<ULyraInventoryItemDefinition> InDef);
 
+	void SetItemDefInstance(TObjectPtr<ULyraInventoryItemDefinition> InDefInstance);
+
 	friend struct FLyraInventoryList;
 	
 	UPROPERTY(Replicated)
@@ -77,6 +79,9 @@ protected:
 	// The item definition
 	UPROPERTY(Replicated)
 	TSubclassOf<ULyraInventoryItemDefinition> ItemDef;
+
+	UPROPERTY(Replicated)
+	TObjectPtr<ULyraInventoryItemDefinition> ItemDefInstance;
 };
 
 #undef UE_API

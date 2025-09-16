@@ -4,7 +4,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/Attributes/LyraAttributeSet.h"
-#include "AbilitySystem/CHAttributeTypes.h"
+#include "AbilitySystem/CHStatID.h"
 
 #include "CHStatSet.generated.h"
 
@@ -23,7 +23,7 @@ struct FCHStatData : public FTableRowBase
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CH|StatData")
-	ECHStatID AttributeID;
+	ECHStatID AttributeID = ECHStatID::stat_001;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CH|StatData")
 	FGameplayAttribute AttributeName;
@@ -32,7 +32,7 @@ public:
 	FName Description;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "CH|StatData")
-	bool bIsPercentage;
+	bool bIsPercentage = false;
 };
 
 

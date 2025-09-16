@@ -3,23 +3,29 @@
 #pragma once
 
 #include "Equipment/LyraEquipmentManagerComponent.h"
+#include "Inventory/LyraInventoryItemInstance.h"
+
 #include "CHEquipmentManagerComponent.generated.h"
 
 
+class UInventoryFragment_CHEquipmentInfo;
+class UCHItemInstance;
 class UCHEquipmentDefinition;
-class UCHEquipmentInstance;
 class UCHEquipmentManagerComponent;
 struct FCHEquipmentList;
 
-/** Base on FLyraAppliedEquipmentEntry */
 USTRUCT(BlueprintType)
 struct FCHAppliedEquipmentEntry : public FLyraAppliedEquipmentEntry
 {
 	GENERATED_BODY()
 
-	FCHAppliedEquipmentEntry()
-	{}
-	
+private:
+	friend FCHEquipmentList;
+	friend UCHEquipmentManagerComponent;
+
+	// The CHEquipmentDefinition
+	UPROPERTY()
+	TObjectPtr<UCHEquipmentDefinition> CHEquipmentDef;
 };
 
 /** Base on FLyraEquipmentList */
@@ -29,10 +35,10 @@ struct FCHEquipmentList : public FLyraEquipmentList
 	GENERATED_BODY()
 
 public:
-	UCHEquipmentInstance* AddEntry(TSubclassOf<UCHEquipmentDefinition> EquipmentDefinition);
-	void RemoveEntry(UCHEquipmentInstance* Instance);
+	ULyraEquipmentInstance* AddEntry(UCHEquipmentDefinition* EquipmentDefinition);
+	void RemoveEntry(ULyraEquipmentInstance* Instance);
 
-private:
+protected:
 	friend UCHEquipmentManagerComponent;
 	
 };
@@ -40,12 +46,17 @@ private:
 
 
 /**
- * Pawn Component로 부착되는 Equipment 매니저 클래스
+ * 
  * 
  */
 UCLASS(BlueprintType, Const)
 class CROSSVIEWHUNTER_API UCHEquipmentManagerComponent : public ULyraEquipmentManagerComponent
 {
 	GENERATED_BODY()
+
+public:
+	ULyraEquipmentInstance* EquipItem(UCHItemInstance* ItemInstance);
+
+	virtual void UnequipItem(ULyraEquipmentInstance* ItemInstance) override;
 
 };

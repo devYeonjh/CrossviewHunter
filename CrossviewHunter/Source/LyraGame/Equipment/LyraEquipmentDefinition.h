@@ -21,7 +21,7 @@ struct FLyraEquipmentActorToSpawn
 	{}
 
 	UPROPERTY(EditAnywhere, Category=Equipment)
-	TSubclassOf<AActor> ActorToSpawn;
+	TSoftClassPtr<AActor> ActorToSpawn;
 
 	UPROPERTY(EditAnywhere, Category=Equipment)
 	FName AttachSocket;

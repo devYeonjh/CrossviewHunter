@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 
-#include "CHAttributeTypes.generated.h"
+#include "CHStatID.generated.h"
 
 UENUM(BlueprintType)
 enum class ECHStatID : uint8
