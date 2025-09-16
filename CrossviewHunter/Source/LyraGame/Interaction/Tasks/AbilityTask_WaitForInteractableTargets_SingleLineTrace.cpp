@@ -52,6 +52,13 @@ void UAbilityTask_WaitForInteractableTargets_SingleLineTrace::PerformTrace()
 		return;
 	}
 
+	APlayerController* PC = Ability->GetCurrentActorInfo()->PlayerController.Get();
+	if (!PC)
+	{
+		return;
+	}
+
+
 	UWorld* World = GetWorld();
 
 	TArray<AActor*> ActorsToIgnore;
