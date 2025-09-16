@@ -20,6 +20,12 @@ class UE_API UInventoryFragment_EquippableItem : public ULyraInventoryItemFragme
 public:
 	UPROPERTY(EditAnywhere, Category=Lyra)
 	TSubclassOf<ULyraEquipmentDefinition> EquipmentDefinition;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Lyra|Inventory")
+	TSubclassOf<ULyraInventoryItemDefinition> DecomposeItemDefinition;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Lyra|Inventory")
+	int32 DecomposeItemAmount = 10;
 };
 
 #undef UE_API
