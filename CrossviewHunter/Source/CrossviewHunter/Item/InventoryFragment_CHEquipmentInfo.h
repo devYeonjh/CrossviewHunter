@@ -3,7 +3,6 @@
 #pragma once
 
 #include "Inventory/InventoryFragment_EquippableItem.h"
-#include "AbilitySystem/CHStatID.h"
 #include "CHItemTypes.h"
 #include "Item/CHItemDataTableRows.h"
 
@@ -12,6 +11,7 @@
 class UCHEquipmentDefinition;
 class ULyraInventoryItemInstance;
 class UObject;
+class UGameplayEffect;
 
 
 
@@ -39,7 +39,7 @@ protected:
 	
 public:
 	UFUNCTION()
-	void InitializeValue(ECHItemType InType, ECHEquipmentSlot InSlot, const TMap<ECHStatID, float>& InModifiers);
+	void InitializeValue(ECHItemType InType, ECHEquipmentSlot InSlot, TMap<TSubclassOf<UGameplayEffect>, float> InModifiers);
 
 	UFUNCTION()
 	void SetEquipmentDefinitionByData(const FEquipmentTypeDefinitionRow& DataRow) const;

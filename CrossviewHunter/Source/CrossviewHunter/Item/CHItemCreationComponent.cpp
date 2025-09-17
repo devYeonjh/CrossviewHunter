@@ -6,11 +6,11 @@
 #include "CHItemInstance.h"
 #include "CHPickableItem.h"
 #include "InventoryFragment_CHEquipmentInfo.h"
-#include "Equipment/CHEquipmentManagerComponent.h"
 #include "Kismet/DataTableFunctionLibrary.h"
 #include "Inventory/LyraInventoryItemDefinition.h"
 #include "GameModes/LyraExperienceManagerComponent.h"
 #include "UObject/ConstructorHelpers.h"
+#include "AbilitySystem/Attributes/CHStatEffectBase.h"
 
 
 
@@ -55,9 +55,6 @@ ACHPickableItem* UCHItemCreationComponent::SpawnPickableItem(const FName& ItemID
 	TSubclassOf<ACHPickableItem> PickableClass = ACHPickableItem::StaticClass();
 	ACHPickableItem* PickableItem = GetWorld()->SpawnActor<ACHPickableItem>(PickableClass, Location, Rotation, SpawnInfo);
 
-	PickableItem->SetStaticMesh(TestMesh.Get());
-	PickableItem->SetInventoryItemInfo(ItemInst);
-
 	return PickableItem;
 }
 
@@ -101,13 +98,22 @@ FEquipmentTypeDefinitionRow& UCHItemCreationComponent::FindEquipmentTypeDefiniti
 
 void UCHItemCreationComponent::SetEquipmentFragment(UCHItemDefinition& ItemDef, const FItemDataTableRow& DataTableRow)
 {
-	// EquipmentInfo Fragment
+	// Fragment 기반으로 아이템 장착 가능 여부 및 장착 스탯 확인
+	// Fragment 데이터를 DataTable 기반으로 결정
 	TObjectPtr<UInventoryFragment_CHEquipmentInfo> EquipInfo = NewObject<UInventoryFragment_CHEquipmentInfo>();
-	EquipInfo->InitializeValue(DataTableRow.ItemType, DataTableRow.EquipmentSlot, DataTableRow.BaseStats);
+
+	TMap<TSubclassOf<UGameplayEffect>, float> Modifiers;
+	
+	for (auto It = DataTableRow.BaseStats.CreateConstIterator(); It; ++It)
+	{
+		Modifiers.Add(StatEffectMap[It.Key()],It.Value());
+	}
+	
+	EquipInfo->InitializeValue(DataTableRow.ItemType, DataTableRow.EquipmentSlot, Modifiers);
 	FEquipmentTypeDefinitionRow EquipTypeDefinition = FindEquipmentTypeDefinition(DataTableRow.ItemType);
 	EquipInfo->SetEquipmentDefinitionByData(EquipTypeDefinition);
-	
 
+	
 	ItemDef.Fragments.Add(EquipInfo);
 	if (UClass* DefinitionClass = EquipTypeDefinition.BaseItemDefinition.LoadSynchronous())
 	{

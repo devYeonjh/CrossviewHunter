@@ -9,6 +9,7 @@
 
 #include "CHItemCreationComponent.generated.h"
 
+class UCHStatEffectBase;
 class UCHItemDefinition;
 class ULyraInventoryItemFragment;
 class ULyraExperienceDefinition;
@@ -70,12 +71,7 @@ protected:
 	UPROPERTY(Transient)
 	TArray<TObjectPtr<ULyraInventoryItemInstance>> CreatedItems;
 
-	UPROPERTY(EditAnywhere)
-	TArray<TObjectPtr<ULyraInventoryItemFragment>> TestFragmentList;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = ItemCreation)
+	TMap<ECHStatID, TSubclassOf<UCHStatEffectBase>> StatEffectMap;
 
-	UPROPERTY(EditAnywhere)
-	TMap<ECHStatID, float> TestModifiers;
-
-	UPROPERTY(EditAnywhere)
-	TSoftObjectPtr<class UStaticMesh> TestMesh;
 };

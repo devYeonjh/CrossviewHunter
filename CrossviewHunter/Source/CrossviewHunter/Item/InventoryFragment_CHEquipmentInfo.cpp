@@ -6,6 +6,7 @@
 #include "AbilitySystem/LyraAbilitySet.h"
 #include "Equipment/CHEquipmentDefinition.h"
 #include "Equipment/LyraEquipmentInstance.h"
+#include "GameplayEffect.h"
 
 UInventoryFragment_CHEquipmentInfo::UInventoryFragment_CHEquipmentInfo()
 {
@@ -13,7 +14,7 @@ UInventoryFragment_CHEquipmentInfo::UInventoryFragment_CHEquipmentInfo()
 }
 
 void UInventoryFragment_CHEquipmentInfo::InitializeValue(ECHItemType InType, ECHEquipmentSlot InSlot,
-                                                         const TMap<ECHStatID, float>& InModifiers)
+                                                         TMap<TSubclassOf<UGameplayEffect>, float> InModifiers)
 {
 	Type = InType;
 	Slot = InSlot;

@@ -42,7 +42,12 @@ ULyraEquipmentInstance* FCHEquipmentList::AddEntry(UCHEquipmentDefinition* Equip
 		for (const TObjectPtr<const ULyraAbilitySet>& AbilitySet : EquipmentDefinition->AbilitySetsToGrant)
 		{
 			AbilitySet->GiveToAbilitySystem(ASC, &NewEntry.GrantedHandles, Result);
-			EquipmentDefinition->ApplyModifiers(ASC);
+		}
+		TArray<FGameplayEffectSpecHandle> Handles = MakeGameEffectSpecHandles(ASC, EquipmentDefinition->GetModifiers());
+		for (FGameplayEffectSpecHandle Handle: Handles)
+		{
+			FActiveGameplayEffectHandle ActiveHandle = ASC->ApplyGameplayEffectSpecToSelf(*Handle.Data);
+			NewEntry.ActiveEffectHandles.Emplace(ActiveHandle);
 		}
 	}
 	else
@@ -69,7 +74,11 @@ void FCHEquipmentList::RemoveEntry(ULyraEquipmentInstance* Instance)
 			if (ULyraAbilitySystemComponent* ASC = GetAbilitySystemComponent())
 			{
 				Entry.GrantedHandles.TakeFromAbilitySystem(ASC);
-				Entry.CHEquipmentDef->RemoveModifiers(ASC);
+				for (const FActiveGameplayEffectHandle ActiveHandle : Entry.ActiveEffectHandles)
+				{
+					ASC->RemoveActiveGameplayEffect(ActiveHandle);
+				}
+				Entry.ActiveEffectHandles.Empty();
 			}
 
 			Instance->DestroyEquipmentActors();
@@ -79,6 +88,25 @@ void FCHEquipmentList::RemoveEntry(ULyraEquipmentInstance* Instance)
 			MarkArrayDirty();
 		}
 	}
+}
+
+TArray<FGameplayEffectSpecHandle> FCHEquipmentList::MakeGameEffectSpecHandles(ULyraAbilitySystemComponent* ASC,
+	TMap<TSubclassOf<UGameplayEffect>, float> Modifiers)
+{
+	TArray<FGameplayEffectSpecHandle> Results;
+	for (auto It = Modifiers.CreateIterator(); It; ++It)
+	{
+		// Effect spec Handle 생성 (GE BP 클래스 기반)
+		FGameplayEffectSpecHandle Handle = ASC->MakeOutgoingSpec(It.Key(), 1.0f, ASC->MakeEffectContext());
+		// SetByCaller 설정을 위한 Tag 받아오기
+		FGameplayTag Tag = Handle.Data->Def->Modifiers[0].ModifierMagnitude.GetSetByCallerFloat().DataTag;
+		// SetByCaller에 값 설정
+		Handle.Data->SetSetByCallerMagnitude(Tag, It.Value());
+
+		Results.Add(Handle);
+	}
+
+	return Results;
 }
 
 ULyraEquipmentInstance* UCHEquipmentManagerComponent::EquipItemInstance(UCHItemInstance* ItemInstance)

@@ -3,10 +3,10 @@
 #pragma once
 
 #include "Equipment/LyraEquipmentDefinition.h"
-#include "ActiveGameplayEffectHandle.h"
 
 #include "CHEquipmentDefinition.generated.h"
 
+class UGameplayEffect;
 class ULyraAbilitySystemComponent;
 enum class ECHStatID : uint8;
 class UObject;
@@ -24,16 +24,11 @@ class CROSSVIEWHUNTER_API UCHEquipmentDefinition : public ULyraEquipmentDefiniti
 public:
 	UCHEquipmentDefinition(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	void SetModifiers(const TMap<ECHStatID, float>& InModifiers);
-	
-	void ApplyModifiers(ULyraAbilitySystemComponent* ASC);
+	void SetModifiers(const TMap<TSubclassOf<UGameplayEffect>, float>& InModifiers);
 
-	void RemoveModifiers(ULyraAbilitySystemComponent* ASC);
+	TMap<TSubclassOf<UGameplayEffect>, float>GetModifiers() const;
 
 private:
-	UPROPERTY()
-	FActiveGameplayEffectHandle RuntimeGEHandle;
-	int EquipmentGENameOffsetNumber;
 
-	TMap<ECHStatID, float> Modifiers;
+	TMap<TSubclassOf<UGameplayEffect>, float> Modifiers;
 };

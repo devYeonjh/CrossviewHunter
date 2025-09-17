@@ -9,7 +9,7 @@ void UCHItemDefinition::SetItemData(const FItemDataTableRow& DataTableRow)
 	ItemID = DataTableRow.ItemID;
 	DisplayName = DataTableRow.ItemName;
 	TObjectPtr<UInventoryFragment_CHEquipmentInfo> EquipInfo = NewObject<UInventoryFragment_CHEquipmentInfo>();
-	EquipInfo->InitializeValue(DataTableRow.ItemType, DataTableRow.EquipmentSlot, DataTableRow.BaseStats);
+	//EquipInfo->InitializeValue(DataTableRow.ItemType, DataTableRow.EquipmentSlot, DataTableRow.BaseStats);
 	Fragments.Add(EquipInfo);
 
 	//@TODO: Fragment List 데이터테이블에 추가
