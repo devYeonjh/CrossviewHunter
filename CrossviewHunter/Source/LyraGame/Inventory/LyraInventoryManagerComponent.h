@@ -96,10 +96,15 @@ public:
 	{
 		return FFastArraySerializer::FastArrayDeltaSerialize<FLyraInventoryEntry, FLyraInventoryList>(Entries, DeltaParms, *this);
 	}
-
 	ULyraInventoryItemInstance* AddEntry(TSubclassOf<ULyraInventoryItemDefinition> ItemClass, int32 StackCount);
-	void AddEntry(ULyraInventoryItemInstance* Instance);
-
+	TArray<TObjectPtr<ULyraInventoryItemInstance>>AddEntry(ULyraInventoryItemInstance* Instance, int32 StackCount);
+	
+	TArray<TObjectPtr<ULyraInventoryItemInstance>> AddStack(
+		ULyraInventoryItemInstance* Instance,
+		FName ItemID,
+		int32 StackCount,
+		int32 MaxCount);
+	
 	void RemoveEntry(ULyraInventoryItemInstance* Instance);
 
 	void SortByDefinition();
@@ -164,7 +169,7 @@ public:
 	UE_API ULyraInventoryItemInstance* AddItemDefinition(TSubclassOf<ULyraInventoryItemDefinition> ItemDef, int32 StackCount = 1);
 
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category=Inventory)
-	UE_API void AddItemInstance(ULyraInventoryItemInstance* ItemInstance);
+	UE_API void AddItemInstance(ULyraInventoryItemInstance* ItemInstance, int32 StackCount = 1);
 
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category=Inventory)
 	UE_API void RemoveItemInstance(ULyraInventoryItemInstance* ItemInstance);
@@ -183,7 +188,7 @@ public:
 	UE_API virtual void ReadyForReplication() override;
 	//~End of UObject interface
 
-private:
+protected:
 	UPROPERTY(Replicated)
 	FLyraInventoryList InventoryList;
 };

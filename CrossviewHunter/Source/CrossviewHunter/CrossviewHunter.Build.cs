@@ -87,6 +87,8 @@ public class CrossviewHunter : ModuleRules
 				"LyraGame"
 			}
 		);
+		
+		CircularlyReferencedDependentModules.Add("LyraGame");
 
 		DynamicallyLoadedModuleNames.AddRange(
 			new string[] {

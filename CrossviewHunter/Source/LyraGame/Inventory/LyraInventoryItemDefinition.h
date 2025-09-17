@@ -46,6 +46,12 @@ public:
 
 public:
 	const ULyraInventoryItemFragment* FindFragmentByClass(TSubclassOf<ULyraInventoryItemFragment> FragmentClass) const;
+
+	const FName& GetItemID() const { return ItemID; }
+
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category=Display)
+	FName ItemID;
 };
 
 //@TODO: Make into a subsystem instead?

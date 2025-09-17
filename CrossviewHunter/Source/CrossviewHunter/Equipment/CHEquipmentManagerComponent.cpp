@@ -42,11 +42,7 @@ ULyraEquipmentInstance* FCHEquipmentList::AddEntry(UCHEquipmentDefinition* Equip
 		for (const TObjectPtr<const ULyraAbilitySet>& AbilitySet : EquipmentDefinition->AbilitySetsToGrant)
 		{
 			AbilitySet->GiveToAbilitySystem(ASC, &NewEntry.GrantedHandles, Result);
-		}
-		//Modifiers 실행
-		if (ALyraCharacter* LyraCharacter = Cast<ALyraCharacter>(OwnerComponent->GetOwner()))
-		{
-			EquipmentDefinition->ApplyModifiers(LyraCharacter);
+			EquipmentDefinition->ApplyModifiers(ASC);
 		}
 	}
 	else
@@ -64,8 +60,6 @@ ULyraEquipmentInstance* FCHEquipmentList::AddEntry(UCHEquipmentDefinition* Equip
 
 void FCHEquipmentList::RemoveEntry(ULyraEquipmentInstance* Instance)
 {
-	FLyraEquipmentList::RemoveEntry(Instance);
-	
 	for (auto EntryIt = Entries.CreateIterator(); EntryIt; ++EntryIt)
 	{
 		//다운 캐스팅
@@ -75,7 +69,7 @@ void FCHEquipmentList::RemoveEntry(ULyraEquipmentInstance* Instance)
 			if (ULyraAbilitySystemComponent* ASC = GetAbilitySystemComponent())
 			{
 				Entry.GrantedHandles.TakeFromAbilitySystem(ASC);
-				Entry.CHEquipmentDef->RemoveModifiers();
+				Entry.CHEquipmentDef->RemoveModifiers(ASC);
 			}
 
 			Instance->DestroyEquipmentActors();

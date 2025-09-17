@@ -12,7 +12,6 @@
 #include "GameModes/LyraExperienceManagerComponent.h"
 #include "UObject/ConstructorHelpers.h"
 
-#include "Kismet/GameplayStatics.h"
 
 
 UCHItemCreationComponent::UCHItemCreationComponent(const FObjectInitializer& ObjectInitializer)
@@ -105,7 +104,17 @@ void UCHItemCreationComponent::SetEquipmentFragment(UCHItemDefinition& ItemDef, 
 	// EquipmentInfo Fragment
 	TObjectPtr<UInventoryFragment_CHEquipmentInfo> EquipInfo = NewObject<UInventoryFragment_CHEquipmentInfo>();
 	EquipInfo->InitializeValue(DataTableRow.ItemType, DataTableRow.EquipmentSlot, DataTableRow.BaseStats);
-	EquipInfo->SetEquipmentDefinitionByData(FindEquipmentTypeDefinition(DataTableRow.ItemType));
+	FEquipmentTypeDefinitionRow EquipTypeDefinition = FindEquipmentTypeDefinition(DataTableRow.ItemType);
+	EquipInfo->SetEquipmentDefinitionByData(EquipTypeDefinition);
+	
 
 	ItemDef.Fragments.Add(EquipInfo);
+	if (UClass* DefinitionClass = EquipTypeDefinition.BaseItemDefinition.LoadSynchronous())
+	{
+		if (ULyraInventoryItemDefinition* DefaultObject = DefinitionClass->GetDefaultObject<ULyraInventoryItemDefinition>())
+		{
+			ItemDef.Fragments.Append(DefaultObject->Fragments);
+		}
+	}
+
 }

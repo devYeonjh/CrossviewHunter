@@ -34,12 +34,11 @@ FInventoryPickup ACHPickableItem::GetPickupInventory() const
 	return InventoryItemInfo;
 }
 
-void ACHPickableItem::SetInventoryItemInfo(const ULyraInventoryItemInstance* ItemInstance)
+void ACHPickableItem::SetInventoryItemInfo(const TObjectPtr<ULyraInventoryItemInstance>& ItemInstance)
 {
-	FPickupTemplate ItemInfo;
-	ItemInfo.ItemDef = ItemInstance->GetItemDef();
-	ItemInfo.StackCount = 1;
-	InventoryItemInfo.Templates.Add(ItemInfo);
+	FPickupInstance ItemInfo;
+	ItemInfo.Item = ItemInstance;
+	InventoryItemInfo.Instances.Add(ItemInfo);
 }
 
 void ACHPickableItem::SetInventoryItemInfoWithCount(const ULyraInventoryItemInstance* ItemInstance, int32 Count)

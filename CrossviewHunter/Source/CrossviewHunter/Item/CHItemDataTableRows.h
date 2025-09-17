@@ -12,6 +12,7 @@
 
 class ULyraAbilitySet;
 class ULyraEquipmentInstance;
+class ULyraInventoryItemDefinition;
 
 USTRUCT(BlueprintType)
 struct FItemDataTableRow : public FTableRowBase
@@ -67,18 +68,21 @@ struct FEquipmentTypeDefinitionRow : public FTableRowBase
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(EditDefaultsOnly, Category=Equipment)
+	UPROPERTY(EditAnywhere, Category=Equipment)
 	ECHItemType Type = ECHItemType::None;
 	
 	// Class to spawn
-	UPROPERTY(EditDefaultsOnly, Category=Equipment)
+	UPROPERTY(EditAnywhere, Category=Equipment)
 	TSoftClassPtr<ULyraEquipmentInstance> InstanceType;
 
 	// Gameplay ability sets to grant when this is equipped
-	UPROPERTY(EditDefaultsOnly, Category=Equipment)
+	UPROPERTY(EditAnywhere, Category=Equipment)
 	TArray<TSoftObjectPtr<ULyraAbilitySet>> AbilitySetsToGrant;
 
 	// Actors to spawn on the pawn when this is equipped
-	UPROPERTY(EditDefaultsOnly, Category=Equipment)
+	UPROPERTY(EditAnywhere, Category=Equipment)
 	TArray<FLyraEquipmentActorToSpawn> ActorsToSpawn;
+
+	UPROPERTY(EditAnywhere, Category=Equipment)
+	TSoftClassPtr<ULyraInventoryItemDefinition> BaseItemDefinition;
 };

@@ -7,6 +7,7 @@
 
 #include "CHEquipmentDefinition.generated.h"
 
+class ULyraAbilitySystemComponent;
 enum class ECHStatID : uint8;
 class UObject;
 class ALyraCharacter;
@@ -25,9 +26,9 @@ public:
 
 	void SetModifiers(const TMap<ECHStatID, float>& InModifiers);
 	
-	void ApplyModifiers(const ALyraCharacter* Owner);
+	void ApplyModifiers(ULyraAbilitySystemComponent* ASC);
 
-	void RemoveModifiers();
+	void RemoveModifiers(ULyraAbilitySystemComponent* ASC);
 
 private:
 	UPROPERTY()

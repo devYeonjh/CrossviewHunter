@@ -13,8 +13,10 @@ class ULyraEquipmentManagerComponent;
 class UObject;
 struct FFrame;
 
+#define UE_API LYRAGAME_API
+
 UCLASS(Blueprintable, meta=(BlueprintSpawnableComponent))
-class ULyraQuickBarComponent : public UControllerComponent
+class UE_API ULyraQuickBarComponent : public UControllerComponent
 {
 	GENERATED_BODY()
 
@@ -53,13 +55,12 @@ public:
 
 	virtual void BeginPlay() override;
 
-private:
-	void UnequipItemInSlot();
-	void EquipItemInSlot();
+protected:
+	virtual void UnequipItemInSlot();
+	virtual void EquipItemInSlot();
 
 	ULyraEquipmentManagerComponent* FindEquipmentManager() const;
 
-protected:
 	UPROPERTY()
 	int32 NumSlots = 3;
 
@@ -69,7 +70,6 @@ protected:
 	UFUNCTION()
 	void OnRep_ActiveSlotIndex();
 
-private:
 	UPROPERTY(ReplicatedUsing=OnRep_Slots)
 	TArray<TObjectPtr<ULyraInventoryItemInstance>> Slots;
 
@@ -105,3 +105,5 @@ struct FLyraQuickBarActiveIndexChangedMessage
 	UPROPERTY(BlueprintReadOnly, Category=Inventory)
 	int32 ActiveIndex = 0;
 };
+
+#undef UE_API

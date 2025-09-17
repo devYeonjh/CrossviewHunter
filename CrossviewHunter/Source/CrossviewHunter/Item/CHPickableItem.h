@@ -25,7 +25,7 @@ public:
 	virtual void GatherInteractionOptions(const FInteractionQuery& InteractQuery, FInteractionOptionBuilder& InteractionBuilder) override;
 	virtual FInventoryPickup GetPickupInventory() const override;
 	
-	void SetInventoryItemInfo(const ULyraInventoryItemInstance* ItemInstance);
+	void SetInventoryItemInfo(const TObjectPtr<ULyraInventoryItemInstance>& ItemInstance);
 	void SetInventoryItemInfoWithCount(const ULyraInventoryItemInstance* ItemInstance, int32 Count);
 	void SetStaticMesh(UStaticMesh* Mesh) const;
 

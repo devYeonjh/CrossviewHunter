@@ -143,9 +143,99 @@ ULyraInventoryItemInstance* FLyraInventoryList::AddEntry(
 	return Result;
 }
 
-void FLyraInventoryList::AddEntry(ULyraInventoryItemInstance* Instance)
+TArray<TObjectPtr<ULyraInventoryItemInstance>> FLyraInventoryList::AddEntry(ULyraInventoryItemInstance* Instance, int32 StackCount)
 {
-	unimplemented();
+	TArray<TObjectPtr<ULyraInventoryItemInstance>> Result;
+	
+	check(Instance != nullptr);
+	check(OwnerComponent);
+
+	AActor* OwningActor = OwnerComponent->GetOwner();
+	check(OwningActor->HasAuthority());
+
+	if (const UInventoryFragment_Stackable* StackableFrag = Instance->FindFragmentByClass<UInventoryFragment_Stackable>())
+	{
+		Result.Append(AddStack(Instance,Instance->GetItemID(), StackCount, StackableFrag->MaxStackSize));
+		return Result;
+	}
+	FLyraInventoryEntry& NewEntry = Entries.AddDefaulted_GetRef();
+	NewEntry.Instance = Instance;
+
+	for (ULyraInventoryItemFragment* Fragment : Instance->GetItemDefInstance()->Fragments)
+	{
+		if (Fragment != nullptr)
+		{
+			Fragment->OnInstanceCreated(NewEntry.Instance);
+		}
+	}
+	NewEntry.StackCount = StackCount;
+
+	MarkItemDirty(NewEntry);
+	Result.Add(NewEntry.Instance);
+	
+	return Result;
+}
+
+TArray<TObjectPtr<ULyraInventoryItemInstance>> FLyraInventoryList::AddStack(ULyraInventoryItemInstance* Instance,
+	FName ItemID, int32 StackCount, int32 MaxCount)
+{
+	TArray<TObjectPtr<ULyraInventoryItemInstance>> Result;
+
+	
+	int32 CurrentCount = StackCount;
+	for (FLyraInventoryEntry& Entry : Entries)
+	{
+		//같은 아이템이 있는 경우
+		if (Entry.Instance && Entry.Instance->GetItemID() == ItemID)
+		{
+			// 현재 수량 + 추가 수량
+			CurrentCount = Entry.StackCount + CurrentCount;
+
+			if (CurrentCount > MaxCount)
+			{
+				// 최대치까지만 채움
+				Entry.StackCount = MaxCount;
+
+				Result.Add(Entry.Instance);
+				MarkItemDirty(Entry);
+				
+				// 남은 개수는 새로 생성 루틴으로 넘김
+				CurrentCount = CurrentCount - MaxCount;
+			}
+			else
+			{
+				// 아직 최대치 이하 → 그냥 누적
+				Entry.StackCount = CurrentCount;
+				Result.Add(Entry.Instance);
+				MarkItemDirty(Entry);
+
+				CurrentCount = 0;
+				break;
+			}
+		}
+	}
+	// 남은 갯수가 있는경우 추가
+	while (CurrentCount > 0)
+	{
+		FLyraInventoryEntry& NewEntry = Entries.AddDefaulted_GetRef();
+		NewEntry.Instance = Instance;
+
+		if (CurrentCount > MaxCount)
+		{
+			NewEntry.StackCount = MaxCount;
+			CurrentCount = CurrentCount - MaxCount;
+		}
+		else
+		{
+			NewEntry.StackCount = CurrentCount;
+			CurrentCount = 0;
+		}
+
+		Result.Add(NewEntry.Instance);
+		MarkItemDirty(NewEntry);
+	}
+
+	return Result;
 }
 
 void FLyraInventoryList::RemoveEntry(ULyraInventoryItemInstance* Instance)
@@ -250,12 +340,15 @@ ULyraInventoryItemInstance* ULyraInventoryManagerComponent::AddItemDefinition(TS
 	return Result;
 }
 
-void ULyraInventoryManagerComponent::AddItemInstance(ULyraInventoryItemInstance* ItemInstance)
+void ULyraInventoryManagerComponent::AddItemInstance(ULyraInventoryItemInstance* ItemInstance, int32 StackCount)
 {
-	InventoryList.AddEntry(ItemInstance);
-	if (IsUsingRegisteredSubObjectList() && IsReadyForReplication() && ItemInstance)
+	TArray<TObjectPtr<ULyraInventoryItemInstance>> Results = InventoryList.AddEntry(ItemInstance, StackCount);
+	for (TObjectPtr<ULyraInventoryItemInstance>& Result : Results)
 	{
-		AddReplicatedSubObject(ItemInstance);
+		if (IsUsingRegisteredSubObjectList() && IsReadyForReplication() && Result)
+		{
+			AddReplicatedSubObject(Result);
+		}
 	}
 }
 

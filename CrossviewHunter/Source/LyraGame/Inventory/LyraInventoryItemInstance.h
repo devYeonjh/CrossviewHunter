@@ -73,6 +73,11 @@ public:
 		return ItemDef;
 	}
 
+	TObjectPtr<ULyraInventoryItemDefinition> GetItemDefInstance() const
+	{
+		return ItemDefInstance;
+	}
+
 	UFUNCTION(BlueprintCallable, BlueprintPure=false, meta=(DeterminesOutputType=FragmentClass))
 	const ULyraInventoryItemFragment* FindFragmentByClass(TSubclassOf<ULyraInventoryItemFragment> FragmentClass) const;
 
@@ -81,6 +86,10 @@ public:
 	{
 		return (ResultClass*)FindFragmentByClass(ResultClass::StaticClass());
 	}
+
+	//Item Definition에서 ID 가져오기
+	UFUNCTION(BlueprintCallable, Category=Inventory)
+	FName GetItemID();
 
 protected:
 #if UE_WITH_IRIS

@@ -28,6 +28,19 @@ void ULyraInventoryItemInstance::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 }
 
 #if UE_WITH_IRIS
+FName ULyraInventoryItemInstance::GetItemID()
+{
+	if (ItemDef != nullptr)
+	{
+		return GetDefault<ULyraInventoryItemDefinition>(ItemDef)->GetItemID();
+	}
+	if (ItemDefInstance != nullptr)
+	{
+		return ItemDefInstance->GetItemID();
+	}
+	return FName();
+}
+
 void ULyraInventoryItemInstance::RegisterReplicationFragments(UE::Net::FFragmentRegistrationContext& Context, UE::Net::EFragmentRegistrationFlags RegistrationFlags)
 {
 	using namespace UE::Net;
