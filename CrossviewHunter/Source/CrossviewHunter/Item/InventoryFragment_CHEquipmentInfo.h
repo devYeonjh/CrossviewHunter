@@ -42,7 +42,7 @@ public:
 	void InitializeValue(ECHItemType InType, ECHEquipmentSlot InSlot, TMap<TSubclassOf<UGameplayEffect>, float> InModifiers);
 
 	UFUNCTION()
-	void SetEquipmentDefinitionByData(const FEquipmentTypeDefinitionRow& DataRow) const;
+	void SetEquipmentDefinitionByData(const FCHEquipmentTypeDefinitionRow& DataRow) const;
 
 	UFUNCTION()
 	FORCEINLINE UCHEquipmentDefinition* GetEquipmentDef() const { return EquipmentDef;}

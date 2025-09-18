@@ -20,9 +20,10 @@ void UCHAttributeHelpers::Deinitialize()
 	Super::Deinitialize();
 }
 
-void UCHAttributeHelpers::GetAttributeForID(ECHStatID ID, FGameplayAttribute& OutAttribute)
+FGameplayAttribute UCHAttributeHelpers::GetAttributeForID(const ECHStatID ID)
 {
-	OutAttribute = StatAttributeMap.FindRef(ID);
+	FGameplayAttribute ResultAttribute = StatAttributeMap.FindRef(ID);
+	return ResultAttribute;
 }
 
 

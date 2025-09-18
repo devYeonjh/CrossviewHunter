@@ -7,22 +7,22 @@
 #include "CHPickableItem.h"
 #include "InventoryFragment_CHEquipmentInfo.h"
 #include "Kismet/DataTableFunctionLibrary.h"
-#include "Inventory/LyraInventoryItemDefinition.h"
 #include "GameModes/LyraExperienceManagerComponent.h"
 #include "UObject/ConstructorHelpers.h"
-#include "AbilitySystem/Attributes/CHStatEffectBase.h"
+
+
 
 
 
 UCHItemCreationComponent::UCHItemCreationComponent(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	ConstructorHelpers::FObjectFinder<UDataTable> ItemDataTableObj(TEXT("/Game/CrossviewHunter/Core/DT_ItemData.DT_ItemData"));
+	ConstructorHelpers::FObjectFinder<UDataTable> ItemDataTableObj(TEXT("/Game/CrossviewHunter/Data/DT_ItemData.DT_ItemData"));
 	if (ItemDataTableObj.Succeeded())
 	{
 		ItemDataTable = ItemDataTableObj.Object;
 	}
-	ConstructorHelpers::FObjectFinder<UDataTable> EquipmentTypeDataTableObj(TEXT("/Game/CrossviewHunter/Core/DT_EquipmentType.DT_EquipmentType"));
+	ConstructorHelpers::FObjectFinder<UDataTable> EquipmentTypeDataTableObj(TEXT("/Game/CrossviewHunter/Data/DT_EquipmentType.DT_EquipmentType"));
 	if (EquipmentTypeDataTableObj.Succeeded())
 	{
 		EquipmentTypeDataTable = EquipmentTypeDataTableObj.Object;
@@ -62,9 +62,9 @@ ULyraInventoryItemInstance* UCHItemCreationComponent::CreateItemInstance(const F
 {
 	// 아이템 데이터 세팅
 	UCHItemDefinition* ItemDefinition = NewObject<UCHItemDefinition>();
-	const FItemDataTableRow& ItemDataRow = FindItemDataByID(ItemID);
-	ItemDefinition->DisplayName = ItemDataRow.ItemName;
-	SetEquipmentFragment(*ItemDefinition, ItemDataRow);
+	const FCHItemDataTableRow& ItemDataRow = FindItemDataByID(ItemID);
+	ItemDefinition->SetItemData(this, ItemDataRow);
+
 	
 	
 	// 아이템 인스턴스 생성
@@ -76,17 +76,27 @@ ULyraInventoryItemInstance* UCHItemCreationComponent::CreateItemInstance(const F
 	return ItemInstance;
 }
 
-FItemDataTableRow& UCHItemCreationComponent::FindItemDataByID(const FName& ItemID) const
+TSubclassOf<UGameplayEffect> UCHItemCreationComponent::GetStatEffect(const ECHStatID StatID)
 {
-	FItemDataTableRow* OutItemDataRow = new FItemDataTableRow();
+	return StatEffectMap[StatID];
+}
+
+TSubclassOf<UCHOptionPool> UCHItemCreationComponent::GetOptionPool(const ECHOptionPoolID OptionPoolID)
+{
+	return OptionPools[OptionPoolID];
+}
+
+FCHItemDataTableRow& UCHItemCreationComponent::FindItemDataByID(const FName& ItemID) const
+{
+	FCHItemDataTableRow* OutItemDataRow = new FCHItemDataTableRow();
 	UDataTableFunctionLibrary::Generic_GetDataTableRowFromName(ItemDataTable, ItemID, OutItemDataRow);
 
 	return *OutItemDataRow;
 }
 
-FEquipmentTypeDefinitionRow& UCHItemCreationComponent::FindEquipmentTypeDefinition(ECHItemType Type) const
+FCHEquipmentTypeDefinitionRow& UCHItemCreationComponent::FindEquipmentTypeDefinition(ECHItemType Type) const
 {
-	FEquipmentTypeDefinitionRow* OutEquipmentTypeDefinitionRow = new FEquipmentTypeDefinitionRow();
+	FCHEquipmentTypeDefinitionRow* OutEquipmentTypeDefinitionRow = new FCHEquipmentTypeDefinitionRow();
 	
 	const UEnum* EnumClass = StaticEnum<ECHItemType>();
 	check(EnumClass != nullptr);
@@ -94,33 +104,4 @@ FEquipmentTypeDefinitionRow& UCHItemCreationComponent::FindEquipmentTypeDefiniti
 	UDataTableFunctionLibrary::Generic_GetDataTableRowFromName(EquipmentTypeDataTable, TypeName, OutEquipmentTypeDefinitionRow);
 
 	return *OutEquipmentTypeDefinitionRow;
-}
-
-void UCHItemCreationComponent::SetEquipmentFragment(UCHItemDefinition& ItemDef, const FItemDataTableRow& DataTableRow)
-{
-	// Fragment 기반으로 아이템 장착 가능 여부 및 장착 스탯 확인
-	// Fragment 데이터를 DataTable 기반으로 결정
-	TObjectPtr<UInventoryFragment_CHEquipmentInfo> EquipInfo = NewObject<UInventoryFragment_CHEquipmentInfo>();
-
-	TMap<TSubclassOf<UGameplayEffect>, float> Modifiers;
-	
-	for (auto It = DataTableRow.BaseStats.CreateConstIterator(); It; ++It)
-	{
-		Modifiers.Add(StatEffectMap[It.Key()],It.Value());
-	}
-	
-	EquipInfo->InitializeValue(DataTableRow.ItemType, DataTableRow.EquipmentSlot, Modifiers);
-	FEquipmentTypeDefinitionRow EquipTypeDefinition = FindEquipmentTypeDefinition(DataTableRow.ItemType);
-	EquipInfo->SetEquipmentDefinitionByData(EquipTypeDefinition);
-
-	
-	ItemDef.Fragments.Add(EquipInfo);
-	if (UClass* DefinitionClass = EquipTypeDefinition.BaseItemDefinition.LoadSynchronous())
-	{
-		if (ULyraInventoryItemDefinition* DefaultObject = DefinitionClass->GetDefaultObject<ULyraInventoryItemDefinition>())
-		{
-			ItemDef.Fragments.Append(DefaultObject->Fragments);
-		}
-	}
-
 }

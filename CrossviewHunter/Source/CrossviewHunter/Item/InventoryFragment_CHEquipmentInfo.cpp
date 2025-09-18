@@ -21,7 +21,7 @@ void UInventoryFragment_CHEquipmentInfo::InitializeValue(ECHItemType InType, ECH
 	EquipmentDef->SetModifiers(InModifiers);
 }
 
-void UInventoryFragment_CHEquipmentInfo::SetEquipmentDefinitionByData(const FEquipmentTypeDefinitionRow& DataRow) const
+void UInventoryFragment_CHEquipmentInfo::SetEquipmentDefinitionByData(const FCHEquipmentTypeDefinitionRow& DataRow) const
 {
 	EquipmentDef->InstanceType = DataRow.InstanceType.Get();
 	for (TSoftObjectPtr<ULyraAbilitySet> AbilitySet : DataRow.AbilitySetsToGrant)

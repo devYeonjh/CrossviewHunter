@@ -50,7 +50,10 @@ public class CrossviewHunter : ModuleRules
 				"GameplayStateTreeModule",
 				"InputCore",
 				"EnhancedInput",
-				"NavigationSystem"
+				"NavigationSystem",
+				"UnrealEd",
+				"ToolMenus",
+				"EditorStyle" 
 			}
 		);
 
