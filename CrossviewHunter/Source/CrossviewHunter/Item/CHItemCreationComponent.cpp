@@ -5,6 +5,7 @@
 #include "CHItemDefinition.h"
 #include "CHItemInstance.h"
 #include "CHPickableItem.h"
+#include "CHOptionPool.h"
 #include "InventoryFragment_CHEquipmentInfo.h"
 #include "Kismet/DataTableFunctionLibrary.h"
 #include "GameModes/LyraExperienceManagerComponent.h"
@@ -64,7 +65,6 @@ ULyraInventoryItemInstance* UCHItemCreationComponent::CreateItemInstance(const F
 	UCHItemDefinition* ItemDefinition = NewObject<UCHItemDefinition>();
 	const FCHItemDataTableRow& ItemDataRow = FindItemDataByID(ItemID);
 	ItemDefinition->SetItemData(this, ItemDataRow);
-
 	
 	
 	// 아이템 인스턴스 생성
@@ -78,11 +78,15 @@ ULyraInventoryItemInstance* UCHItemCreationComponent::CreateItemInstance(const F
 
 TSubclassOf<UGameplayEffect> UCHItemCreationComponent::GetStatEffect(const ECHStatID StatID)
 {
+	if (StatEffectMap.Contains(StatID) == false)
+		return nullptr;
 	return StatEffectMap[StatID];
 }
 
-TSubclassOf<UCHOptionPool> UCHItemCreationComponent::GetOptionPool(const ECHOptionPoolID OptionPoolID)
+TObjectPtr<UCHOptionPool> UCHItemCreationComponent::GetOptionPool(const ECHOptionPoolID OptionPoolID)
 {
+	if (OptionPools.Contains(OptionPoolID) == false)
+		return nullptr;
 	return OptionPools[OptionPoolID];
 }
 

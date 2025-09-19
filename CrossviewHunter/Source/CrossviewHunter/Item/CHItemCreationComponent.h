@@ -7,7 +7,7 @@
 #include "AbilitySystem/CHStatID.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "AbilitySystem/Attributes/CHStatEffectBase.h"
-#include "CHItemDataTableRows.h"
+#include "CHOptionPool.h"
 
 #include "CHItemCreationComponent.generated.h"
 
@@ -17,6 +17,7 @@ class ULyraExperienceDefinition;
 class ULyraInventoryItemDefinition;
 class ULyraInventoryItemInstance;
 class ACHPickableItem;
+
 
 /**
  * 아이템 생성기 컴포넌트 (GameStateComponent)
@@ -48,7 +49,7 @@ public:
 	/** GameEffect 받아오기 */
 	TSubclassOf<UGameplayEffect> GetStatEffect(const ECHStatID StatID);
 
-	TSubclassOf<UCHOptionPool> GetOptionPool(const ECHOptionPoolID OptionPoolID);
+	TObjectPtr<UCHOptionPool> GetOptionPool(const ECHOptionPoolID OptionPoolID);
 
 	/** Type 정보 받아오기 */
 	FCHEquipmentTypeDefinitionRow& FindEquipmentTypeDefinition(ECHItemType Type) const;
@@ -75,6 +76,5 @@ protected:
 	TMap<ECHStatID, TSubclassOf<UCHStatEffectBase>> StatEffectMap;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = ItemCreation)
-	TMap<ECHOptionPoolID, TSubclassOf<UCHOptionPool>> OptionPools;
-
+	TMap<ECHOptionPoolID, TObjectPtr<UCHOptionPool>> OptionPools;
 };

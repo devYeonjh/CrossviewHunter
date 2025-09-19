@@ -3,7 +3,6 @@
 
 #include "CHEquipmentDefinition.h"
 #include "Equipment/LyraEquipmentInstance.h"
-#include "AbilitySystem/LyraAbilitySystemComponent.h"
 #include "AbilitySystem/Attributes/CHStatEffectBase.h"
 
 #include "Engine/GameInstance.h"
@@ -15,13 +14,23 @@ UCHEquipmentDefinition::UCHEquipmentDefinition(const FObjectInitializer& ObjectI
 	InstanceType = ULyraEquipmentInstance::StaticClass();
 }
 
-void UCHEquipmentDefinition::SetModifiers(const TMap<TSubclassOf<UGameplayEffect>, float>& InModifiers)
+void UCHEquipmentDefinition::SetDefaultOptions(const TMap<TSubclassOf<UGameplayEffect>, float>& Options)
 {
-	Modifiers = InModifiers;
+	DefaultOptions = Options;
 }
 
-TMap<TSubclassOf<UGameplayEffect>, float> UCHEquipmentDefinition::GetModifiers() const
+void UCHEquipmentDefinition::SetAdditionalOptions(const TArray<TPair<TSubclassOf<UGameplayEffect>, float>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>& Options)
 {
-	return Modifiers;
+	AdditionalOptions = Options;
+}
+
+TMap<TSubclassOf<UGameplayEffect>, float> UCHEquipmentDefinition::GetDefaultOptions() const
+{
+	return DefaultOptions;
+}
+
+TArray<TPair<TSubclassOf<UGameplayEffect>, float>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>> UCHEquipmentDefinition::GetAdditionalOptions() const
+{
+	return AdditionalOptions;
 }
 

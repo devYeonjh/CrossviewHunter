@@ -13,12 +13,16 @@ UInventoryFragment_CHEquipmentInfo::UInventoryFragment_CHEquipmentInfo()
 	EquipmentDef = NewObject<UCHEquipmentDefinition>();
 }
 
-void UInventoryFragment_CHEquipmentInfo::InitializeValue(ECHItemType InType, ECHEquipmentSlot InSlot,
-                                                         TMap<TSubclassOf<UGameplayEffect>, float> InModifiers)
+void UInventoryFragment_CHEquipmentInfo::InitializeValue(
+	const ECHItemType InType,
+	const ECHEquipmentSlot InSlot,
+	const TMap<TSubclassOf<UGameplayEffect>, float>& DefaultOptions,
+	const TArray<TPair<TSubclassOf<UGameplayEffect>, float>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>& AdditionalOptions)
 {
 	Type = InType;
 	Slot = InSlot;
-	EquipmentDef->SetModifiers(InModifiers);
+	EquipmentDef->SetDefaultOptions(DefaultOptions);
+	EquipmentDef->SetAdditionalOptions(AdditionalOptions);
 }
 
 void UInventoryFragment_CHEquipmentInfo::SetEquipmentDefinitionByData(const FCHEquipmentTypeDefinitionRow& DataRow) const

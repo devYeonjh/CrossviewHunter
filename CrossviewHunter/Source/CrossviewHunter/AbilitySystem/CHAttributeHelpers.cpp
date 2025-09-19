@@ -29,7 +29,7 @@ FGameplayAttribute UCHAttributeHelpers::GetAttributeForID(const ECHStatID ID)
 
 void UCHAttributeHelpers::InitializeDataTable()
 {
-	StatDataTable = LoadObject<UDataTable>(nullptr, TEXT("/Game/CrossviewHunter/Core/DT_StatData.DT_StatData"));
+	StatDataTable = LoadObject<UDataTable>(nullptr, TEXT("/Game/CrossviewHunter/Data/DT_StatData.DT_StatData"));
 		
 	StatDataTable->ForeachRow<FCHStatData>(FString("FCHStatData"),
 		[this](const FName& Key, const FCHStatData& Value)

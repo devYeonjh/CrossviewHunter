@@ -4,6 +4,7 @@
 #include "CHItemDefinition.h"
 #include "InventoryFragment_CHEquipmentInfo.h"
 #include "CHItemCreationComponent.h"
+#include "CHOptionPool.h"
 
 
 void UCHItemDefinition::SetItemData(UCHItemCreationComponent* ICC, const FCHItemDataTableRow& DataTableRow)
@@ -12,23 +13,32 @@ void UCHItemDefinition::SetItemData(UCHItemCreationComponent* ICC, const FCHItem
 	DisplayName = DataTableRow.ItemName;
 	
 	SetEquipmentFragment(ICC, DataTableRow);
-	TSubclassOf<UCHOptionPool> OptionPool = ICC->GetOptionPool(DataTableRow.OptionPoolID);
 }
 
 void UCHItemDefinition::SetEquipmentFragment(UCHItemCreationComponent* ICC, const FCHItemDataTableRow& DataTableRow)
 {
 	TObjectPtr<UInventoryFragment_CHEquipmentInfo> EquipInfo = NewObject<UInventoryFragment_CHEquipmentInfo>();
 
-	TMap<TSubclassOf<UGameplayEffect>, float> Modifiers;
+	TMap<TSubclassOf<UGameplayEffect>, float> DefaultOptions;
+	TArray<TPair<TSubclassOf<UGameplayEffect>, float>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>> AdditionalOptions;
 
-	// Modifier 추가
+	// Default 옵션 추가
 	for (auto It = DataTableRow.BaseStats.CreateConstIterator(); It; ++It)
 	{
-		Modifiers.Add(ICC->GetStatEffect(It.Key()),It.Value());
+		DefaultOptions.Add(ICC->GetStatEffect(It.Key()),It.Value());
+	}
+	
+	// Additional 옵션 추가
+	TObjectPtr<UCHOptionPool> OptionPool = ICC->GetOptionPool(DataTableRow.OptionPoolID);
+	TArray<TPair<ECHStatID, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>> RandomStatArray = OptionPool->GetRandomOptions(DataTableRow.ItemGrade);
+
+	for (TPair RandomStat : RandomStatArray)
+	{
+		AdditionalOptions.Emplace(TPair<TSubclassOf<UGameplayEffect>, float>(ICC->GetStatEffect(RandomStat.Key), RandomStat.Value));
 	}
 
 	// EquipInfo fragment에서 값 설정
-	EquipInfo->InitializeValue(DataTableRow.ItemType, DataTableRow.EquipmentSlot, Modifiers);
+	EquipInfo->InitializeValue(DataTableRow.ItemType, DataTableRow.EquipmentSlot, DefaultOptions, AdditionalOptions);
 	FCHEquipmentTypeDefinitionRow EquipTypeDefinition = ICC->FindEquipmentTypeDefinition(DataTableRow.ItemType);
 	EquipInfo->SetEquipmentDefinitionByData(EquipTypeDefinition);
 	Fragments.Add(EquipInfo);

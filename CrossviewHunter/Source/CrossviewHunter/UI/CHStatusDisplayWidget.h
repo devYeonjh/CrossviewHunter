@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
+#include "CommonActivatableWidget.h"
 
 #include "CHStatusDisplayWidget.generated.h"
 
@@ -15,7 +15,7 @@ struct FGameplayEffectSpec;
  * 
  */
 UCLASS()
-class CROSSVIEWHUNTER_API UCHStatusDisplayWidget : public UUserWidget
+class CROSSVIEWHUNTER_API UCHStatusDisplayWidget : public UCommonActivatableWidget
 {
 	GENERATED_BODY()
 

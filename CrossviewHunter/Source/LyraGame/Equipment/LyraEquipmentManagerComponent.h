@@ -49,6 +49,7 @@ protected:
 	FLyraAbilitySet_GrantedHandles GrantedHandles;
 
 	TArray<FActiveGameplayEffectHandle> ActiveEffectHandles;
+	TArray<FActiveGameplayEffectHandle, TFixedAllocator<3>> ActiveAdditionalEffectHandles;
 };
 
 /** List of applied equipment */

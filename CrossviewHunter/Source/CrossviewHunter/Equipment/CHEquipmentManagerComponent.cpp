@@ -18,6 +18,7 @@
 
 ULyraEquipmentInstance* FCHEquipmentList::AddEntry(UCHEquipmentDefinition* EquipmentDefinition)
 {
+	//기본 구조는 FLyraEquipmentList와 동일
 	ULyraEquipmentInstance* Result = nullptr;
 
 	check(EquipmentDefinition != nullptr);
@@ -31,24 +32,38 @@ ULyraEquipmentInstance* FCHEquipmentList::AddEntry(UCHEquipmentDefinition* Equip
 		InstanceType = ULyraEquipmentInstance::StaticClass();
 	}
 
-	// 다운 캐스팅
+	// 다운 캐스팅 -> CHEquipmentDef를 쓰기위함 (기존 Definition은 SubclassOf로 설정되어있어 값을 런타임중에 설정한 클래스를 사용하기 어려움)
 	FCHAppliedEquipmentEntry& NewEntry = static_cast<FCHAppliedEquipmentEntry&>(Entries.AddDefaulted_GetRef());
 	NewEntry.CHEquipmentDef = EquipmentDefinition;
 	NewEntry.Instance = NewObject<ULyraEquipmentInstance>(OwnerComponent->GetOwner(), InstanceType);
 	Result = NewEntry.Instance;
-
+	
 	if (ULyraAbilitySystemComponent* ASC = GetAbilitySystemComponent())
 	{
 		for (const TObjectPtr<const ULyraAbilitySet>& AbilitySet : EquipmentDefinition->AbilitySetsToGrant)
 		{
 			AbilitySet->GiveToAbilitySystem(ASC, &NewEntry.GrantedHandles, Result);
 		}
-		TArray<FGameplayEffectSpecHandle> Handles = MakeGameEffectSpecHandles(ASC, EquipmentDefinition->GetModifiers());
+		// Default 옵션 적용
+		// GameplayEffectSpec기반으로 적용할 옵션을 생성
+		TArray<FGameplayEffectSpecHandle> Handles = MakeGameEffectSpecHandles(ASC, EquipmentDefinition->GetDefaultOptions());
 		for (FGameplayEffectSpecHandle Handle: Handles)
 		{
+			// ASC에 생성한 GE Spec 등록
+			// FGameplayEffectSpecHandle ASC에서 GameplaySpec을 동적으로 생성할때 나오는 결과
 			FActiveGameplayEffectHandle ActiveHandle = ASC->ApplyGameplayEffectSpecToSelf(*Handle.Data);
 			NewEntry.ActiveEffectHandles.Emplace(ActiveHandle);
 		}
+		// Additional 옵션 적용
+		Handles.Empty();
+		Handles = MakeGameEffectSpecHandles(ASC, EquipmentDefinition->GetAdditionalOptions());
+		for (FGameplayEffectSpecHandle Handle: Handles)
+		{
+			FActiveGameplayEffectHandle ActiveHandle = ASC->ApplyGameplayEffectSpecToSelf(*Handle.Data);
+			NewEntry.ActiveAdditionalEffectHandles.Emplace(ActiveHandle);
+		}
+		
+		
 	}
 	else
 	{
@@ -78,7 +93,12 @@ void FCHEquipmentList::RemoveEntry(ULyraEquipmentInstance* Instance)
 				{
 					ASC->RemoveActiveGameplayEffect(ActiveHandle);
 				}
+				for (const FActiveGameplayEffectHandle ActiveHandle : Entry.ActiveAdditionalEffectHandles)
+				{
+					ASC->RemoveActiveGameplayEffect(ActiveHandle);
+				}
 				Entry.ActiveEffectHandles.Empty();
+				Entry.ActiveAdditionalEffectHandles.Empty();
 			}
 
 			Instance->DestroyEquipmentActors();
@@ -90,8 +110,9 @@ void FCHEquipmentList::RemoveEntry(ULyraEquipmentInstance* Instance)
 	}
 }
 
-TArray<FGameplayEffectSpecHandle> FCHEquipmentList::MakeGameEffectSpecHandles(ULyraAbilitySystemComponent* ASC,
-	TMap<TSubclassOf<UGameplayEffect>, float> Modifiers)
+TArray<FGameplayEffectSpecHandle> FCHEquipmentList::MakeGameEffectSpecHandles(
+	const TObjectPtr<ULyraAbilitySystemComponent>& ASC,
+	TMap<TSubclassOf<UGameplayEffect>, float> Modifiers) const
 {
 	TArray<FGameplayEffectSpecHandle> Results;
 	for (auto It = Modifiers.CreateIterator(); It; ++It)
@@ -108,6 +129,28 @@ TArray<FGameplayEffectSpecHandle> FCHEquipmentList::MakeGameEffectSpecHandles(UL
 
 	return Results;
 }
+
+TArray<FGameplayEffectSpecHandle> FCHEquipmentList::MakeGameEffectSpecHandles(
+	const TObjectPtr<ULyraAbilitySystemComponent>& ASC,
+	const TArray<TPair<TSubclassOf<UGameplayEffect>, float>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>& Modifiers) const
+{
+	TArray<FGameplayEffectSpecHandle> Results;
+	for (TPair It : Modifiers)
+	{
+		// Effect spec Handle 생성 (GE BP 클래스 기반)
+		FGameplayEffectSpecHandle Handle = ASC->MakeOutgoingSpec(It.Key, 1.0f, ASC->MakeEffectContext());
+		// SetByCaller 설정을 위한 Tag 받아오기
+		FGameplayTag Tag = Handle.Data->Def->Modifiers[0].ModifierMagnitude.GetSetByCallerFloat().DataTag;
+		// SetByCaller에 값 설정
+		Handle.Data->SetSetByCallerMagnitude(Tag, It.Value);
+
+		Results.Add(Handle);
+	}
+
+	return Results;
+	
+}
+
 
 ULyraEquipmentInstance* UCHEquipmentManagerComponent::EquipItemInstance(UCHItemInstance* ItemInstance)
 {

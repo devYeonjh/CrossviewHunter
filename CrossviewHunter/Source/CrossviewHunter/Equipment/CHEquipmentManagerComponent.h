@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Equipment/LyraEquipmentManagerComponent.h"
+#include "Item/CHItemDataTableRows.h"
 
 #include "CHEquipmentManagerComponent.generated.h"
 
@@ -39,8 +40,13 @@ public:
 	ULyraEquipmentInstance* AddEntry(UCHEquipmentDefinition* EquipmentDefinition);
 	void RemoveEntry(ULyraEquipmentInstance* Instance);
 
-	TArray<FGameplayEffectSpecHandle> MakeGameEffectSpecHandles(ULyraAbilitySystemComponent* ASC,
-		TMap<TSubclassOf<UGameplayEffect>, float> Modifiers);
+	TArray<FGameplayEffectSpecHandle> MakeGameEffectSpecHandles(
+		const TObjectPtr<ULyraAbilitySystemComponent>& ASC,
+		TMap<TSubclassOf<UGameplayEffect>, float> Modifiers) const;
+
+	TArray<FGameplayEffectSpecHandle> MakeGameEffectSpecHandles(
+		const TObjectPtr<ULyraAbilitySystemComponent>& ASC,
+		const TArray<TPair<TSubclassOf<UGameplayEffect>, float>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>& Modifiers) const;
 
 protected:
 	friend UCHEquipmentManagerComponent;

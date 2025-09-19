@@ -6,9 +6,10 @@
 #include "AbilitySystem/CHStatID.h"
 #include "CHItemTypes.h"
 #include "Equipment/LyraEquipmentDefinition.h"
-#include "Engine/DataAsset.h"
 
 #include "CHItemDataTableRows.generated.h"
+
+#define MAX_ADDITIONAL_OPTION_COUNT 3
 
 class ULyraAbilitySet;
 class ULyraEquipmentInstance;
@@ -50,6 +51,19 @@ USTRUCT(BlueprintType)
 struct FCHItemDataTableRow : public FTableRowBase
 {
 	GENERATED_BODY()
+
+	FCHItemDataTableRow()
+	:	ItemID(FName())
+	,	ItemName(FText())
+	,	ItemType(ECHItemType::None)
+	,	ItemGrade(ECHGradeID::grade_20001)
+	,	EquipmentSlot(ECHEquipmentSlot::None)
+	,	BaseStats(TMap<ECHStatID, float>())
+	,	OptionPoolID(ECHOptionPoolID::pool_200001)
+	,	SpecialEffectID(FName())
+	{
+		
+	}
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Info")
@@ -59,13 +73,13 @@ public:
 	FText ItemName;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Info")
-	ECHItemType ItemType = ECHItemType::None;
+	ECHItemType ItemType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Grade")
-	ECHGradeID ItemGrade = ECHGradeID::grade_20001;
+	ECHGradeID ItemGrade;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Info")
-	ECHEquipmentSlot EquipmentSlot = ECHEquipmentSlot::None;
+	ECHEquipmentSlot EquipmentSlot;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Info")
 	TMap<ECHStatID, float> BaseStats;
@@ -82,6 +96,18 @@ struct FCHItemOptionDetailRow : public FTableRowBase
 {
 	GENERATED_BODY()
 
+	FCHItemOptionDetailRow()
+	:	OptionID(FName())
+	,	OptionPoolID(ECHOptionPoolID::pool_200001)
+	,	StatID(ECHStatID::stat_001)
+	,	MinValue(0)
+	,	MaxValue(0)
+	,	Weight(0)
+	{
+		
+	}
+	
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Option")
 	FName OptionID;
@@ -90,7 +116,7 @@ public:
 	ECHOptionPoolID OptionPoolID;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Option")
-	ECHStatID StatID = ECHStatID::stat_001;
+	ECHStatID StatID;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Option")
 	int32 MinValue;
@@ -107,7 +133,7 @@ USTRUCT(BlueprintType)
 struct FCHEquipmentTypeDefinitionRow : public FTableRowBase
 {
 	GENERATED_BODY()
-
+	
 public:
 	UPROPERTY(EditAnywhere, Category=Equipment)
 	ECHItemType Type = ECHItemType::None;
@@ -133,9 +159,18 @@ struct FCHItemGradeRow : public FTableRowBase
 {
 	GENERATED_BODY()
 
+	FCHItemGradeRow()
+	:	GradeID(ECHGradeID::grade_20001)
+	,	AffixLines(0)
+	,	ScrapMetal(0)
+	,	Description(FString())
+	{
+		
+	}
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Info")
-	ECHGradeID ItemID;
+	ECHGradeID GradeID;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Info")
 	int32 AffixLines;
@@ -147,50 +182,4 @@ public:
 	FString Description;
 };
 
-
-/**
- * OptionPool 저장하는 데이터 에셋 (ItemOptionDetail DataTable에서 자동으로 데이터 가져옴)
- * @TODO 서버에서 DataTable 참조해서 미리 로딩하는 방식으로 변경
- */
-UCLASS(Blueprintable)
-class UCHOptionPool : public UPrimaryDataAsset
-{
-	GENERATED_BODY()
-
-public:
-	UCHOptionPool(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
-	
-	virtual FPrimaryAssetId GetPrimaryAssetId() const override;
-	
-protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Info")
-	ECHOptionPoolID PoolID;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "OptionPools" )
-	TArray<FCHItemOptionDetailRow> OptionDetails;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "DataSource")
-	TObjectPtr<UDataTable> OptionDataTable;
-
-public:
-#if WITH_EDITOR
-	// 에디터에서 PoolID 변경 시 호출
-	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
-	
-	// 수동 새로고침
-	UFUNCTION(CallInEditor, Category = "DataManagement")
-	void RefreshOptionDetails();
-#endif
-
-	TMap<ECHStatID, int32> GetRandomOptions(int32 Num);
-
-
-private:
-	// 내부 로드 함수
-	void LoadMatchingOptionsFromDataTable();
-	
-	// 이전 PoolID 추적 (변경 감지용)
-	UPROPERTY()
-	ECHOptionPoolID LastPoolID;
-};
 

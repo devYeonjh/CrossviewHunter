@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Equipment/LyraEquipmentDefinition.h"
+#include "Item/CHItemDataTableRows.h"
 
 #include "CHEquipmentDefinition.generated.h"
 
@@ -24,11 +25,14 @@ class CROSSVIEWHUNTER_API UCHEquipmentDefinition : public ULyraEquipmentDefiniti
 public:
 	UCHEquipmentDefinition(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	void SetModifiers(const TMap<TSubclassOf<UGameplayEffect>, float>& InModifiers);
+	void SetDefaultOptions(const TMap<TSubclassOf<UGameplayEffect>, float>& Options);
+	void SetAdditionalOptions(const TArray<TPair<TSubclassOf<UGameplayEffect>, float>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>& Options);
 
-	TMap<TSubclassOf<UGameplayEffect>, float>GetModifiers() const;
+	TMap<TSubclassOf<UGameplayEffect>, float>GetDefaultOptions() const;
+	TArray<TPair<TSubclassOf<UGameplayEffect>, float>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>GetAdditionalOptions() const;
 
 private:
 
-	TMap<TSubclassOf<UGameplayEffect>, float> Modifiers;
+	TMap<TSubclassOf<UGameplayEffect>, float> DefaultOptions;
+	TArray<TPair<TSubclassOf<UGameplayEffect>, float>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>AdditionalOptions;
 };

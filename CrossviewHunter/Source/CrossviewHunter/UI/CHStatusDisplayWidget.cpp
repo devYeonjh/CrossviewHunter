@@ -56,8 +56,8 @@ void UCHStatusDisplayWidget::BindToStatSet(const UCHStatSet* StatSet)
 
 void UCHStatusDisplayWidget::UnbindFromStatSet()
 {
-	
-	
+	BoundStatSet = nullptr;
+	UpdateAllStats();
 }
 
 void UCHStatusDisplayWidget::OnHealthChanged(float NewValue)
@@ -88,7 +88,7 @@ void UCHStatusDisplayWidget::UpdateAllStats()
 
 		DefenceText->SetText(FText::AsNumber(BoundStatSet->GetDefence()));
 		
-		CritRateText->SetText(FText::AsPercent(BoundStatSet->GetCritRate()));
+		CritRateText->SetText(FText::AsNumber(BoundStatSet->GetCritRate()));
 
 		FireRateText->SetText(FText::AsNumber(BoundStatSet->GetFireDelay()));
 

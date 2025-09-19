@@ -8,6 +8,7 @@
 
 #include "CHItemDefinition.generated.h"
 
+
 class UCHItemCreationComponent;
 
 /**
