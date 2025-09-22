@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CommonActivatableWidget.h"
+#include "CommonUserWidget.h"
 #include "Item/CHItemDataTableRows.h"
 #include "CHEquipmentOptionDisplayWidget.generated.h"
 
@@ -16,7 +16,7 @@ class UCHStatSet;
  * 
  */
 UCLASS()
-class CROSSVIEWHUNTER_API UCHEquipmentOptionDisplayWidget : public UCommonActivatableWidget
+class CROSSVIEWHUNTER_API UCHEquipmentOptionDisplayWidget : public UCommonUserWidget
 {
 	GENERATED_BODY()
 
