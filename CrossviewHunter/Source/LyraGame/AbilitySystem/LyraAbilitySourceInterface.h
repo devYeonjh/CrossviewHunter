@@ -6,18 +6,20 @@
 
 #include "LyraAbilitySourceInterface.generated.h"
 
+#define UE_API LYRAGAME_API
+
 class UObject;
 class UPhysicalMaterial;
 struct FGameplayTagContainer;
 
 /** Base interface for anything acting as a ability calculation source */
 UINTERFACE()
-class ULyraAbilitySourceInterface : public UInterface
+class UE_API ULyraAbilitySourceInterface : public UInterface
 {
 	GENERATED_UINTERFACE_BODY()
 };
 
-class ILyraAbilitySourceInterface
+class UE_API ILyraAbilitySourceInterface
 {
 	GENERATED_IINTERFACE_BODY()
 
@@ -34,3 +36,5 @@ class ILyraAbilitySourceInterface
 
 	virtual float GetPhysicalMaterialAttenuation(const UPhysicalMaterial* PhysicalMaterial, const FGameplayTagContainer* SourceTags = nullptr, const FGameplayTagContainer* TargetTags = nullptr) const = 0;
 };
+
+#undef UE_API
