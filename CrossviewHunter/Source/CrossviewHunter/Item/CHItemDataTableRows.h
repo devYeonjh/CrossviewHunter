@@ -35,13 +35,13 @@ enum class ECHGradeID : uint8
 UENUM(BlueprintType)
 enum class ECHOptionPoolID : uint8
 {
-	pool_200001 UMETA(DisplayName = "Weapon_Common_Options"),
+	pool_20001 UMETA(DisplayName = "Weapon_Common_Options"),
 
-	pool_200002 UMETA(DisplayName = "Armor_Common_Options"),
+	pool_20002 UMETA(DisplayName = "Armor_Common_Options"),
 
-	pool_200003 UMETA(DisplayName = "Weapon_Unique_Options"),
+	pool_20003 UMETA(DisplayName = "Weapon_Unique_Options"),
 
-	pool_200004 UMETA(DisplayName = "Armor_Unique_Options"),
+	pool_20004 UMETA(DisplayName = "Armor_Unique_Options"),
 
 	MAX UMETA(Hidden)
 };
@@ -59,7 +59,7 @@ struct FCHItemDataTableRow : public FTableRowBase
 	,	ItemGrade(ECHGradeID::grade_20001)
 	,	EquipmentSlot(ECHEquipmentSlot::None)
 	,	BaseStats(TMap<ECHStatID, float>())
-	,	OptionPoolID(ECHOptionPoolID::pool_200001)
+	,	OptionPoolID(ECHOptionPoolID::pool_20001)
 	,	SpecialEffectID(FName())
 	{
 		
@@ -98,7 +98,7 @@ struct FCHItemOptionDetailRow : public FTableRowBase
 
 	FCHItemOptionDetailRow()
 	:	OptionID(FName())
-	,	OptionPoolID(ECHOptionPoolID::pool_200001)
+	,	OptionPoolID(ECHOptionPoolID::pool_20001)
 	,	StatID(ECHStatID::stat_001)
 	,	MinValue(0)
 	,	MaxValue(0)

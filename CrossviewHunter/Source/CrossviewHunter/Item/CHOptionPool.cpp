@@ -12,8 +12,8 @@
 
 UCHOptionPool::UCHOptionPool(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
-	, PoolID(ECHOptionPoolID::pool_200001)
-	, LastPoolID(ECHOptionPoolID::pool_200001)
+	, PoolID(ECHOptionPoolID::pool_20001)
+	, LastPoolID(ECHOptionPoolID::pool_20001)
 {
 	ConstructorHelpers::FObjectFinder<UDataTable> OptionDataTableObject(TEXT("/Game/CrossviewHunter/Data/DT_ItemOptionDetail.DT_ItemOptionDetail"));
 	if (OptionDataTableObject.Succeeded())
