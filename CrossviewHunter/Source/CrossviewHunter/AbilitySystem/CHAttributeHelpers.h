@@ -25,7 +25,7 @@ public:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	virtual void Deinitialize() override;
 	
-	void GetAttributeForID(ECHStatID ID, FGameplayAttribute& OutAttribute);
+	FGameplayAttribute GetAttributeForID(ECHStatID ID);
 
 private:
 	void InitializeDataTable();

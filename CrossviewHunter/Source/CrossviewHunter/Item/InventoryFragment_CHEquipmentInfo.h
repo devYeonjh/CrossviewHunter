@@ -3,7 +3,6 @@
 #pragma once
 
 #include "Inventory/InventoryFragment_EquippableItem.h"
-#include "AbilitySystem/CHStatID.h"
 #include "CHItemTypes.h"
 #include "Item/CHItemDataTableRows.h"
 
@@ -12,6 +11,7 @@
 class UCHEquipmentDefinition;
 class ULyraInventoryItemInstance;
 class UObject;
+class UGameplayEffect;
 
 
 
@@ -38,12 +38,16 @@ protected:
 	TObjectPtr<UCHEquipmentDefinition> EquipmentDef;
 	
 public:
-	UFUNCTION()
-	void InitializeValue(ECHItemType InType, ECHEquipmentSlot InSlot, const TMap<ECHStatID, float>& InModifiers);
+	void InitializeValue(
+		ECHItemType InType,
+		ECHEquipmentSlot InSlot,
+		const TMap<TSubclassOf<UGameplayEffect>, float>& DefaultOptions,
+		const TArray<TPair<TSubclassOf<UGameplayEffect>, float>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>& AdditionalOptions);
 
+	/** WID에 있는 AbilitySet과 ActorToSpawn 데이터 설정 */
 	UFUNCTION()
-	void SetEquipmentDefinitionByData(const FEquipmentTypeDefinitionRow& DataRow) const;
+	void SetEquipmentDefinitionByData(const FCHEquipmentTypeDefinitionRow& DataRow) const;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category = "CH|InventoryFragment_CHEquipmentInfo")
 	FORCEINLINE UCHEquipmentDefinition* GetEquipmentDef() const { return EquipmentDef;}
 };

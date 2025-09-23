@@ -8,6 +8,9 @@
 
 #include "CHItemDefinition.generated.h"
 
+
+class UCHItemCreationComponent;
+
 /**
  * 
  */
@@ -17,5 +20,8 @@ class CROSSVIEWHUNTER_API UCHItemDefinition : public ULyraInventoryItemDefinitio
 	GENERATED_BODY()
 
 public:
-	void SetItemData(const FItemDataTableRow& DataTableRow);
+	void SetItemData(UCHItemCreationComponent* ICC, const FCHItemDataTableRow& DataTableRow);
+
+	void SetEquipmentFragment(UCHItemCreationComponent* ICC, const FCHItemDataTableRow& DataTableRow);
+
 };

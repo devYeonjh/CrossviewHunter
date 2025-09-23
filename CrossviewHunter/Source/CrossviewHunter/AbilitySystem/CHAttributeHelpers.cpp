@@ -20,15 +20,16 @@ void UCHAttributeHelpers::Deinitialize()
 	Super::Deinitialize();
 }
 
-void UCHAttributeHelpers::GetAttributeForID(ECHStatID ID, FGameplayAttribute& OutAttribute)
+FGameplayAttribute UCHAttributeHelpers::GetAttributeForID(const ECHStatID ID)
 {
-	OutAttribute = StatAttributeMap.FindRef(ID);
+	FGameplayAttribute ResultAttribute = StatAttributeMap.FindRef(ID);
+	return ResultAttribute;
 }
 
 
 void UCHAttributeHelpers::InitializeDataTable()
 {
-	StatDataTable = LoadObject<UDataTable>(nullptr, TEXT("/Game/CrossviewHunter/Core/DT_StatData.DT_StatData"));
+	StatDataTable = LoadObject<UDataTable>(nullptr, TEXT("/Game/CrossviewHunter/Data/DT_StatData.DT_StatData"));
 		
 	StatDataTable->ForeachRow<FCHStatData>(FString("FCHStatData"),
 		[this](const FName& Key, const FCHStatData& Value)

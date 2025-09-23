@@ -10,6 +10,7 @@
 class UObject;
 struct FFrame;
 
+#define UE_API LYRAGAME_API
 
 /**
  * ULyraCombatSet
@@ -18,7 +19,7 @@ struct FFrame;
  *	Attribute examples include: damage, healing, attack power, and shield penetrations.
  */
 UCLASS(BlueprintType)
-class ULyraCombatSet : public ULyraAttributeSet
+class UE_API ULyraCombatSet : public ULyraAttributeSet
 {
 	GENERATED_BODY()
 
@@ -47,3 +48,5 @@ private:
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_BaseHeal, Category = "Lyra|Combat", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData BaseHeal;
 };
+
+#undef UE_API

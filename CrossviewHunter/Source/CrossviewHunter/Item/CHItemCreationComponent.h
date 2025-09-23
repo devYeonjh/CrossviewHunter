@@ -6,6 +6,8 @@
 #include "Components/GameStateComponent.h"
 #include "AbilitySystem/CHStatID.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "AbilitySystem/Attributes/CHStatEffectBase.h"
+#include "CHOptionPool.h"
 
 #include "CHItemCreationComponent.generated.h"
 
@@ -15,8 +17,7 @@ class ULyraExperienceDefinition;
 class ULyraInventoryItemDefinition;
 class ULyraInventoryItemInstance;
 class ACHPickableItem;
-struct FItemDataTableRow;
-struct FEquipmentTypeDefinitionRow;
+
 
 /**
  * 아이템 생성기 컴포넌트 (GameStateComponent)
@@ -44,13 +45,18 @@ public:
 	/** 아이템 인스턴스 생성 */
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = ItemCreation)
 	ULyraInventoryItemInstance* CreateItemInstance(const FName& ItemID);
+
+	/** GameEffect 받아오기 */
+	TSubclassOf<UGameplayEffect> GetStatEffect(const ECHStatID StatID);
+
+	TObjectPtr<UCHOptionPool> GetOptionPool(const ECHOptionPoolID OptionPoolID);
+
+	/** Type 정보 받아오기 */
+	FCHEquipmentTypeDefinitionRow& FindEquipmentTypeDefinition(ECHItemType Type) const;
 	
 private:
 	/** ID 기반으로 Data 찾기*/
-	FItemDataTableRow& FindItemDataByID(const FName& ItemID) const;
-
-	/** Type 정보 받아오기 */
-	FEquipmentTypeDefinitionRow& FindEquipmentTypeDefinition(ECHItemType Type) const;
+	FCHItemDataTableRow& FindItemDataByID(const FName& ItemID) const;
 
 	
 protected:
@@ -61,21 +67,14 @@ protected:
 	/** DataTable containing item definitions */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = ItemCreation)
 	TObjectPtr<UDataTable> EquipmentTypeDataTable;
-
-	void SetEquipmentFragment(UCHItemDefinition& ItemDef, const FItemDataTableRow& DataTableRow);
-
-	
 	
 	/** Array to track created item instances for testing */
 	UPROPERTY(Transient)
 	TArray<TObjectPtr<ULyraInventoryItemInstance>> CreatedItems;
 
-	UPROPERTY(EditAnywhere)
-	TArray<TObjectPtr<ULyraInventoryItemFragment>> TestFragmentList;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = ItemCreation)
+	TMap<ECHStatID, TSubclassOf<UCHStatEffectBase>> StatEffectMap;
 
-	UPROPERTY(EditAnywhere)
-	TMap<ECHStatID, float> TestModifiers;
-
-	UPROPERTY(EditAnywhere)
-	TSoftObjectPtr<class UStaticMesh> TestMesh;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = ItemCreation)
+	TMap<ECHOptionPoolID, TObjectPtr<UCHOptionPool>> OptionPools;
 };

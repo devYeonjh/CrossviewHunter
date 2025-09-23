@@ -13,7 +13,7 @@ class UObject;
 class UPhysicalMaterial;
 
 USTRUCT()
-struct FLyraGameplayEffectContext : public FGameplayEffectContext
+struct LYRAGAME_API FLyraGameplayEffectContext : public FGameplayEffectContext
 {
 	GENERATED_BODY()
 
@@ -28,7 +28,7 @@ struct FLyraGameplayEffectContext : public FGameplayEffectContext
 	}
 
 	/** Returns the wrapped FLyraGameplayEffectContext from the handle, or nullptr if it doesn't exist or is the wrong type */
-	static LYRAGAME_API FLyraGameplayEffectContext* ExtractEffectContext(struct FGameplayEffectContextHandle Handle);
+	static FLyraGameplayEffectContext* ExtractEffectContext(struct FGameplayEffectContextHandle Handle);
 
 	/** Sets the object used as the ability source */
 	void SetAbilitySource(const ILyraAbilitySourceInterface* InObject, float InSourceLevel);

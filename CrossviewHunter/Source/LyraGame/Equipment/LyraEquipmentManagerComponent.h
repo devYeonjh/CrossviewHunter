@@ -5,6 +5,7 @@
 #include "AbilitySystem/LyraAbilitySet.h"
 #include "Components/PawnComponent.h"
 #include "Net/Serialization/FastArraySerializer.h"
+#include "ActiveGameplayEffectHandle.h"
 
 #include "LyraEquipmentManagerComponent.generated.h"
 
@@ -46,6 +47,9 @@ protected:
 	// Authority-only list of granted handles
 	UPROPERTY(NotReplicated)
 	FLyraAbilitySet_GrantedHandles GrantedHandles;
+
+	TArray<FActiveGameplayEffectHandle> ActiveEffectHandles;
+	TArray<FActiveGameplayEffectHandle, TFixedAllocator<3>> ActiveAdditionalEffectHandles;
 };
 
 /** List of applied equipment */
