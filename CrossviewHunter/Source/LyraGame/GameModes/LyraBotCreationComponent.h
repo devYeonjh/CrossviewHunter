@@ -49,6 +49,12 @@ protected:
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category=Gameplay)
 	virtual void RemoveOneBot();
 
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category=Gameplay)
+	virtual void SetSpawnBotNum(int num)
+	{
+		NumBotsToCreate = num;
+	}
+	
 	/** Spawns bots up to NumBotsToCreate */
 	UFUNCTION(BlueprintNativeEvent, BlueprintAuthorityOnly, Category=Gameplay)
 	void ServerCreateBots();
