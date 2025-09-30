@@ -6,7 +6,7 @@
 #include "Engine/EngineTypes.h"
 #include "GameplayTagsManager.h"
 
-namespace LyraGameplayTags
+namespace CHGameplayTags
 {
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(SetByCaller_Health, "SetByCaller.Health", "SetByCaller tag used by health gameplay effects.");
 	
@@ -27,7 +27,6 @@ namespace LyraGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(SetByCaller_CritDamage, "SetByCaller.CritDamage", "SetByCaller tag used by CritDamage gameplay effects.");
 
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(SetByCaller_HeadDamage, "SetByCaller.HeadDamage", "SetByCaller tag used by HeadDamage gameplay effects.");
-	
 	
 	FGameplayTag FindTagByString(const FString& TagString, bool bMatchPartialString)
 	{

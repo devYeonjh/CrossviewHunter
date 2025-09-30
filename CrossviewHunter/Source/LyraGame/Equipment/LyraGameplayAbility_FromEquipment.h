@@ -6,6 +6,8 @@
 
 #include "LyraGameplayAbility_FromEquipment.generated.h"
 
+#define UE_API LYRAGAME_API
+
 class ULyraEquipmentInstance;
 class ULyraInventoryItemInstance;
 
@@ -15,7 +17,7 @@ class ULyraInventoryItemInstance;
  * An ability granted by and associated with an equipment instance
  */
 UCLASS()
-class ULyraGameplayAbility_FromEquipment : public ULyraGameplayAbility
+class UE_API ULyraGameplayAbility_FromEquipment : public ULyraGameplayAbility
 {
 	GENERATED_BODY()
 
@@ -34,3 +36,5 @@ public:
 #endif
 
 };
+
+#undef UE_API

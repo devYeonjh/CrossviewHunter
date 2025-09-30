@@ -210,6 +210,14 @@ void ULyraHealthSet::PostAttributeChange(const FGameplayAttribute& Attribute, fl
 
 			LyraASC->ApplyModToAttribute(GetHealthAttribute(), EGameplayModOp::Override, NewValue);
 		}
+		else if (GetHealth() <= NewValue)
+		{
+			ULyraAbilitySystemComponent* LyraASC = GetLyraAbilitySystemComponent();
+			check(LyraASC);
+			float ChangeValue = NewValue - OldValue;
+
+			LyraASC->ApplyModToAttribute(GetHealthAttribute(), EGameplayModOp::Override, GetHealth() + ChangeValue);
+		}
 	}
 
 	if (bOutOfHealth && (GetHealth() > 0.0f))

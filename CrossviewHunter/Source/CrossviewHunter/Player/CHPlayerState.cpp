@@ -45,6 +45,7 @@ void ACHPlayerState::OnExperienceLoaded(const ULyraExperienceDefinition* Current
 		if (UCHGameInstance* GI = GetGameInstance<UCHGameInstance>())
 		{
 			GI->InitAttributeSet(AbilitySystemComponent, TEXT("Default"), 2, true);
+			
 			if (UCHInventoryManagerComponent* InventoryManagerComponent = PC->GetComponentByClass<UCHInventoryManagerComponent>())
 			{
 				// TArray<FLyraInventoryEntry>& SavedInventoryList = GI->SavedPlayerData.InventoryList;

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameplayEffectTypes.h"
+#include "Kismet/BlueprintFunctionLibrary.h"
 
 #include "LyraGameplayEffectContext.generated.h"
 
@@ -64,6 +65,14 @@ public:
 	UPROPERTY()
 	int32 CartridgeID = -1;
 
+	/** 크리티컬 히트 여부 체크 */
+	UPROPERTY()
+	bool bIsCriticalHit = false;
+
+	/** 헤드샷 여부 체크 */
+	UPROPERTY()
+	bool bIsHeadshot = false;
+
 protected:
 	/** Ability Source object (should implement ILyraAbilitySourceInterface). NOT replicated currently */
 	UPROPERTY()
@@ -79,4 +88,22 @@ struct TStructOpsTypeTraits<FLyraGameplayEffectContext> : public TStructOpsTypeT
 		WithCopy = true
 	};
 };
+
+UCLASS()
+class ULyraEffectContextStatics: public UBlueprintFunctionLibrary
+{
+	GENERATED_BODY()
+
+public:
+	ULyraEffectContextStatics();
+
+	/** 크리티컬 여부 체크 헬퍼 함수 */
+	UFUNCTION(BlueprintCallable, Category="GameplayEffectContext")
+	static bool IsCriticalHitFromContext(const FGameplayEffectContextHandle& EffectContext);
+
+	/** 헤드샷 여부 체크 헬퍼 함수 */
+	UFUNCTION(BlueprintCallable, Category="GameplayEffectContext")
+	static bool IsHeadshotFromContext(const FGameplayEffectContextHandle& EffectContext);
+};
+
 

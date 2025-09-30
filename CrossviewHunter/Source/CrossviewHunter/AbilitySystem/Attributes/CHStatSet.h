@@ -62,10 +62,15 @@ public:
 	ATTRIBUTE_ACCESSORS(UCHStatSet, HeadDamage);
 
 	mutable FCHAttributeChange OnHealthChanged;
-
 	mutable FCHAttributeChange OnAttackChanged;
-
 	mutable FCHAttributeChange OnDefenceChanged;
+	mutable FCHAttributeChange OnCritRateChanged;
+	mutable FCHAttributeChange OnMoveSpeedChanged;
+	mutable FCHAttributeChange OnFireDelayChanged;
+	mutable FCHAttributeChange OnReloadDelayChanged;
+	mutable FCHAttributeChange OnArmorPiercingDamageChanged;
+	mutable FCHAttributeChange OnCritDamageChanged;
+	mutable FCHAttributeChange OnHeadDamageChanged;
 
 protected:
 	UFUNCTION()
@@ -105,42 +110,42 @@ protected:
 
 private:
 	// The max health of the character.
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData Health;
 	
 	// The attack damage of the character.
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, ReplicatedUsing = OnRep_Attack, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Attack, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData Attack;
 
 	// The defence rating of the character.
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, ReplicatedUsing = OnRep_Defence, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Defence, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData Defence;
 	
 	// The critical hit rate of the character (0.0 - 1.0).
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, ReplicatedUsing = OnRep_CritRate, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CritRate, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData CritRate;
 
 	// The movement speed of the character.
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, ReplicatedUsing = OnRep_MoveSpeed, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MoveSpeed, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData MoveSpeed;
 
 	// The delay between firing shots in seconds.
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, ReplicatedUsing = OnRep_FireDelay, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_FireDelay, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData FireDelay;
 	
 	// The delay for reloading weapons in seconds.
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, ReplicatedUsing = OnRep_ReloadDelay, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ReloadDelay, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData ReloadDelay;
 	
 	// The armor piercing damage that ignores defense.
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, ReplicatedUsing = OnRep_ArmorPiercingDamage, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_ArmorPiercingDamage, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData ArmorPiercingDamage;
 
 	// The critical damage multiplier when landing critical hits.
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, ReplicatedUsing = OnRep_CritDamage, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_CritDamage, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData CritDamage;
 
 	// The damage multiplier when hitting the head.
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, ReplicatedUsing = OnRep_HeadDamage, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_HeadDamage, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData HeadDamage;
 };

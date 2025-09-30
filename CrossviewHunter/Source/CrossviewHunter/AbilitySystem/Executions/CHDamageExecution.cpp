@@ -11,6 +11,7 @@
 #include "Engine/World.h"
 #include "Teams/LyraTeamSubsystem.h"
 #include "CHLogChannel.h"
+#include "GameplayEffect.h"
 
 struct FCHDamageStatics
 {
@@ -158,6 +159,15 @@ void UCHDamageExecution::Execute_Implementation(const FGameplayEffectCustomExecu
 	
 	// 크리티컬 계산
 	float CriticalChance = FMath::FRand();
+	if (CriticalChance <= CritRate)
+	{
+		TypedContext->bIsCriticalHit = true;
+	}
+	else
+	{
+		TypedContext->bIsCriticalHit = false;
+		CritDamage = 1.0f;
+	}
 	CritDamage = CriticalChance <= CritRate ? CritDamage : 1.0f;
 	
 	float DistanceAttenuation = 1.0f;
@@ -166,7 +176,15 @@ void UCHDamageExecution::Execute_Implementation(const FGameplayEffectCustomExecu
 		if (const UPhysicalMaterial* PhysMat = TypedContext->GetPhysicalMaterial())
 		{
 			// 헤드샷 배율 추가 Range Weapon에서 매핑되어있는 태그가 없는경우 1.0f로 반환
-			HeadDamage = FMath::IsNearlyEqualByULP(AbilitySource->GetPhysicalMaterialAttenuation(PhysMat, SourceTags, TargetTags),1.0f ) ? 1.0f : HeadDamage;
+			if (FMath::IsNearlyEqualByULP(AbilitySource->GetPhysicalMaterialAttenuation(PhysMat, SourceTags, TargetTags),1.0f ))
+			{
+				TypedContext->bIsHeadshot = false;
+				HeadDamage = 1.0f;
+			}
+			else
+			{
+				TypedContext->bIsHeadshot = true;
+			}
 		}
 		// 거리 감쇠 적용
 		DistanceAttenuation = AbilitySource->GetDistanceAttenuation(Distance, SourceTags, TargetTags);

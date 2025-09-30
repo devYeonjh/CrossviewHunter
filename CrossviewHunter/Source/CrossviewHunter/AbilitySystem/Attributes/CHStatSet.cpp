@@ -3,9 +3,10 @@
 
 #include "AbilitySystem/Attributes/CHStatSet.h"
 
-#include "AbilitySystem/Attributes/LyraAttributeSet.h"
 #include "Net/UnrealNetwork.h"
 #include "GameplayEffectExtension.h"
+#include "AbilitySystem/LyraAbilitySystemComponent.h"
+#include "AbilitySystem/Attributes/LyraHealthSet.h"
 
 
 class FLifetimeProperty;
@@ -93,9 +94,14 @@ void UCHStatSet::OnRep_HeadDamage(const FGameplayAttributeData& OldValue)
 void UCHStatSet::PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue)
 {
 	Super::PostAttributeChange(Attribute, OldValue, NewValue);
-	
+
 	if (Attribute == GetHealthAttribute())
 	{
+		ULyraAbilitySystemComponent* ASC = GetLyraAbilitySystemComponent();
+		const ULyraHealthSet* HealthSet = Cast<ULyraHealthSet>(ASC->GetAttributeSet(ULyraHealthSet::StaticClass()));
+		check(ASC);
+		
+		ASC->ApplyModToAttribute(HealthSet->GetMaxHealthAttribute(), EGameplayModOp::Override, GetHealth());
 		OnHealthChanged.Broadcast(GetHealth());
 	}
 	else if (Attribute == GetAttackAttribute())
@@ -106,6 +112,36 @@ void UCHStatSet::PostAttributeChange(const FGameplayAttribute& Attribute, float 
 	{
 		OnDefenceChanged.Broadcast(GetDefence());
 	}
+	else if (Attribute == GetCritRateAttribute())
+	{
+		OnCritRateChanged.Broadcast(GetCritRate());
+	}
+	else if (Attribute == GetMoveSpeedAttribute())
+	{
+		OnMoveSpeedChanged.Broadcast(GetMoveSpeed());
+	}
+	else if (Attribute == GetFireDelayAttribute())
+	{
+		OnFireDelayChanged.Broadcast(GetFireDelay());
+	}
+	else if (Attribute == GetReloadDelayAttribute())
+	{
+		OnReloadDelayChanged.Broadcast(GetReloadDelay());
+	}
+	else if (Attribute == GetArmorPiercingDamageAttribute())
+	{
+		OnArmorPiercingDamageChanged.Broadcast(GetArmorPiercingDamage());
+	}
+	else if (Attribute == GetCritDamageAttribute())
+	{
+		OnCritDamageChanged.Broadcast(GetCritDamage());
+	}
+	else if (Attribute == GetHeadDamageAttribute())
+	{
+		OnHeadDamageChanged.Broadcast(GetHeadDamage());
+	}	
+
+	
 }
 
 
