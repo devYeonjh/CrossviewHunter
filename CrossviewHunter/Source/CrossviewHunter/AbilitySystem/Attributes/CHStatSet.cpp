@@ -12,15 +12,15 @@ class FLifetimeProperty;
 
 
 UCHStatSet::UCHStatSet()
-	: Attack(10.0f)
-	, Defence(5.0f)
-	, CritRate(0.05f)
-	, MoveSpeed(600.0f)
-	, FireDelay(0.5f)
-	, ReloadDelay(2.0f)
+	: Attack(0.0f)
+	, Defence(0.0f)
+	, CritRate(0.0f)
+	, MoveSpeed(0.0f)
+	, FireDelay(0.0f)
+	, ReloadDelay(0.0f)
 	, ArmorPiercingDamage(0.0f)
-	, CritDamage(1.5f)
-	, HeadDamage(2.0f)
+	, CritDamage(0.0f)
+	, HeadDamage(0.0f)
 {
 }
 

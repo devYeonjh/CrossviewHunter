@@ -134,19 +134,16 @@ public:
 	// Sets the replicated view rotation, only valid on the server
 	UE_API void SetReplicatedViewRotation(const FRotator& NewRotation);
 
-private:
-	UE_API void OnExperienceLoaded(const ULyraExperienceDefinition* CurrentExperience);
-
 protected:
+	UE_API virtual void OnExperienceLoaded(const ULyraExperienceDefinition* CurrentExperience);
+	UE_API virtual void InitializeAbilitySystemComponent(const FObjectInitializer& ObjectInitializer);
+
 	UFUNCTION()
 	UE_API void OnRep_PawnData();
 
 protected:
-
 	UPROPERTY(ReplicatedUsing = OnRep_PawnData)
 	TObjectPtr<const ULyraPawnData> PawnData;
-
-private:
 
 	// The ability system component sub-object used by player characters.
 	UPROPERTY(VisibleAnywhere, Category = "Lyra|PlayerState")
@@ -158,6 +155,8 @@ private:
 	// Combat attribute set used by this actor.
 	UPROPERTY()
 	TObjectPtr<const class ULyraCombatSet> CombatSet;
+
+private:
 
 	UPROPERTY(Replicated)
 	ELyraPlayerConnectionType MyPlayerConnectionType;

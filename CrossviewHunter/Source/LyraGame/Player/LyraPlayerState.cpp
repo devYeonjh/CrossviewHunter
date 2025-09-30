@@ -31,9 +31,7 @@ ALyraPlayerState::ALyraPlayerState(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 	, MyPlayerConnectionType(ELyraPlayerConnectionType::Player)
 {
-	AbilitySystemComponent = ObjectInitializer.CreateDefaultSubobject<ULyraAbilitySystemComponent>(this, TEXT("AbilitySystemComponent"));
-	AbilitySystemComponent->SetIsReplicated(true);
-	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
+	InitializeAbilitySystemComponent(ObjectInitializer);
 
 	// These attribute sets will be detected by AbilitySystemComponent::InitializeComponent. Keeping a reference so that the sets don't get garbage collected before that.
 	HealthSet = CreateDefaultSubobject<ULyraHealthSet>(TEXT("HealthSet"));
@@ -44,6 +42,13 @@ ALyraPlayerState::ALyraPlayerState(const FObjectInitializer& ObjectInitializer)
 
 	MyTeamID = FGenericTeamId::NoTeam;
 	MySquadID = INDEX_NONE;
+}
+
+void ALyraPlayerState::InitializeAbilitySystemComponent(const FObjectInitializer& ObjectInitializer)
+{
+	AbilitySystemComponent = ObjectInitializer.CreateDefaultSubobject<ULyraAbilitySystemComponent>(this, TEXT("AbilitySystemComponent"));
+	AbilitySystemComponent->SetIsReplicated(true);
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
 }
 
 void ALyraPlayerState::PreInitializeComponents()

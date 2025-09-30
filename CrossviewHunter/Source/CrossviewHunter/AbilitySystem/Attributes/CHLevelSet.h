@@ -16,7 +16,7 @@ struct FFrame;
  *	레벨 및 경험치 관련 스탯을 정의하는 클래스입니다.
  *	Attribute 예시: 레벨, 경험치
  */
-UCLASS(BlueprintType)
+UCLASS(Blueprintable, BlueprintType)
 class CROSSVIEWHUNTER_API UCHLevelSet : public ULyraAttributeSet
 {
 	GENERATED_BODY()
@@ -39,10 +39,10 @@ protected:
 private:
 	
 	// The current level of the character.
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Level, Category = "CH|Level", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, ReplicatedUsing = OnRep_Level, Category = "CH|Level", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData Level;
 
 	// The current experience points of the character.
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_EXP, Category = "CH|Level", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, ReplicatedUsing = OnRep_EXP, Category = "CH|Level", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData EXP;
 };

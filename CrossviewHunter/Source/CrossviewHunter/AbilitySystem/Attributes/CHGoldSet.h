@@ -16,7 +16,7 @@ struct FFrame;
  *	플레이어의 골드(화폐) 관련 스탯을 정의하는 클래스입니다.
  *	Attribute 예시: 골드
  */
-UCLASS(BlueprintType)
+UCLASS(Blueprintable, BlueprintType)
 class CROSSVIEWHUNTER_API UCHGoldSet : public ULyraAttributeSet
 {
 	GENERATED_BODY()
@@ -35,6 +35,6 @@ protected:
 private:
 	
 	// The current gold amount of the character.
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Gold, Category = "CH|Gold", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, ReplicatedUsing = OnRep_Gold, Category = "CH|Gold", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData Gold;
 };

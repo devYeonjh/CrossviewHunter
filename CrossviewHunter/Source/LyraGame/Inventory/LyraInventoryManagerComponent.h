@@ -114,6 +114,7 @@ private:
 
 private:
 	friend ULyraInventoryManagerComponent;
+	friend class UCHInventoryManagerComponent;
 
 private:
 	// Replicated list of items
@@ -169,10 +170,10 @@ public:
 	UE_API ULyraInventoryItemInstance* AddItemDefinition(TSubclassOf<ULyraInventoryItemDefinition> ItemDef, int32 StackCount = 1);
 
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category=Inventory)
-	UE_API void AddItemInstance(ULyraInventoryItemInstance* ItemInstance, int32 StackCount = 1);
+	UE_API virtual void AddItemInstance(ULyraInventoryItemInstance* ItemInstance, int32 StackCount = 1);
 
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category=Inventory)
-	UE_API void RemoveItemInstance(ULyraInventoryItemInstance* ItemInstance);
+	UE_API virtual void RemoveItemInstance(ULyraInventoryItemInstance* ItemInstance);
 
 	UFUNCTION(BlueprintCallable, Category=Inventory, BlueprintPure=false)
 	UE_API TArray<ULyraInventoryItemInstance*> GetAllItems() const;
