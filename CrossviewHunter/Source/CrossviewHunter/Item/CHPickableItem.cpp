@@ -10,11 +10,9 @@ struct FInteractionQuery;
 
 ACHPickableItem::ACHPickableItem()
 {
-	USceneComponent* SceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("SceneRoot"));
-	SetRootComponent(SceneRoot);
-
+	//Collect Gameplay Queue가 루트 컴포넌트인 Static Mesh Comp의 값을 참조하여 작동
 	StaticMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
-	StaticMeshComp->SetupAttachment(SceneRoot);
+	SetRootComponent(StaticMeshComp);
 
 	static ConstructorHelpers::FObjectFinder<UGameplayAbility> GA_Interaction(TEXT("/ShooterExplorer/Interact/GA_Interaction_Collect.GA_Interaction_Collect"));
 	if (GA_Interaction.Succeeded())
