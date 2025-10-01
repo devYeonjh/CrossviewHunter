@@ -106,9 +106,10 @@ void FCHEquipmentList::RemoveEntry(ULyraEquipmentInstance* Instance)
 
 			Instance->DestroyEquipmentActors();
 			
-
 			EntryIt.RemoveCurrent();
 			MarkArrayDirty();
+
+			break;
 		}
 	}
 }
@@ -196,7 +197,7 @@ void UCHEquipmentManagerComponent::UnequipItem(ULyraEquipmentInstance* ItemInsta
 
 		ItemInstance->OnUnequipped();
 		
-		static_cast<FCHEquipmentList>(EquipmentList).RemoveEntry(ItemInstance);
+		static_cast<FCHEquipmentList&>(EquipmentList).RemoveEntry(ItemInstance);
 		
 	}
 }

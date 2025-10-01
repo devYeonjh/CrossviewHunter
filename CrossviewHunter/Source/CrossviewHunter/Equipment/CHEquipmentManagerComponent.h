@@ -44,6 +44,10 @@ public:
 		const TObjectPtr<ULyraAbilitySystemComponent>& ASC,
 		TMap<TSubclassOf<UGameplayEffect>, float> Modifiers) const;
 
+	// Additional 옵션을 위한 GameplayEffectSpec 생성.
+	// TArray 사용 이유 : 정해진 크기의 배열을 받기위해
+	// 중복된 옵션을 적용시키기 위해(TMap은 안됨(TMultiMap은 가능))
+	// Index로 옵션을 관리하기 위해
 	TArray<FGameplayEffectSpecHandle> MakeGameEffectSpecHandles(
 		const TObjectPtr<ULyraAbilitySystemComponent>& ASC,
 		const TArray<TPair<TSubclassOf<UGameplayEffect>, float>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>& Modifiers) const;
