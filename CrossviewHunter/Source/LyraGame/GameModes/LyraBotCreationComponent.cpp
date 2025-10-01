@@ -142,19 +142,19 @@ void ULyraBotCreationComponent::RemoveOneBot()
 		if (BotToRemove)
 		{
 			// If we can find a health component, self-destruct it, otherwise just destroy the actor
-			if (APawn* ControlledPawn = BotToRemove->GetPawn())
-			{
-				if (ULyraHealthComponent* HealthComponent = ULyraHealthComponent::FindHealthComponent(ControlledPawn))
-				{
-					// Note, right now this doesn't work quite as desired: as soon as the player state goes away when
-					// the controller is destroyed, the abilities like the death animation will be interrupted immediately
-					HealthComponent->DamageSelfDestruct();
-				}
-				else
-				{
-					ControlledPawn->Destroy();
-				}
-			}
+			// if (APawn* ControlledPawn = BotToRemove->GetPawn())
+			// {
+			// 	if (ULyraHealthComponent* HealthComponent = ULyraHealthComponent::FindHealthComponent(ControlledPawn))
+			// 	{
+			// 		// Note, right now this doesn't work quite as desired: as soon as the player state goes away when
+			// 		// the controller is destroyed, the abilities like the death animation will be interrupted immediately
+			// 		HealthComponent->DamageSelfDestruct();
+			// 	}
+			// 	else
+			// 	{
+			// 		ControlledPawn->Destroy();
+			// 	}
+			// }
 
 			// Destroy the controller (will cause it to Logout, etc...)
 			BotToRemove->Destroy();

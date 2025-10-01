@@ -54,10 +54,31 @@ ACHPickableItem* UCHItemCreationComponent::SpawnPickableItem(const FName& ItemID
 	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	TSubclassOf<ACHPickableItem> PickableClass = ACHPickableItem::StaticClass();
+	
 	ACHPickableItem* PickableItem = GetWorld()->SpawnActor<ACHPickableItem>(PickableClass, Location, Rotation, SpawnInfo);
 
+	PickableItem->SetInventoryItemInfo(ItemInst);
+	
 	return PickableItem;
 }
+
+ACHPickableItem* UCHItemCreationComponent::SpawnPickableItemByClass
+(const TSubclassOf<ACHPickableItem>& PickableClass, const FName& ItemID, const FVector& Location, const FRotator& Rotation)
+{
+	ULyraInventoryItemInstance* ItemInst =  CreateItemInstance(ItemID);
+
+	FActorSpawnParameters SpawnInfo;
+	SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	//TSubclassOf<ACHPickableItem> PickableClass = ACHPickableItem::StaticClass;
+	
+	ACHPickableItem* PickableItem = GetWorld()->SpawnActor<ACHPickableItem>(PickableClass, Location, Rotation, SpawnInfo);
+
+	PickableItem->SetInventoryItemInfo(ItemInst);
+	
+	return PickableItem;
+}
+
 
 ULyraInventoryItemInstance* UCHItemCreationComponent::CreateItemInstance(const FName& ItemID)
 {

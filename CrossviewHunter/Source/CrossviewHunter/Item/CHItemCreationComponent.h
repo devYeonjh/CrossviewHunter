@@ -42,6 +42,9 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = ItemCreation)
 	ACHPickableItem* SpawnPickableItem(const FName& ItemID, const FVector& Location, const FRotator& Rotation);
 
+	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = ItemCreation)
+	ACHPickableItem* SpawnPickableItemByClass(const TSubclassOf<ACHPickableItem>& PickableClass, const FName& ItemID, const FVector& Location, const FRotator& Rotation);
+
 	/** 아이템 인스턴스 생성 */
 	UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, Category = ItemCreation)
 	ULyraInventoryItemInstance* CreateItemInstance(const FName& ItemID);
@@ -77,4 +80,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = ItemCreation)
 	TMap<ECHOptionPoolID, TObjectPtr<UCHOptionPool>> OptionPools;
+
+//	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+//	TSubclassOf<ACHPickableItem> PickableClass;
 };

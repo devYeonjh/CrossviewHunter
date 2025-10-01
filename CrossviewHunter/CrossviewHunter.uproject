@@ -12,7 +12,8 @@
 				"DeveloperSettings",
 				"Engine",
 				"ModularGameplayActors",
-				"LyraGame"
+				"LyraGame",
+				"AIModule"
 			]
 		},
 		{
