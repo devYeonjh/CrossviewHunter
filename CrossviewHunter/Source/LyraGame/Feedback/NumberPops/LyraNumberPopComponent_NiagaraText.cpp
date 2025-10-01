@@ -22,10 +22,10 @@ void ULyraNumberPopComponent_NiagaraText::AddNumberPop(const FLyraNumberPopReque
 	int32 LocalDamage = NewRequest.NumberToDisplay;
 
 	//Change Damage to negative to differentiate Critial vs Normal hit
-	if (NewRequest.bIsCriticalDamage)
-	{
-		LocalDamage *= -1;
-	}
+	// if (NewRequest.bIsCriticalDamage)
+	// {
+	// 	LocalDamage *= -1;
+	// }
 
 	//Add a NiagaraComponent if we don't already have one
 	if (!NiagaraComp)
@@ -51,6 +51,12 @@ void ULyraNumberPopComponent_NiagaraText::AddNumberPop(const FLyraNumberPopReque
 	TArray<FVector4> DamageList = UNiagaraDataInterfaceArrayFunctionLibrary::GetNiagaraArrayVector4(NiagaraComp, Style->NiagaraArrayName);
 	DamageList.Add(FVector4(NewRequest.WorldLocation.X, NewRequest.WorldLocation.Y, NewRequest.WorldLocation.Z, LocalDamage));
 	UNiagaraDataInterfaceArrayFunctionLibrary::SetNiagaraArrayVector4(NiagaraComp, Style->NiagaraArrayName, DamageList);
+
+	//크리티컬과 헤드샷 정보 추가
+	TArray<bool> BoolList = UNiagaraDataInterfaceArrayFunctionLibrary::GetNiagaraArrayBool(NiagaraComp, Style->NiagaraBoolArrayName);
+	BoolList.Add(NewRequest.bIsCriticalDamage);
+	BoolList.Add(NewRequest.bIsHeadshot);
+	UNiagaraDataInterfaceArrayFunctionLibrary::SetNiagaraArrayBool(NiagaraComp, Style->NiagaraBoolArrayName, BoolList);
 	
 }
 

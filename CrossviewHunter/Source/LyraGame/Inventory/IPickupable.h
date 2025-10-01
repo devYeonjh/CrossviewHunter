@@ -29,6 +29,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<ULyraInventoryItemDefinition> ItemDef;
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<ULyraInventoryItemDefinition> ItemDefInstance;
 };
 
 USTRUCT(BlueprintType)

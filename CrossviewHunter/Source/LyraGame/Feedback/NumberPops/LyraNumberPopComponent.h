@@ -31,9 +31,13 @@ struct FLyraNumberPopRequest
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Lyra|Number Pops")
 	int32 NumberToDisplay = 0;
 
-	// Whether the number is 'critical' or not (@TODO: move to a tag)
+	// 숫자가 크리티컬 히트인지 여부
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Lyra|Number Pops")
 	bool bIsCriticalDamage = false;
+
+	// 숫자가 헤드샷인지 여부
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Lyra|Number Pops")
+	bool bIsHeadshot = false;
 
 	FLyraNumberPopRequest()
 		: WorldLocation(ForceInitToZero)

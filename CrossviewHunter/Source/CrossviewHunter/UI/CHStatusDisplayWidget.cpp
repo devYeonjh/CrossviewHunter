@@ -45,10 +45,10 @@ void UCHStatusDisplayWidget::BindToStatSet(const UCHStatSet* StatSet)
 	BoundStatSet = StatSet;
 	if (BoundStatSet)
 	{
-		// 각 속성 변경 델리게이트에 바인딩                                                          
-		BoundStatSet->OnHealthChanged.AddUObject(this, &ThisClass::OnHealthChanged);
-		BoundStatSet->OnAttackChanged.AddUObject(this, &ThisClass::OnAttackChanged);
-		BoundStatSet->OnDefenceChanged.AddUObject(this, &ThisClass::OnDefenceChanged);
+		// // 각 속성 변경 델리게이트에 바인딩                                                          
+		// BoundStatSet->OnHealthChanged.AddUObject(this, &ThisClass::OnHealthChanged);
+		// BoundStatSet->OnAttackChanged.AddUObject(this, &ThisClass::OnAttackChanged);
+		// BoundStatSet->OnDefenceChanged.AddUObject(this, &ThisClass::OnDefenceChanged);
 
 		UpdateAllStats(); // 초기값 표시                                                             
 	}
@@ -59,25 +59,22 @@ void UCHStatusDisplayWidget::UnbindFromStatSet()
 	BoundStatSet = nullptr;
 	UpdateAllStats();
 }
-
+/*
 void UCHStatusDisplayWidget::OnHealthChanged(float NewValue)
 {
 	HealthText->SetText(FText::AsNumber(NewValue));
-	UE_LOG(LogTemp, Log, TEXT("Health Changed : %f"), NewValue);
 }
 
 void UCHStatusDisplayWidget::OnAttackChanged(float NewValue)
 {
 	AttackText->SetText(FText::AsNumber(NewValue));
-	UE_LOG(LogTemp, Log, TEXT("Attack Changed : %f"), NewValue);
 }
 
 void UCHStatusDisplayWidget::OnDefenceChanged(float NewValue)
 {
 	DefenceText->SetText(FText::AsNumber(NewValue));
-	UE_LOG(LogTemp, Log, TEXT("Defence Changed : %f"), NewValue);
 }
-
+*/
 void UCHStatusDisplayWidget::UpdateAllStats()                                                        
 {
 	if (BoundStatSet)

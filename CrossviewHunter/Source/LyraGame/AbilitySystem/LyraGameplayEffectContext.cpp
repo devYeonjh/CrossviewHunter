@@ -65,3 +65,27 @@ const UPhysicalMaterial* FLyraGameplayEffectContext::GetPhysicalMaterial() const
 	return nullptr;
 }
 
+ULyraEffectContextStatics::ULyraEffectContextStatics()
+	: Super(FObjectInitializer::Get())
+{
+	
+}
+
+bool ULyraEffectContextStatics::IsCriticalHitFromContext(const FGameplayEffectContextHandle& EffectContext)
+{
+	if (FLyraGameplayEffectContext* Context = FLyraGameplayEffectContext::ExtractEffectContext(EffectContext))
+	{
+		return Context->bIsCriticalHit;
+	}
+	return false;		
+}
+
+bool ULyraEffectContextStatics::IsHeadshotFromContext(const FGameplayEffectContextHandle& EffectContext)
+{
+	if (FLyraGameplayEffectContext* Context = FLyraGameplayEffectContext::ExtractEffectContext(EffectContext))
+	{
+		return Context->bIsHeadshot;
+	}
+	return false;		
+}
+

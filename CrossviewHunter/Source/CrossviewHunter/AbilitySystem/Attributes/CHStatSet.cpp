@@ -3,24 +3,25 @@
 
 #include "AbilitySystem/Attributes/CHStatSet.h"
 
-#include "AbilitySystem/Attributes/LyraAttributeSet.h"
 #include "Net/UnrealNetwork.h"
 #include "GameplayEffectExtension.h"
+#include "AbilitySystem/LyraAbilitySystemComponent.h"
+#include "AbilitySystem/Attributes/LyraHealthSet.h"
 
 
 class FLifetimeProperty;
 
 
 UCHStatSet::UCHStatSet()
-	: Attack(10.0f)
-	, Defence(5.0f)
-	, CritRate(0.05f)
-	, MoveSpeed(600.0f)
-	, FireDelay(0.5f)
-	, ReloadDelay(2.0f)
+	: Attack(0.0f)
+	, Defence(0.0f)
+	, CritRate(0.0f)
+	, MoveSpeed(0.0f)
+	, FireDelay(0.0f)
+	, ReloadDelay(0.0f)
 	, ArmorPiercingDamage(0.0f)
-	, CritDamage(1.5f)
-	, HeadDamage(2.0f)
+	, CritDamage(0.0f)
+	, HeadDamage(0.0f)
 {
 }
 
@@ -93,9 +94,14 @@ void UCHStatSet::OnRep_HeadDamage(const FGameplayAttributeData& OldValue)
 void UCHStatSet::PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue)
 {
 	Super::PostAttributeChange(Attribute, OldValue, NewValue);
-	
+
 	if (Attribute == GetHealthAttribute())
 	{
+		ULyraAbilitySystemComponent* ASC = GetLyraAbilitySystemComponent();
+		const ULyraHealthSet* HealthSet = Cast<ULyraHealthSet>(ASC->GetAttributeSet(ULyraHealthSet::StaticClass()));
+		check(ASC);
+		
+		ASC->ApplyModToAttribute(HealthSet->GetMaxHealthAttribute(), EGameplayModOp::Override, GetHealth());
 		OnHealthChanged.Broadcast(GetHealth());
 	}
 	else if (Attribute == GetAttackAttribute())
@@ -106,6 +112,36 @@ void UCHStatSet::PostAttributeChange(const FGameplayAttribute& Attribute, float 
 	{
 		OnDefenceChanged.Broadcast(GetDefence());
 	}
+	else if (Attribute == GetCritRateAttribute())
+	{
+		OnCritRateChanged.Broadcast(GetCritRate());
+	}
+	else if (Attribute == GetMoveSpeedAttribute())
+	{
+		OnMoveSpeedChanged.Broadcast(GetMoveSpeed());
+	}
+	else if (Attribute == GetFireDelayAttribute())
+	{
+		OnFireDelayChanged.Broadcast(GetFireDelay());
+	}
+	else if (Attribute == GetReloadDelayAttribute())
+	{
+		OnReloadDelayChanged.Broadcast(GetReloadDelay());
+	}
+	else if (Attribute == GetArmorPiercingDamageAttribute())
+	{
+		OnArmorPiercingDamageChanged.Broadcast(GetArmorPiercingDamage());
+	}
+	else if (Attribute == GetCritDamageAttribute())
+	{
+		OnCritDamageChanged.Broadcast(GetCritDamage());
+	}
+	else if (Attribute == GetHeadDamageAttribute())
+	{
+		OnHeadDamageChanged.Broadcast(GetHeadDamage());
+	}	
+
+	
 }
 
 

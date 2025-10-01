@@ -43,7 +43,6 @@ public class LyraGame : ModuleRules
 				"AsyncMixin",
 				"ControlFlows",
 				"PropertyPath",
-				"CrossviewHunter",
 			}
 		);
 
@@ -75,11 +74,9 @@ public class LyraGame : ModuleRules
 				"EngineSettings",
 				"DTLSHandlerComponent",
 				"Json",
-				"CrossviewHunter",
 			}
 		);
 
-		CircularlyReferencedDependentModules.Add("CrossviewHunter");
 		DynamicallyLoadedModuleNames.AddRange(
 			new string[] {
 			}

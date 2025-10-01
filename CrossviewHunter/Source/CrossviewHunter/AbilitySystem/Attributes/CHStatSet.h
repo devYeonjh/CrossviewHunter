@@ -41,7 +41,7 @@ public:
  *
  *	플레이어의 전투 및 이동 관련 스탯을 정의하는 클래스입니다.
  */
-UCLASS(BlueprintType)
+UCLASS(Blueprintable, BlueprintType)
 class CROSSVIEWHUNTER_API UCHStatSet : public ULyraAttributeSet
 {
 	GENERATED_BODY()
@@ -62,10 +62,15 @@ public:
 	ATTRIBUTE_ACCESSORS(UCHStatSet, HeadDamage);
 
 	mutable FCHAttributeChange OnHealthChanged;
-
 	mutable FCHAttributeChange OnAttackChanged;
-
 	mutable FCHAttributeChange OnDefenceChanged;
+	mutable FCHAttributeChange OnCritRateChanged;
+	mutable FCHAttributeChange OnMoveSpeedChanged;
+	mutable FCHAttributeChange OnFireDelayChanged;
+	mutable FCHAttributeChange OnReloadDelayChanged;
+	mutable FCHAttributeChange OnArmorPiercingDamageChanged;
+	mutable FCHAttributeChange OnCritDamageChanged;
+	mutable FCHAttributeChange OnHeadDamageChanged;
 
 protected:
 	UFUNCTION()
@@ -105,7 +110,7 @@ protected:
 
 private:
 	// The max health of the character.
-	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Attack, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "CH|PlayerStatus", Meta = (AllowPrivateAccess = true))
 	FGameplayAttributeData Health;
 	
 	// The attack damage of the character.

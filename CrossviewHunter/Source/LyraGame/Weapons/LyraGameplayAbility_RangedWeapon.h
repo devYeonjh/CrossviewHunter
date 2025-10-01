@@ -6,6 +6,8 @@
 
 #include "LyraGameplayAbility_RangedWeapon.generated.h"
 
+#define UE_API LYRAGAME_API
+
 enum ECollisionChannel : int;
 
 class APawn;
@@ -44,7 +46,7 @@ enum class ELyraAbilityTargetingSource : uint8
  * An ability granted by and associated with a ranged weapon instance
  */
 UCLASS()
-class ULyraGameplayAbility_RangedWeapon : public ULyraGameplayAbility_FromEquipment
+class UE_API ULyraGameplayAbility_RangedWeapon : public ULyraGameplayAbility_FromEquipment
 {
 	GENERATED_BODY()
 
@@ -121,3 +123,5 @@ protected:
 private:
 	FDelegateHandle OnTargetDataReadyCallbackDelegateHandle;
 };
+
+#undef UE_API

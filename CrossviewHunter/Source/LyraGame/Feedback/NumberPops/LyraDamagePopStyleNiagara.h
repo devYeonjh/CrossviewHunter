@@ -22,6 +22,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category="DamagePop")
 	FName NiagaraArrayName;
 
+	UPROPERTY(EditDefaultsOnly, Category="DamagePop")
+	FName NiagaraBoolArrayName;
+
 	//Niagara System used to display the damages
 	UPROPERTY(EditDefaultsOnly, Category="DamagePop")
 	TObjectPtr<UNiagaraSystem> TextNiagara;

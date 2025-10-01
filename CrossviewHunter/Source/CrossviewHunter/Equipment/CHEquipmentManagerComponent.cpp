@@ -42,7 +42,10 @@ ULyraEquipmentInstance* FCHEquipmentList::AddEntry(UCHEquipmentDefinition* Equip
 	{
 		for (const TObjectPtr<const ULyraAbilitySet>& AbilitySet : EquipmentDefinition->AbilitySetsToGrant)
 		{
-			AbilitySet->GiveToAbilitySystem(ASC, &NewEntry.GrantedHandles, Result);
+			if (AbilitySet != nullptr)
+			{
+				AbilitySet->GiveToAbilitySystem(ASC, &NewEntry.GrantedHandles, Result);
+			}
 		}
 		// Default 옵션 적용
 		// GameplayEffectSpec기반으로 적용할 옵션을 생성
