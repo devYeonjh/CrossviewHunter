@@ -50,12 +50,19 @@ public class CrossviewHunter : ModuleRules
 				"GameplayStateTreeModule",
 				"InputCore",
 				"EnhancedInput",
-				"NavigationSystem",
-				"UnrealEd",
-				"ToolMenus",
-				"EditorStyle" 
+				"NavigationSystem",				
+				"ToolMenus"				
 			}
 		);
+
+		if (Target.bBuildEditor)
+		{
+			PrivateDependencyModuleNames.AddRange(new string[] { "LevelEditor", "UnrealEd", "EditorStyle" });
+		}
+		else
+		{
+			PrivateDependencyModuleNames.AddRange(new string[] { });
+		}
 
 		PrivateDependencyModuleNames.AddRange(
 			new string[] {
@@ -87,11 +94,11 @@ public class CrossviewHunter : ModuleRules
 				"Json",
 				"GameplayAbilities",
 				"GameplayTags",
-				"LyraGame"
-			}
+				"LyraGame",                
+            }
 		);
 		
-		CircularlyReferencedDependentModules.Add("LyraGame");
+		//CircularlyReferencedDependentModules.Add("LyraGame");
 
 		DynamicallyLoadedModuleNames.AddRange(
 			new string[] {
