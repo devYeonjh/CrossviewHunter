@@ -11,6 +11,8 @@
 
 #include "CHItemCreationComponent.generated.h"
 
+struct FCHEquipmentTypeDefinitionRow;
+struct FCHItemDataTableRow;
 class UCHItemDefinition;
 class ULyraInventoryItemFragment;
 class ULyraExperienceDefinition;
@@ -63,11 +65,9 @@ private:
 
 	
 protected:
-	/** DataTable containing item definitions */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = ItemCreation)
 	TObjectPtr<UDataTable> ItemDataTable;
 
-	/** DataTable containing item definitions */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = ItemCreation)
 	TObjectPtr<UDataTable> EquipmentTypeDataTable;
 	

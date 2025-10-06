@@ -3,16 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CHItemDataTableRows.h"
+#include "CHItemTypes.h"
+#include "AbilitySystem/CHStatID.h"
 #include "Engine/DataAsset.h"
 
 #include "CHOptionPool.generated.h"
 
-
+struct FCHItemOptionDetailRow;
 
 /**
 * OptionPool 저장하는 데이터 에셋 (ItemOptionDetail DataTable에서 자동으로 데이터 가져옴)
- * @TODO 서버에서 DataTable 참조해서 미리 로딩하는 방식으로 변경
  */
 UCLASS(BlueprintType, Const, Meta = (DisplayName = "CH OptionPool"))
 class UCHOptionPool : public UPrimaryDataAsset
@@ -44,20 +44,15 @@ public:
 #if WITH_EDITOR
 	// 에디터에서 PoolID 변경 시 호출
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
-	
-	// 수동 새로고침
-	UFUNCTION(CallInEditor, Category = "DataManagement")
-	void RefreshOptionDetails();
 #endif
 
 	/** 등급에 따라 다른 갯수의 랜덤 옵션 결정 */
 	TArray<TPair<ECHStatID, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>> GetRandomOptions(const ECHGradeID Grade);
 
+	/** DataTable에서 매칭되는 옵션들을 로드 (에디터와 런타임 모두 사용) */
+	void LoadMatchingOptionsFromDataTable();
 
 private:
-	// 내부 로드 함수
-	void LoadMatchingOptionsFromDataTable();
-	
 	// 이전 PoolID 추적 (변경 감지용)
 	UPROPERTY()
 	ECHOptionPoolID LastPoolID;

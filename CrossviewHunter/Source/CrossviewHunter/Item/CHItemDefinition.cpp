@@ -4,6 +4,7 @@
 #include "CHItemDefinition.h"
 #include "InventoryFragment_CHEquipmentInfo.h"
 #include "CHItemCreationComponent.h"
+#include "CHItemDataTableRows.h"
 #include "CHOptionPool.h"
 
 

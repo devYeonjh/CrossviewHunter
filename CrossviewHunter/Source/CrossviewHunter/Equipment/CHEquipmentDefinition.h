@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Equipment/LyraEquipmentDefinition.h"
-#include "Item/CHItemDataTableRows.h"
+#include "Item/CHItemTypes.h"
 
 #include "CHEquipmentDefinition.generated.h"
 

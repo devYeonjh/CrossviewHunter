@@ -19,7 +19,14 @@ float UCHGameplayAbility_RangedWeapon::GetFireDelayTimeSecs()
 	float FireDelayRate = GetLyraAbilitySystemComponentFromActorInfo()->GetGameplayAttributeValue(UCHStatSet::GetFireDelayAttribute(), bSuccess);
 	if (bSuccess)
 	{
-		FinalFireDelay = FireDelayTimeSecs / FireDelayRate;
+		if (FireDelayRate > 0.0f)
+		{
+			FinalFireDelay = FireDelayTimeSecs / FireDelayRate;
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("[UCHGameplayAbility_RangedWeapon] FireDelayRate is zero or negative. Using default value of %f seconds."), FireDelayTimeSecs);
+		}
 	}
 	
 	return FinalFireDelay;

@@ -6,7 +6,7 @@
 #include "CHItemInstance.h"
 #include "CHPickableItem.h"
 #include "CHOptionPool.h"
-#include "InventoryFragment_CHEquipmentInfo.h"
+#include "CHItemDataTableRows.h"
 #include "Kismet/DataTableFunctionLibrary.h"
 #include "GameModes/LyraExperienceManagerComponent.h"
 #include "UObject/ConstructorHelpers.h"
@@ -43,7 +43,7 @@ void UCHItemCreationComponent::BeginPlay()
 
 void UCHItemCreationComponent::OnExperienceLoaded(const ULyraExperienceDefinition* Experience)
 {
-	//@TODO: 서버 코드 : 아이템 데이터 테이블 로드
+	
 }
 
 ACHPickableItem* UCHItemCreationComponent::SpawnPickableItem(const FName& ItemID, const FVector& Location, const FRotator& Rotation)

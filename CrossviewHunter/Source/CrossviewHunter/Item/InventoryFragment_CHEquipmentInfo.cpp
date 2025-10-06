@@ -5,6 +5,7 @@
 
 #include "AbilitySystem/LyraAbilitySet.h"
 #include "Equipment/CHEquipmentDefinition.h"
+#include "CHItemDataTableRows.h"
 #include "Equipment/LyraEquipmentInstance.h"
 #include "GameplayEffect.h"
 

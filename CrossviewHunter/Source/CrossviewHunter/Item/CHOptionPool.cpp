@@ -2,13 +2,11 @@
 
 
 #include "CHOptionPool.h"
+
+#include "CHItemDataTableRows.h"
 #include "Engine/DataTable.h"
 #include "Utility/EnumHelpers.h"
 #include "Kismet/DataTableFunctionLibrary.h"
-
-#if WITH_EDITOR
-#include "Editor.h"
-#endif
 
 UCHOptionPool::UCHOptionPool(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -41,11 +39,11 @@ FPrimaryAssetId UCHOptionPool::GetPrimaryAssetId() const
 void UCHOptionPool::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
-	
+
 	if (PropertyChangedEvent.Property)
 	{
 		const FName PropertyName = PropertyChangedEvent.Property->GetFName();
-		
+
 		// PoolID가 변경된 경우
 		if (PropertyName == GET_MEMBER_NAME_CHECKED(UCHOptionPool, PoolID))
 		{
@@ -62,24 +60,13 @@ void UCHOptionPool::PostEditChangeProperty(FPropertyChangedEvent& PropertyChange
 		}
 	}
 }
-
-
-void UCHOptionPool::RefreshOptionDetails()
-{
-	LoadMatchingOptionsFromDataTable();
-	
-	// 에디터 새로고침
-	if (GEditor)
-	{
-		GEditor->RedrawAllViewports();
-	}
-}
+#endif
 
 TArray<TPair<ECHStatID, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>> UCHOptionPool::GetRandomOptions(const ECHGradeID Grade)
 {
 	// 가중치에 따라서 랜덤 옵션 결정 로직
 	// 등급에 따라 옵션 갯수를 결정
-	
+
 	TArray<TPair<ECHStatID, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>> Result;
 	int32 WeightSum = 0;
 	for (FCHItemOptionDetailRow Option : OptionDetails)
@@ -89,7 +76,7 @@ TArray<TPair<ECHStatID, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>> UC
 
 	FCHItemGradeRow* OutGradeDataRow = new FCHItemGradeRow();
 	UDataTableFunctionLibrary::Generic_GetDataTableRowFromName(GradeDataTable, UEnumHelpers::GetEnumFName(Grade), OutGradeDataRow);
-	
+
 	for (int32 i = 0; i < OutGradeDataRow->AffixLines ; i++)
 	{
 		int32 RandomWeight = FMath::RandRange(1, WeightSum);
@@ -107,7 +94,6 @@ TArray<TPair<ECHStatID, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>> UC
 
 	return Result;
 }
-#endif
 
 void UCHOptionPool::LoadMatchingOptionsFromDataTable()
 {
@@ -146,13 +132,4 @@ void UCHOptionPool::LoadMatchingOptionsFromDataTable()
 	}
 	
 	UE_LOG(LogTemp, Log, TEXT("Loaded %d options for PoolID: %d"), MatchedCount, (int32)PoolID);
-	
-#if WITH_EDITOR
-	// 에디터에서 프로퍼티 새로고침
-	if (GEditor)
-	{
-		FPropertyChangedEvent PropertyEvent(FindFieldChecked<FProperty>(GetClass(), TEXT("OptionDetails")));
-		PostEditChangeProperty(PropertyEvent);
-	}
-#endif
 }

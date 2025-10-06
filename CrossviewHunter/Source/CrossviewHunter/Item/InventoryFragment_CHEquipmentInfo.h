@@ -4,7 +4,6 @@
 
 #include "Inventory/InventoryFragment_EquippableItem.h"
 #include "CHItemTypes.h"
-#include "Item/CHItemDataTableRows.h"
 
 #include "InventoryFragment_CHEquipmentInfo.generated.h"
 

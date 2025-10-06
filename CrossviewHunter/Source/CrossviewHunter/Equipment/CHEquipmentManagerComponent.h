@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Equipment/LyraEquipmentManagerComponent.h"
-#include "Item/CHItemDataTableRows.h"
+#include "Item/CHItemTypes.h"
 
 #include "CHEquipmentManagerComponent.generated.h"
 
@@ -56,8 +56,6 @@ protected:
 	friend UCHEquipmentManagerComponent;
 	
 };
-
-
 
 /**
  * 

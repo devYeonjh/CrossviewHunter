@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CommonUserWidget.h"
-#include "Item/CHItemDataTableRows.h"
+#include "Item/CHItemTypes.h"
 #include "CHEquipmentOptionDisplayWidget.generated.h"
 
 class UCHEquipmentDefinition;
