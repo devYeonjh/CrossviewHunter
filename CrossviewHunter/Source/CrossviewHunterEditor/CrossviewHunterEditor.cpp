@@ -1,7 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "CrossviewHunterEditor.h"
-#include "CHDataTableImportHandler.h"
 #include "Modules/ModuleManager.h"
 
 #define LOCTEXT_NAMESPACE "CrossviewHunterEditor"
@@ -15,20 +14,18 @@ class FCrossviewHunterEditorModule : public FDefaultGameModuleImpl
 {
 	typedef FCrossviewHunterEditorModule ThisClass;
 
-	// virtual void StartupModule() override
-	// {
-	// 	if (!IsRunningGame())
-	// 	{
-	// 		// DataTable Import Handler 초기화
-	// 		FCHDataTableImportHandler::Initialize();
-	// 	}
-	// }
-	//
-	// virtual void ShutdownModule() override
-	// {
-	// 	// DataTable Import Handler 정리
-	// 	FCHDataTableImportHandler::Shutdown();
-	// }
+	virtual void StartupModule() override
+	{
+		if (!IsRunningGame())
+		{
+			
+		}
+	}
+	
+	virtual void ShutdownModule() override
+	{
+		
+	}
 };
 
 IMPLEMENT_MODULE(FCrossviewHunterEditorModule, CrossviewHunterEditor);

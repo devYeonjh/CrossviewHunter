@@ -22,7 +22,9 @@ class ACHPickableItem;
 
 
 /**
- * 아이템 생성기 컴포넌트 (GameStateComponent)
+ * 아이템 생성 컴포넌트 (GameStateComponent)
+ * BotCreationComponent를 참고해서 구현
+ * @See ULyraBotCreationComponent
  */
 UCLASS(BlueprintType, Blueprintable, Abstract)
 class CROSSVIEWHUNTER_API UCHItemCreationComponent : public UGameStateComponent
@@ -57,19 +59,16 @@ public:
 	TObjectPtr<UCHOptionPool> GetOptionPool(const ECHOptionPoolID OptionPoolID);
 
 	/** Type 정보 받아오기 */
-	FCHEquipmentTypeDefinitionRow& FindEquipmentTypeDefinition(ECHItemType Type) const;
+	const FCHEquipmentTypeDefinitionRow& FindEquipmentTypeDefinition(ECHItemType Type) const;
 	
 private:
 	/** ID 기반으로 Data 찾기*/
-	FCHItemDataTableRow& FindItemDataByID(const FName& ItemID) const;
+	const FCHItemDataTableRow& FindItemDataByID(const FName& ItemID) const;
 
 	
 protected:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = ItemCreation)
-	TObjectPtr<UDataTable> ItemDataTable;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = ItemCreation)
-	TObjectPtr<UDataTable> EquipmentTypeDataTable;
+	TArray<TObjectPtr<UDataTable>> CachedItemDataTableList;
+	TArray<TObjectPtr<UDataTable>> CachedEquipmentTypeDataTableList;
 	
 	/** Array to track created item instances for testing */
 	UPROPERTY(Transient)

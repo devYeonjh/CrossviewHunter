@@ -30,7 +30,7 @@ struct FGameFeatureDataTablesEntry
 	uint8 bServerData:1;
 
 	UPROPERTY(EditAnywhere, Category="DataTables")
-	TArray<TSoftClassPtr<UDataTable>> DataTables;
+	TArray<TSoftObjectPtr<UDataTable>> DataTables;
 };
 
 /**
@@ -55,7 +55,7 @@ public:
 
 	//~ Begin UObject interface
 #if WITH_EDITOR
-	virtual EDataValidationResult IsDataValid(class FDataValidationContext& Context) const override;
+	virtual EDataValidationResult IsDataValid(FDataValidationContext& Context) const override;
 #endif
 	//~ End UObject interface
 

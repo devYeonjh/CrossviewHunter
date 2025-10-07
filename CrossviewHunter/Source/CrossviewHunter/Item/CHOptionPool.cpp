@@ -74,8 +74,7 @@ TArray<TPair<ECHStatID, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>> UC
 		WeightSum += Option.Weight;
 	}
 
-	FCHItemGradeRow* OutGradeDataRow = new FCHItemGradeRow();
-	UDataTableFunctionLibrary::Generic_GetDataTableRowFromName(GradeDataTable, UEnumHelpers::GetEnumFName(Grade), OutGradeDataRow);
+	const FCHItemGradeRow* OutGradeDataRow = GradeDataTable->FindRow<FCHItemGradeRow>(UEnumHelpers::GetEnumFName(Grade), TEXT("GetRandomOptions"));
 
 	for (int32 i = 0; i < OutGradeDataRow->AffixLines ; i++)
 	{

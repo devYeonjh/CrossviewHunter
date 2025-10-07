@@ -23,14 +23,6 @@ namespace CHGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(CH_DT_EquipmentTypeDataTable, "CH.DT.EquipmentTypeDataTable", "EquipmentTypeDataTable");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(CH_DT_LootTable, "CH.DT.LootTable", "LootTable");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(CH_DT_LootGroup, "CH.DT.LootGroup", "LootGroup");
-
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(CH_ID_Item, "CH.ID.Item", "Item");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(CH_ID_Grade, "CH.ID.Grade", "Item Grade");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(CH_ID_EquipmentType, "CH.ID.EquipmentType", "EquipmentType");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(CH_ID_EquipmentSlot, "CH.ID.EquipmentSlot", "EquipmentSlot");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(CH_ID_OptionPool, "CH.ID.OptionPool", "OptionPool");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(CH_ID_LootTable, "CH.ID.LootTable", "LootTable");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(CH_ID_LootGroup, "CH.ID.LootGroup", "LootGroup");
 	
 	FGameplayTag FindTagByString(const FString& TagString, bool bMatchPartialString)
 	{

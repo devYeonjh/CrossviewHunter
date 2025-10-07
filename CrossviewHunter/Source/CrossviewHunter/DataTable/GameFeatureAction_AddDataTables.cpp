@@ -25,6 +25,7 @@ void UGameFeatureAction_AddDataTables::OnGameFeatureActivating(FGameFeatureActiv
 {
 	FContextHandles& Handles = ContextHandles.FindOrAdd(Context);
 
+	// 새로 생성되는 게임 인스턴스에 대한 데이터 테이블 등록을 처리하기 위한 핸들
 	Handles.GameInstanceStartHandle = FWorldDelegates::OnStartGameInstance.AddUObject(this, 
 		&UGameFeatureAction_AddDataTables::HandleGameInstanceStart, FGameFeatureStateChangeContext(Context));
 
@@ -60,14 +61,14 @@ void UGameFeatureAction_AddDataTables::AddAdditionalAssetBundleData(FAssetBundle
 		{
 			if (Entry.bClientData)
 			{
-				for (TSoftClassPtr<UDataTable> DataTable : Entry.DataTables)
+				for (TSoftObjectPtr<UDataTable> DataTable : Entry.DataTables)
 				{
 					AssetBundleData.AddBundleAsset(UGameFeaturesSubsystemSettings::LoadStateClient, DataTable.ToSoftObjectPath().GetAssetPath());
 				}
 			}
 			if (Entry.bServerData)
 			{
-				for (TSoftClassPtr<UDataTable> DataTable : Entry.DataTables)
+				for (TSoftObjectPtr<UDataTable> DataTable : Entry.DataTables)
 				{
 					AssetBundleData.AddBundleAsset(UGameFeaturesSubsystemSettings::LoadStateServer, DataTable.ToSoftObjectPath().GetAssetPath());
 				}
@@ -85,7 +86,7 @@ EDataValidationResult UGameFeatureAction_AddDataTables::IsDataValid(class FDataV
 	int32 EntryIndex = 0;
 	for (const FGameFeatureDataTablesEntry& Entry : DataTableList)
 	{
-		if (Entry.Category.IsValid())
+		if (!Entry.Category.IsValid())
 		{
 			Result = EDataValidationResult::Invalid;
 			Context.AddError(FText::Format(LOCTEXT("EntryHasInvalidCategory", "Invalid Category at index {0} in DataTableList"), FText::AsNumber(EntryIndex)));
@@ -98,7 +99,7 @@ EDataValidationResult UGameFeatureAction_AddDataTables::IsDataValid(class FDataV
 		}
 
 		int32 DataTableIndex = 0;
-		for (TSoftClassPtr<UDataTable> DataTable : Entry.DataTables)
+		for (TSoftObjectPtr<UDataTable> DataTable : Entry.DataTables)
 		{
 			if (DataTable.IsNull())
 			{
@@ -136,27 +137,28 @@ void UGameFeatureAction_AddDataTables::AddToWorld(const FWorldContext& WorldCont
 	    		const bool bShouldAddRequest = (bIsServer && Entry.bServerData) || (bIsClient && Entry.bClientData);
 	    		if (bShouldAddRequest)
 	    		{
-	    			if (!Entry.Category.IsValid())
+	    			if (Entry.Category.IsValid())
 	    			{
 	    				UE_SCOPED_ENGINE_ACTIVITY(TEXT("Adding DataTables to world %s (%s)"), *World->GetDebugDisplayName(), *Entry.Category.ToString());
-	    				TArray<TSubclassOf<UDataTable>> DataTableClassList;
-	    				for (TSoftClassPtr<UDataTable> DTIt : Entry.DataTables)
+	    				TArray<TObjectPtr<UDataTable>> DataTablePtrList;
+	    				for (TSoftObjectPtr<UDataTable> DTIT : Entry.DataTables)
 	    				{
-	    					TSubclassOf<UDataTable> DataTableClass = DTIt.LoadSynchronous();
-	    					if (DataTableClass)
+	    					TObjectPtr<UDataTable> DataTablePtr = DTIT.LoadSynchronous();
+	    					if (DataTablePtr)
 	    					{
-	    						DataTableClassList.Add(DataTableClass);
+	    						DataTablePtrList.Add(DataTablePtr);
 	    					}
 	    				}
-	    				if (!DataTableClassList.IsEmpty())
+	    				if (!DataTablePtrList.IsEmpty())
 	    				{
-	    					Handles.DataTableRequestHandles.Add(DataTableManager->AddDataTableListRequest(Entry.Category, DataTableClassList));
+	    					Handles.DataTableRequestHandles.Add(DataTableManager->AddDataTableListRequest(Entry.Category, DataTablePtrList));
 	    				}
 	    			}
 	    		}
 	    	}
 	    }
     }
+	
 }
 
 void UGameFeatureAction_AddDataTables::HandleGameInstanceStart(UGameInstance* GameInstance, FGameFeatureStateChangeContext ChangeContext)

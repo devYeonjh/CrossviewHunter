@@ -3,21 +3,22 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CHItemTypes.h"
-#include "GameplayTagContainer.h"
 
-#include "CHLootTableRaw.generated.h"
+#include "CHLootTableRow.generated.h"
 
 
 USTRUCT(BlueprintType)
-struct FCHLootGroupRow : public FTableRowBase
+struct FCHLootGroupEntryRow : public FTableRowBase
 {
 	GENERATED_BODY()
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LootTable", meta = (Categories = "CH.DT.LootGroup.ID"))
-	FGameplayTag LootGroupID;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LootTable")
+	FName LootGroupEntryID;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LootTable")
+	FName LootGroupID;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LootTable", meta = (ClampMin = 0))
 	int32 Weight;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LootTable")
@@ -33,7 +34,7 @@ struct FCHLootGroupRow : public FTableRowBase
 	int32 QuantityMin;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LootTable")
-	ECHEquipmentSlot RewardType;
+	FName RewardType;
 };
 
 USTRUCT(BlueprintType)
@@ -41,15 +42,15 @@ struct FCHLootTableRow : public FTableRowBase
 {
 	GENERATED_BODY()
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LootTable", meta = (Categories = "CH.DT.LootTable.ID"))
-	FGameplayTag LootTableID;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LootTable")
+	FName LootTableID;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LootTable")
 	FText Description;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LootTable")
-	int32 Weight;
+	float DropChance;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LootTable", meta = (Categories = "CH.DT.LootGroup.ID"))
-	FGameplayTag LootGroupID;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "LootTable")
+	FName LootGroupID;
 };

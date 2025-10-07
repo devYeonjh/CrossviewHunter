@@ -10,24 +10,15 @@
 #include "Kismet/DataTableFunctionLibrary.h"
 #include "GameModes/LyraExperienceManagerComponent.h"
 #include "UObject/ConstructorHelpers.h"
-
-
-
+#include "System/CHGameInstance.h"
+#include "DataTable/CHDataTableManager.h"
+#include "GameplayTagContainer.h"
 
 
 UCHItemCreationComponent::UCHItemCreationComponent(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
-	ConstructorHelpers::FObjectFinder<UDataTable> ItemDataTableObj(TEXT("/Game/CrossviewHunter/Data/DT_ItemData.DT_ItemData"));
-	if (ItemDataTableObj.Succeeded())
-	{
-		ItemDataTable = ItemDataTableObj.Object;
-	}
-	ConstructorHelpers::FObjectFinder<UDataTable> EquipmentTypeDataTableObj(TEXT("/Game/CrossviewHunter/Data/DT_EquipmentType.DT_EquipmentType"));
-	if (EquipmentTypeDataTableObj.Succeeded())
-	{
-		EquipmentTypeDataTable = EquipmentTypeDataTableObj.Object;
-	}
+	
 }
 
 void UCHItemCreationComponent::BeginPlay()
@@ -43,7 +34,28 @@ void UCHItemCreationComponent::BeginPlay()
 
 void UCHItemCreationComponent::OnExperienceLoaded(const ULyraExperienceDefinition* Experience)
 {
-	
+#if WITH_SERVER_CODE
+	if (HasAuthority())
+	{
+		if (UGameInstance* GI = GetGameInstance<UCHGameInstance>())
+		{
+			if (UCHDataTableManager* DataTableManager = GI->GetSubsystem<UCHDataTableManager>())
+			{
+				TArray<UDataTable*> ItemDataTables = DataTableManager->GetDataTableList(FGameplayTag::RequestGameplayTag("CH.DT.ItemDataTable"));
+				if (ItemDataTables.Num() > 0)
+				{
+					CachedItemDataTableList = ItemDataTables;
+				}
+				TArray<UDataTable*> EquipmentTypeDataTables = DataTableManager->GetDataTableList(FGameplayTag::RequestGameplayTag("CH.DT.EquipmentTypeDataTable"));
+				if (EquipmentTypeDataTables.Num() > 0)
+				{
+					CachedEquipmentTypeDataTableList = EquipmentTypeDataTables;
+				
+				}
+			}
+		}
+	}
+#endif
 }
 
 ACHPickableItem* UCHItemCreationComponent::SpawnPickableItem(const FName& ItemID, const FVector& Location, const FRotator& Rotation)
@@ -87,7 +99,6 @@ ULyraInventoryItemInstance* UCHItemCreationComponent::CreateItemInstance(const F
 	const FCHItemDataTableRow& ItemDataRow = FindItemDataByID(ItemID);
 	ItemDefinition->SetItemData(this, ItemDataRow);
 	
-	
 	// 아이템 인스턴스 생성
 	UCHItemInstance* ItemInstance = NewObject<UCHItemInstance>();
 	ItemInstance->SetItemDefinitionData(ItemDefinition);
@@ -111,22 +122,36 @@ TObjectPtr<UCHOptionPool> UCHItemCreationComponent::GetOptionPool(const ECHOptio
 	return OptionPools[OptionPoolID];
 }
 
-FCHItemDataTableRow& UCHItemCreationComponent::FindItemDataByID(const FName& ItemID) const
+const FCHItemDataTableRow& UCHItemCreationComponent::FindItemDataByID(const FName& ItemID) const
 {
-	FCHItemDataTableRow* OutItemDataRow = new FCHItemDataTableRow();
-	UDataTableFunctionLibrary::Generic_GetDataTableRowFromName(ItemDataTable, ItemID, OutItemDataRow);
-
+	const FCHItemDataTableRow* OutItemDataRow = nullptr;
+	for (UDataTable* DataTable : CachedItemDataTableList)
+	{
+		OutItemDataRow = DataTable->FindRow<FCHItemDataTableRow>(ItemID, TEXT("FindItemDataByID"));
+		if (OutItemDataRow)
+		{
+			return *OutItemDataRow;
+		}
+	}
 	return *OutItemDataRow;
 }
 
-FCHEquipmentTypeDefinitionRow& UCHItemCreationComponent::FindEquipmentTypeDefinition(ECHItemType Type) const
+const FCHEquipmentTypeDefinitionRow& UCHItemCreationComponent::FindEquipmentTypeDefinition(ECHItemType Type) const
 {
-	FCHEquipmentTypeDefinitionRow* OutEquipmentTypeDefinitionRow = new FCHEquipmentTypeDefinitionRow();
+	const FCHEquipmentTypeDefinitionRow* OutEquipmentTypeDefinitionRow = nullptr;
 	
 	const UEnum* EnumClass = StaticEnum<ECHItemType>();
 	check(EnumClass != nullptr);
 	FName TypeName = FName(EnumClass->GetNameStringByValue(static_cast<int64>(Type)));
-	UDataTableFunctionLibrary::Generic_GetDataTableRowFromName(EquipmentTypeDataTable, TypeName, OutEquipmentTypeDefinitionRow);
+
+	for (UDataTable* DataTable : CachedEquipmentTypeDataTableList)
+	{
+		OutEquipmentTypeDefinitionRow = DataTable->FindRow<FCHEquipmentTypeDefinitionRow>(TypeName, TEXT("FindEquipmentTypeDefinition"));
+		if (OutEquipmentTypeDefinitionRow)
+		{
+			return *OutEquipmentTypeDefinitionRow;
+		}
+	}
 
 	return *OutEquipmentTypeDefinitionRow;
 }

@@ -12,10 +12,10 @@ class UCHDataTableManager;
 
 struct FDataTableRequestHandle
 {
-	FDataTableRequestHandle(const TWeakObjectPtr<UCHDataTableManager>& InOwningManager, const FGameplayTag& InCategory, const TArray<TSubclassOf<UDataTable>>& InDataTableClassList)
+	FDataTableRequestHandle(const TWeakObjectPtr<UCHDataTableManager>& InOwningManager, const FGameplayTag& InCategory, const TArray<UDataTable*>& InDataTableList)
 		: OwningManager(InOwningManager)
 		, Category(InCategory)
-		, DataTableClassList(InDataTableClassList)
+		, DataTableList(InDataTableList)
 	{}
 
 	~FDataTableRequestHandle();
@@ -29,10 +29,9 @@ struct FDataTableRequestHandle
 	/** DataTable 카테고리 */
 	FGameplayTag Category;
 	
-	/** DataTable 클래스 */
-	TArray<TSubclassOf<UDataTable>> DataTableClassList;
+	/** DataTable 리스트 */
+	TArray<UDataTable*> DataTableList;
 };
-
 
 /**
  * GameDataTable 매니저
@@ -51,34 +50,36 @@ public:
 	 * DataTable을 등록하는 요청을 추가합니다.
 	 *
 	 * @param Category			DataTable이 포함되는 카테고리 태그
-	 * @param DataTableClass	DataTable 클래스
+	 * @param DataTableList 	DataTable 리스트
 	 * 
 	 * @return 요청 핸들, 요청이 이미 존재하는 경우 nullptr
 	 */
-	TSharedPtr<FDataTableRequestHandle> AddDataTableListRequest(const FGameplayTag& Category, TArray<TSubclassOf<UDataTable>> DataTableClassList);
+	TSharedPtr<FDataTableRequestHandle> AddDataTableListRequest(const FGameplayTag& Category, const TArray<UDataTable*>& DataTableList);
 
+	UFUNCTION(BlueprintCallable, Category = DataTableManager)
+	TArray<UDataTable*> GetDataTableList(const FGameplayTag& Category) const;
 
 private:
 	/** FDataTableRequestHandle이 소멸될 때 호출되어 등록된 DataTable 요청을 제거합니다. */
-	void RemoveDataTableListRequest(const FGameplayTag& Category, TArray<TSubclassOf<UDataTable>> DataTableClassList);
+	void RemoveDataTableListRequest(const FGameplayTag& Category, const TArray<UDataTable*>& DataTableList);
 	
-	void RegisterDataTableList(const FGameplayTag& Category, const TArray<TSubclassOf<UDataTable>>& DataTableClassList);
+	void RegisterDataTableList(const FGameplayTag& Category, const TArray<UDataTable*>& DataTableList);
 	void UnregisterDataTable(const FGameplayTag& Category);
 
 	/** DataTable 요청 정보 */
 	struct FDataTableListRequest
 	{
 		FGameplayTag Category;
-		TArray<UClass*> DataTableClassList;
+		TArray<UDataTable*> DataTableList;
 		
 		bool operator==(const FDataTableListRequest& Other) const
 		{
-			return Category == Other.Category && DataTableClassList == Other.DataTableClassList;
+			return Category == Other.Category && DataTableList == Other.DataTableList;
 		}
 
 		friend FORCEINLINE uint32 GetTypeHash(const FDataTableListRequest& Request)
 		{
-			return GetTypeHash(Request.Category) ^ GetTypeHash(Request.DataTableClassList);
+			return GetTypeHash(Request.Category) ^ GetTypeHash(Request.DataTableList);
 		}
 	};
 
