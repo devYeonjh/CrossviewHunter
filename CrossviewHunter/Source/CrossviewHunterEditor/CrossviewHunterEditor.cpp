@@ -2,10 +2,9 @@
 
 #include "CrossviewHunterEditor.h"
 #include "Modules/ModuleManager.h"
-
-#define LOCTEXT_NAMESPACE "CrossviewHunterEditor"
-
-DEFINE_LOG_CATEGORY(LogCrossviewHunterEditor);
+#include "PropertyEditorModule.h"
+#include "CHMonsterSpawnPointRowCustomization.h"
+ 
 
 /**
  * FCrossviewHunterEditorModule
@@ -16,18 +15,21 @@ class FCrossviewHunterEditorModule : public FDefaultGameModuleImpl
 
 	virtual void StartupModule() override
 	{
-		if (!IsRunningGame())
-		{
-			
-		}
+		FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
+		PropertyModule.RegisterCustomPropertyTypeLayout(
+			"CHMonsterSpawnPointRow", // USTRUCT 이름 정확히 입력
+			FOnGetPropertyTypeCustomizationInstance::CreateStatic(&FCHMonsterSpawnPointRowCustomization::MakeInstance)
+		);
 	}
 	
 	virtual void ShutdownModule() override
 	{
-		
+		if (FModuleManager::Get().IsModuleLoaded("PropertyEditor"))
+		{
+			FPropertyEditorModule& PropertyModule = FModuleManager::GetModuleChecked<FPropertyEditorModule>("PropertyEditor");
+			PropertyModule.UnregisterCustomPropertyTypeLayout("CHMonsterSpawnPointRow");
+		}
 	}
 };
 
-IMPLEMENT_MODULE(FCrossviewHunterEditorModule, CrossviewHunterEditor);
-
-#undef LOCTEXT_NAMESPACE
+IMPLEMENT_MODULE(FCrossviewHunterEditorModule, CrossviewHunterEditor)

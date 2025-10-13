@@ -21,8 +21,8 @@ public:
 	{
 		const UEnum* EnumClass = StaticEnum<T>();
 		check(EnumClass != nullptr);
-		
-		const FName TypeName = EnumClass->GetNameByValue(static_cast<int64>(EnumType));
-		return TypeName;
+
+		const FString EnumName = EnumClass->GetNameStringByValue(static_cast<int64>(EnumType));
+		return FName(*EnumName);
 	}
 };

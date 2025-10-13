@@ -25,11 +25,15 @@ public class CrossviewHunterEditor : ModuleRules
 				"GameplayTagsEditor",
 				"CrossviewHunter",
 				"LyraGame",
+				"PropertyEditor",
+				"EditorSubsystem" 
 			}
 		);
 
 		PrivateDependencyModuleNames.AddRange(
 			new string[] {
+				"Core",
+				"CoreUObject",
 				"InputCore",
 				"Slate",
 				"SlateCore",
@@ -38,7 +42,19 @@ public class CrossviewHunterEditor : ModuleRules
 				"AssetTools",
 				"PropertyEditor",
 				"DetailCustomizations",
+				"EditorWidgets",       
+				"Blutility",
+				"UMG",
+				"Landscape",
+				"PropertyEditor",
+				"EditorSubsystem" 
 			}
 		);
+		
+		if (Target.bBuildEditor)
+		{
+			PrivateDependencyModuleNames.Add("EditorScriptingUtilities");
+			PrivateDependencyModuleNames.Add("UnrealEd");
+		}
 	}
 }
