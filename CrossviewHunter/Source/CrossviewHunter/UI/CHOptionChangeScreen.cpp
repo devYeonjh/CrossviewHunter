@@ -48,7 +48,7 @@ void UCHOptionChangeScreen::ChangeRandomOption()
 			{
 				AdditionalOptions.Emplace(TPair<TSubclassOf<UGameplayEffect>, int32>(ICC->GetStatEffect(RandomStat.Key), RandomStat.Value));
 			}
-			EquipInfo->ChangeAdditionalOption(AdditionalOptions);
+			EquipInfo->ChangeAdditionalOption(AdditionalOptions, OptionDetails);
 
 			EquipmentDataWidget->UpdateOptionData();
 		}

@@ -43,7 +43,7 @@ public:
 		const TArray<FCHItemOptionDetailRow>& OptionDetails,
 		int32 DecomposeItemCount);
 
-	void ChangeAdditionalOption(const TArray<TPair<TSubclassOf<UGameplayEffect>, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>& AdditionalOptions) const;
+	void ChangeAdditionalOption(const TArray<TPair<TSubclassOf<UGameplayEffect>, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>& AdditionalOptions, const TArray<FCHItemOptionDetailRow>& OptionDetails) const;
 
 	/** WID에 있는 AbilitySet과 ActorToSpawn 데이터 설정 */
 	UFUNCTION()

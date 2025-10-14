@@ -31,9 +31,11 @@ void UInventoryFragment_CHEquipmentInfo::InitializeValue(
 }
 
 void UInventoryFragment_CHEquipmentInfo::ChangeAdditionalOption(
-	const TArray<TPair<TSubclassOf<UGameplayEffect>, int32>, TFixedAllocator<3>>& AdditionalOptions) const
+	const TArray<TPair<TSubclassOf<UGameplayEffect>, int32>, TFixedAllocator<3>>& AdditionalOptions,
+	const TArray<FCHItemOptionDetailRow>& OptionDetails) const
 {
 	EquipmentDef->SetAdditionalOptions(AdditionalOptions);
+	EquipmentDef->SetOptionDetails(OptionDetails);
 }
 
 void UInventoryFragment_CHEquipmentInfo::SetEquipmentDefinitionByData(const FCHEquipmentTypeDefinitionRow& DataRow) const
