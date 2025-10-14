@@ -47,13 +47,14 @@ public:
 	void SavePlayerData(const FUniqueNetIdRepl& PlayerId);
 
 	bool LoadPlayerData(const FUniqueNetIdRepl& PlayerId, FPlayerSaveData& OutData);
-	
+
+	FPlayerSaveData SavedPlayerData;
 protected:
 	virtual void Init() override;
 	virtual void Shutdown() override;
 private:
 	FAttributeSetInitterDiscreteLevels AttributeSetInitter;
-
+	
 	UPROPERTY()
 	TMap<FUniqueNetIdRepl, FPlayerSaveData> CachedPlayerDataMap;
 	

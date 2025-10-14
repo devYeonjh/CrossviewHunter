@@ -4,10 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "CommonUserWidget.h"
-#include "Item/CHItemTypes.h"
 #include "CHEquipmentOptionDisplayWidget.generated.h"
 
-class UCHEquipmentDefinition;
+class UVerticalBox;
+class UInventoryFragment_CHEquipmentInfo;
+class ULyraInventoryItemInstance;
+class UCHOptionDetailWidget;
 class UTextBlock;
 class UCHStatSet;
 
@@ -22,18 +24,23 @@ class CROSSVIEWHUNTER_API UCHEquipmentOptionDisplayWidget : public UCommonUserWi
 
 protected:
 	UPROPERTY(BlueprintReadOnly, Category ="TEXT", meta = (BindWidget, AllowPrivateAccess = "true"))
-	TObjectPtr<UTextBlock> AdditionalOption1;
+	TObjectPtr<UTextBlock> ItemName;
 
 	UPROPERTY(BlueprintReadOnly, Category ="TEXT", meta = (BindWidget, AllowPrivateAccess = "true"))
-	TObjectPtr<UTextBlock> AdditionalOption2;
+	TObjectPtr<UTextBlock> ItemType;
 
 	UPROPERTY(BlueprintReadOnly, Category ="TEXT", meta = (BindWidget, AllowPrivateAccess = "true"))
-	TObjectPtr<UTextBlock> AdditionalOption3;
+	TObjectPtr<UTextBlock> ItemGrade;
 
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget, AllowPrivateAccess = "true"))
+	TObjectPtr<UVerticalBox> OptionBox;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UCHOptionDetailWidget> OptionDetailWidget;
+	
 	UPROPERTY()
-	TObjectPtr<const UCHEquipmentDefinition> BoundEquipmentDefinition;
+	TObjectPtr<const UInventoryFragment_CHEquipmentInfo> BoundEquipmentInfo;
 
-	TArray<TObjectPtr<UTextBlock>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>> TextBlocks;
 
 public:
 	virtual void NativeOnInitialized() override;
@@ -41,10 +48,12 @@ public:
 	virtual void NativeDestruct() override;
 
 	UFUNCTION(BlueprintCallable, Category = "CH|OptionDisplayWidget")
-	void BindToEquipmentDefinition(const UCHEquipmentDefinition* EquipmentDefinition);
-	
+	void BindToEquipmentInfo(const UInventoryFragment_CHEquipmentInfo* EquipmentInfo);
 
-private:
-	
+	UFUNCTION(BlueprintCallable, Category = "CH|OptionDisplayWidget")
+	const UInventoryFragment_CHEquipmentInfo* GetEquipmentInfo() const;
+
+	UFUNCTION(BlueprintCallable, Category = "CH|OptionDisplayWidget")
 	void UpdateOptionData();
+	
 };

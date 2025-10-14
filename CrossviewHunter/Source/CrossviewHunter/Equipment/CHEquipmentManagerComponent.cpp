@@ -116,7 +116,7 @@ void FCHEquipmentList::RemoveEntry(ULyraEquipmentInstance* Instance)
 
 TArray<FGameplayEffectSpecHandle> FCHEquipmentList::MakeGameEffectSpecHandles(
 	const TObjectPtr<ULyraAbilitySystemComponent>& ASC,
-	TMap<TSubclassOf<UGameplayEffect>, float> Modifiers) const
+	TMap<TSubclassOf<UGameplayEffect>, int32> Modifiers) const
 {
 	TArray<FGameplayEffectSpecHandle> Results;
 	for (auto It = Modifiers.CreateIterator(); It; ++It)
@@ -136,7 +136,7 @@ TArray<FGameplayEffectSpecHandle> FCHEquipmentList::MakeGameEffectSpecHandles(
 
 TArray<FGameplayEffectSpecHandle> FCHEquipmentList::MakeGameEffectSpecHandles(
 	const TObjectPtr<ULyraAbilitySystemComponent>& ASC,
-	const TArray<TPair<TSubclassOf<UGameplayEffect>, float>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>& Modifiers) const
+	const TArray<TPair<TSubclassOf<UGameplayEffect>, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>& Modifiers) const
 {
 	TArray<FGameplayEffectSpecHandle> Results;
 	for (TPair It : Modifiers)

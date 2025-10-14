@@ -49,6 +49,11 @@ public:
 	/** 등급에 따라 다른 갯수의 랜덤 옵션 결정 */
 	TArray<TPair<ECHStatID, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>> GetRandomOptions(const ECHGradeID Grade);
 
+	TArray<TPair<ECHStatID, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>> GetRandomOptionsWithInfos(const ECHGradeID Grade, TArray<FCHItemOptionDetailRow>& OutOptions);
+
+	/** 등급에 맞는 Decompose Item 갯수 반환  */
+	int32 GetDecomposeItemCount(const ECHGradeID Grade); 
+
 	/** DataTable에서 매칭되는 옵션들을 로드 (에디터와 런타임 모두 사용) */
 	void LoadMatchingOptionsFromDataTable();
 

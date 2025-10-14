@@ -25,4 +25,13 @@ public:
 		const FString EnumName = EnumClass->GetNameStringByValue(static_cast<int64>(EnumType));
 		return FName(*EnumName);
 	}
+
+	template<typename T>
+	static FText GetEnumDisplayName(T EnumType)
+	{
+		const UEnum* EnumClass = StaticEnum<T>();
+		check(EnumClass != nullptr);
+ 
+		return EnumClass->GetDisplayNameTextByValue(static_cast<int64>(EnumType));
+	}
 };

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Equipment/LyraEquipmentDefinition.h"
+#include "Item/CHItemDataTableRows.h"
 #include "Item/CHItemTypes.h"
 
 #include "CHEquipmentDefinition.generated.h"
@@ -25,14 +26,16 @@ class CROSSVIEWHUNTER_API UCHEquipmentDefinition : public ULyraEquipmentDefiniti
 public:
 	UCHEquipmentDefinition(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
-	void SetDefaultOptions(const TMap<TSubclassOf<UGameplayEffect>, float>& Options);
-	void SetAdditionalOptions(const TArray<TPair<TSubclassOf<UGameplayEffect>, float>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>& Options);
+	void SetDefaultOptions(const TMap<TSubclassOf<UGameplayEffect>, int32>& Options);
+	void SetAdditionalOptions(const TArray<TPair<TSubclassOf<UGameplayEffect>, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>& Options);
+	void SetOptionDetails(const TArray<FCHItemOptionDetailRow>& Options);
 
-	TMap<TSubclassOf<UGameplayEffect>, float>GetDefaultOptions() const;
-	TArray<TPair<TSubclassOf<UGameplayEffect>, float>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>GetAdditionalOptions() const;
+	TMap<TSubclassOf<UGameplayEffect>, int32> GetDefaultOptions() const;
+	TArray<TPair<TSubclassOf<UGameplayEffect>, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>> GetAdditionalOptions() const;
+	TArray<FCHItemOptionDetailRow> GetOptionDetails() const;
 
 private:
-
-	TMap<TSubclassOf<UGameplayEffect>, float> DefaultOptions;
-	TArray<TPair<TSubclassOf<UGameplayEffect>, float>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>AdditionalOptions;
+	TMap<TSubclassOf<UGameplayEffect>, int32> DefaultOptions;
+	TArray<TPair<TSubclassOf<UGameplayEffect>, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>> AdditionalOptions;
+	TArray<FCHItemOptionDetailRow> OptionDetails;
 };

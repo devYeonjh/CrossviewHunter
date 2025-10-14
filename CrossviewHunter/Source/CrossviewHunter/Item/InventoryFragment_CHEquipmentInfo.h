@@ -2,11 +2,13 @@
 
 #pragma once
 
+#include "CHItemDataTableRows.h"
 #include "Inventory/InventoryFragment_EquippableItem.h"
 #include "CHItemTypes.h"
 
 #include "InventoryFragment_CHEquipmentInfo.generated.h"
 
+struct FCHEquipmentTypeDefinitionRow;
 class UCHEquipmentDefinition;
 class ULyraInventoryItemInstance;
 class UObject;
@@ -27,21 +29,21 @@ class CROSSVIEWHUNTER_API UInventoryFragment_CHEquipmentInfo : public UInventory
 	UInventoryFragment_CHEquipmentInfo();
 
 protected:
-	UPROPERTY(EditDefaultsOnly, Category=Equipment)
-	ECHItemType Type;
-
-	UPROPERTY(EditDefaultsOnly, Category=Equipment)
-	ECHEquipmentSlot Slot;
-	
 	UPROPERTY()
 	TObjectPtr<UCHEquipmentDefinition> EquipmentDef;
+
+	UPROPERTY()
+	FCHItemDataTableRow ItemData;
 	
 public:
 	void InitializeValue(
-		ECHItemType InType,
-		ECHEquipmentSlot InSlot,
-		const TMap<TSubclassOf<UGameplayEffect>, float>& DefaultOptions,
-		const TArray<TPair<TSubclassOf<UGameplayEffect>, float>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>& AdditionalOptions);
+		const FCHItemDataTableRow& ItemDataRow,
+		const TMap<TSubclassOf<UGameplayEffect>, int32>& DefaultOptions,
+		const TArray<TPair<TSubclassOf<UGameplayEffect>, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>& AdditionalOptions,
+		const TArray<FCHItemOptionDetailRow>& OptionDetails,
+		int32 DecomposeItemCount);
+
+	void ChangeAdditionalOption(const TArray<TPair<TSubclassOf<UGameplayEffect>, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>& AdditionalOptions) const;
 
 	/** WID에 있는 AbilitySet과 ActorToSpawn 데이터 설정 */
 	UFUNCTION()
@@ -49,4 +51,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "CH|InventoryFragment_CHEquipmentInfo")
 	FORCEINLINE UCHEquipmentDefinition* GetEquipmentDef() const { return EquipmentDef;}
+
+	UFUNCTION(BlueprintCallable, Category = "CH|InventoryFragment_CHEquipmentInfo")
+	FORCEINLINE FCHItemDataTableRow GetItemData() const {return ItemData;} 
 };

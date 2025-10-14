@@ -11,14 +11,14 @@
 UENUM()
 enum class ECHItemType : uint8
 {
-	None,
-	Pistol,
-	Rifle,
-	Shotgun,
-	GrenadeLauncher,
-	Bow,
-	Flamethrower,
-	Core,
+	None UMETA(DisplayName = "None"),
+	Pistol UMETA(DisplayName = "Pistol"),
+	Rifle UMETA(DisplayName = "Rifle"),
+	Shotgun UMETA(DisplayName = "Shotgun"),
+	GrenadeLauncher UMETA(DisplayName = "GrenadeLauncher"),
+	Bow UMETA(DisplayName = "Bow"),
+	Flamethrower UMETA(DisplayName = "Flamethrower"),
+	Core UMETA(DisplayName = "Core"),
 	
 	MAX UMETA(Hidden)
 };

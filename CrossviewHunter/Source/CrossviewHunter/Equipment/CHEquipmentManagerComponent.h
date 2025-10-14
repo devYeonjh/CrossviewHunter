@@ -42,7 +42,7 @@ public:
 
 	TArray<FGameplayEffectSpecHandle> MakeGameEffectSpecHandles(
 		const TObjectPtr<ULyraAbilitySystemComponent>& ASC,
-		TMap<TSubclassOf<UGameplayEffect>, float> Modifiers) const;
+		TMap<TSubclassOf<UGameplayEffect>, int32> Modifiers) const;
 
 	// Additional 옵션을 위한 GameplayEffectSpec 생성.
 	// TArray 사용 이유 : 정해진 크기의 배열을 받기위해
@@ -50,7 +50,7 @@ public:
 	// Index로 옵션을 관리하기 위해
 	TArray<FGameplayEffectSpecHandle> MakeGameEffectSpecHandles(
 		const TObjectPtr<ULyraAbilitySystemComponent>& ASC,
-		const TArray<TPair<TSubclassOf<UGameplayEffect>, float>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>& Modifiers) const;
+		const TArray<TPair<TSubclassOf<UGameplayEffect>, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>>& Modifiers) const;
 
 protected:
 	friend UCHEquipmentManagerComponent;

@@ -29,8 +29,8 @@ void ACHPlayerState::OnDeactivated()
 		{
 			if (UCHGameInstance* GI = GetGameInstance<UCHGameInstance>())
 			{
-				//GI->SavedPlayerData.InventoryList.Empty();
-				//GI->SavedPlayerData.InventoryList.Append(InventoryManagerComponent->GetAddableInventoryList());
+				GI->SavedPlayerData.InventoryList.Empty();
+				GI->SavedPlayerData.InventoryList.Append(InventoryManagerComponent->GetAddableInventoryList());
 			}
 		}
 	}
@@ -48,12 +48,12 @@ void ACHPlayerState::OnExperienceLoaded(const ULyraExperienceDefinition* Current
 			
 			if (UCHInventoryManagerComponent* InventoryManagerComponent = PC->GetComponentByClass<UCHInventoryManagerComponent>())
 			{
-				// TArray<FLyraInventoryEntry>& SavedInventoryList = GI->SavedPlayerData.InventoryList;
-				// if (!SavedInventoryList.IsEmpty())
-				// {
-				// 	InventoryManagerComponent->GetAddableInventoryList().Append(SavedInventoryList);
-				// 	SavedInventoryList.Empty();
-				// }
+				TArray<FLyraInventoryEntry>& SavedInventoryList = GI->SavedPlayerData.InventoryList;
+				if (!SavedInventoryList.IsEmpty())
+				{
+					InventoryManagerComponent->GetAddableInventoryList().Append(SavedInventoryList);
+					SavedInventoryList.Empty();
+				}
 			}
 		}
 	}
