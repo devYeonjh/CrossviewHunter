@@ -31,3 +31,8 @@ void UCHInventoryManagerComponent::RemoveItemInstance(ULyraInventoryItemInstance
 	Super::RemoveItemInstance(ItemInstance);
 }
 
+TArray<FLyraInventoryEntry>& UCHInventoryManagerComponent::GetAddableInventoryList()
+{
+	return InventoryList.Entries;
+}
+

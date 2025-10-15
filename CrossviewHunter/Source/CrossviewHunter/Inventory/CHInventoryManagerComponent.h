@@ -19,6 +19,8 @@ public:
 	virtual void AddItemInstance(ULyraInventoryItemInstance* ItemInstance, int32 StackCount = 1) override;
 	virtual void RemoveItemInstance(ULyraInventoryItemInstance* ItemInstance) override;
 
+	TArray<FLyraInventoryEntry>& GetAddableInventoryList();
+
 private:
 	
 

@@ -2,13 +2,11 @@
 
 
 #include "CHOptionPool.h"
+
+#include "CHItemDataTableRows.h"
 #include "Engine/DataTable.h"
 #include "Utility/EnumHelpers.h"
 #include "Kismet/DataTableFunctionLibrary.h"
-
-#if WITH_EDITOR
-#include "Editor.h"
-#endif
 
 UCHOptionPool::UCHOptionPool(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -41,11 +39,11 @@ FPrimaryAssetId UCHOptionPool::GetPrimaryAssetId() const
 void UCHOptionPool::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
 {
 	Super::PostEditChangeProperty(PropertyChangedEvent);
-	
+
 	if (PropertyChangedEvent.Property)
 	{
 		const FName PropertyName = PropertyChangedEvent.Property->GetFName();
-		
+
 		// PoolID가 변경된 경우
 		if (PropertyName == GET_MEMBER_NAME_CHECKED(UCHOptionPool, PoolID))
 		{
@@ -62,24 +60,15 @@ void UCHOptionPool::PostEditChangeProperty(FPropertyChangedEvent& PropertyChange
 		}
 	}
 }
+#endif
 
 
-void UCHOptionPool::RefreshOptionDetails()
-{
-	LoadMatchingOptionsFromDataTable();
-	
-	// 에디터 새로고침
-	if (GEditor)
-	{
-		GEditor->RedrawAllViewports();
-	}
-}
 
 TArray<TPair<ECHStatID, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>> UCHOptionPool::GetRandomOptions(const ECHGradeID Grade)
 {
 	// 가중치에 따라서 랜덤 옵션 결정 로직
 	// 등급에 따라 옵션 갯수를 결정
-	
+
 	TArray<TPair<ECHStatID, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>> Result;
 	int32 WeightSum = 0;
 	for (FCHItemOptionDetailRow Option : OptionDetails)
@@ -87,9 +76,8 @@ TArray<TPair<ECHStatID, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>> UC
 		WeightSum += Option.Weight;
 	}
 
-	FCHItemGradeRow* OutGradeDataRow = new FCHItemGradeRow();
-	UDataTableFunctionLibrary::Generic_GetDataTableRowFromName(GradeDataTable, UEnumHelpers::GetEnumFName(Grade), OutGradeDataRow);
-	
+	const FCHItemGradeRow* OutGradeDataRow = GradeDataTable->FindRow<FCHItemGradeRow>(UEnumHelpers::GetEnumFName(Grade), TEXT("GetRandomOptions"));
+
 	for (int32 i = 0; i < OutGradeDataRow->AffixLines ; i++)
 	{
 		int32 RandomWeight = FMath::RandRange(1, WeightSum);
@@ -107,7 +95,44 @@ TArray<TPair<ECHStatID, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>> UC
 
 	return Result;
 }
-#endif
+
+TArray<TPair<ECHStatID, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>> UCHOptionPool::GetRandomOptionsWithInfos(const ECHGradeID Grade,
+	TArray<FCHItemOptionDetailRow>& OutOptions)
+{
+	TArray<TPair<ECHStatID, int32>, TFixedAllocator<MAX_ADDITIONAL_OPTION_COUNT>> Result;
+	int32 WeightSum = 0;
+	for (FCHItemOptionDetailRow Option : OptionDetails)
+	{
+		WeightSum += Option.Weight;
+	}
+
+	const FCHItemGradeRow* OutGradeDataRow = GradeDataTable->FindRow<FCHItemGradeRow>(UEnumHelpers::GetEnumFName(Grade), TEXT("GetRandomOptions"));
+
+	for (int32 i = 0; i < OutGradeDataRow->AffixLines ; i++)
+	{
+		int32 RandomWeight = FMath::RandRange(1, WeightSum);
+		for (FCHItemOptionDetailRow Option : OptionDetails)
+		{
+			if (RandomWeight <= Option.Weight)
+			{
+				int32 RandomValue = FMath::RandRange(Option.MinValue, Option.MaxValue);
+				Result.Emplace(TPair<ECHStatID, int32>(Option.StatID, RandomValue));
+				OutOptions.Emplace(Option);
+				break;
+			}
+			RandomWeight -= Option.Weight;
+		}
+	}
+
+	return Result;
+}
+
+int32 UCHOptionPool::GetDecomposeItemCount(const ECHGradeID Grade)
+{
+	const FCHItemGradeRow* GradeDataRow = GradeDataTable->FindRow<FCHItemGradeRow>(UEnumHelpers::GetEnumFName(Grade), TEXT("GetRandomOptions"));
+
+	return GradeDataRow->ScrapMetal;
+}
 
 void UCHOptionPool::LoadMatchingOptionsFromDataTable()
 {
@@ -146,13 +171,4 @@ void UCHOptionPool::LoadMatchingOptionsFromDataTable()
 	}
 	
 	UE_LOG(LogTemp, Log, TEXT("Loaded %d options for PoolID: %d"), MatchedCount, (int32)PoolID);
-	
-#if WITH_EDITOR
-	// 에디터에서 프로퍼티 새로고침
-	if (GEditor)
-	{
-		FPropertyChangedEvent PropertyEvent(FindFieldChecked<FProperty>(GetClass(), TEXT("OptionDetails")));
-		PostEditChangeProperty(PropertyEvent);
-	}
-#endif
 }

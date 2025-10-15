@@ -50,8 +50,10 @@ public class CrossviewHunter : ModuleRules
 				"GameplayStateTreeModule",
 				"InputCore",
 				"EnhancedInput",
-				"NavigationSystem",				
-				"ToolMenus"				
+				"NavigationSystem",
+				"UnrealEd",
+				"ToolMenus",
+				"EditorStyle" 
 			}
 		);
 
@@ -94,11 +96,11 @@ public class CrossviewHunter : ModuleRules
 				"Json",
 				"GameplayAbilities",
 				"GameplayTags",
-				"LyraGame",                
-            }
+				"LyraGame"
+			}
 		);
 		
-		//CircularlyReferencedDependentModules.Add("LyraGame");
+		CircularlyReferencedDependentModules.Add("LyraGame");
 
 		DynamicallyLoadedModuleNames.AddRange(
 			new string[] {

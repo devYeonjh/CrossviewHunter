@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Inventory/LyraInventoryItemDefinition.h"
-#include "CHItemDataTableRows.h"
 
 #include "CHItemDefinition.generated.h"
 
 
 class UCHItemCreationComponent;
+struct FCHItemDataTableRow;
 
 /**
  * 

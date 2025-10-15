@@ -142,7 +142,7 @@ void ULyraBotCreationComponent::RemoveOneBot()
 		if (BotToRemove)
 		{
 			// If we can find a health component, self-destruct it, otherwise just destroy the actor
-			// if (APawn* ControlledPawn = BotToRemove->GetPawn())
+			 if (APawn* ControlledPawn = BotToRemove->GetPawn())
 			// {
 			// 	if (ULyraHealthComponent* HealthComponent = ULyraHealthComponent::FindHealthComponent(ControlledPawn))
 			// 	{
@@ -151,10 +151,10 @@ void ULyraBotCreationComponent::RemoveOneBot()
 			// 		HealthComponent->DamageSelfDestruct();
 			// 	}
 			// 	else
-			// 	{
-			// 		ControlledPawn->Destroy();
-			// 	}
-			// }
+			 	{
+			 		ControlledPawn->Destroy();
+			 	}
+			//	}
 
 			// Destroy the controller (will cause it to Logout, etc...)
 			BotToRemove->Destroy();

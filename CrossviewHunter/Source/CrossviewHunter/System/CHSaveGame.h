@@ -18,7 +18,7 @@ class CROSSVIEWHUNTER_API UCHSaveGame : public USaveGame
 
 public: 
 	UPROPERTY()
-	TMap<FString, FPlayerSaveData> PlayerDataMap;
+	TMap<FUniqueNetIdRepl, FPlayerSaveData> PlayerDataMap;
 
 	UPROPERTY()
 	FString SaveSlotName = TEXT("CHPlayerSave");

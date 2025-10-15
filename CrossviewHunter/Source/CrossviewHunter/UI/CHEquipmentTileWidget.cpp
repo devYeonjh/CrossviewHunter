@@ -91,7 +91,7 @@ void UCHEquipmentTileWidget::UpdateTileData(FGameplayTag InChannel, const FLyraI
 					UE_LOG(LogTemp, Error, TEXT("EquipmentInfo is nullptr"));
 					break;
 				}
-				OptionWidgetInstance->BindToEquipmentDefinition(EquipmentInfo->GetEquipmentDef());
+				OptionWidgetInstance->BindToEquipmentInfo(EquipmentInfo);
 			}
 			
 			break;

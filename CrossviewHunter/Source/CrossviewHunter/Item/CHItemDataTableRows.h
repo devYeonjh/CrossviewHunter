@@ -9,43 +9,10 @@
 
 #include "CHItemDataTableRows.generated.h"
 
-#define MAX_ADDITIONAL_OPTION_COUNT 3
-
 class ULyraAbilitySet;
 class ULyraEquipmentInstance;
 class ULyraInventoryItemDefinition;
 struct FFrame;
-
-UENUM(BlueprintType)
-enum class ECHGradeID : uint8
-{
-	grade_20001 UMETA(DisplayName = "Common"),
-	
-	grade_20002 UMETA(DisplayName = "Rare"),
-	
-	grade_20003 UMETA(DisplayName = "Epic"),
-	
-	grade_20004 UMETA(DisplayName = "Unique"),
-	
-	grade_20005 UMETA(DisplayName = "Legendary"),
-	
-	MAX UMETA(Hidden)
-};
-
-UENUM(BlueprintType)
-enum class ECHOptionPoolID : uint8
-{
-	pool_20001 UMETA(DisplayName = "Weapon_Common_Options"),
-
-	pool_20002 UMETA(DisplayName = "Armor_Common_Options"),
-
-	pool_20003 UMETA(DisplayName = "Weapon_Unique_Options"),
-
-	pool_20004 UMETA(DisplayName = "Armor_Unique_Options"),
-
-	MAX UMETA(Hidden)
-};
-
 
 USTRUCT(BlueprintType)
 struct FCHItemDataTableRow : public FTableRowBase
@@ -181,5 +148,4 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Item Info")
 	FString Description;
 };
-
 

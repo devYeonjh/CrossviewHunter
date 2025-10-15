@@ -10,6 +10,7 @@
 #include "AbilitySystemComponent.h"
 #include "AbilitySystem/LyraGameplayAbilityTargetData_SingleTargetHit.h"
 #include "DrawDebugHelpers.h"
+#include "AbilitySystem/Phases/LyraGamePhaseSubsystem.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(LyraGameplayAbility_RangedWeapon)
 
@@ -361,9 +362,20 @@ void ULyraGameplayAbility_RangedWeapon::PerformLocalTargeting(OUT TArray<FHitRes
 		InputData.bCanPlayBulletFX = (AvatarPawn->GetNetMode() != NM_DedicatedServer);
 
 		//@TODO: Should do more complicated logic here when the player is close to a wall, etc...
-		const FTransform TargetTransform = GetTargetingTransform(AvatarPawn, ELyraAbilityTargetingSource::CameraTowardsFocus);
-		InputData.AimDir = TargetTransform.GetUnitAxis(EAxis::X);
-		InputData.StartTrace = TargetTransform.GetTranslation();
+		ULyraGamePhaseSubsystem* PhaseSubsystem = GetWorld()->GetSubsystem<ULyraGamePhaseSubsystem>();
+
+		if (PhaseSubsystem->IsPhaseActive(FGameplayTag::RequestGameplayTag(FName("ShooterGame.GamePhase.Playing"))))
+		{
+			const FTransform TargetTransform = GetTargetingTransform(AvatarPawn, ELyraAbilityTargetingSource::CameraTowardsFocus);
+			InputData.AimDir = TargetTransform.GetUnitAxis(EAxis::X);
+			InputData.StartTrace = TargetTransform.GetTranslation();
+		}
+		else
+		{
+			const FTransform TargetTransform = GetTargetingTransform(AvatarPawn, ELyraAbilityTargetingSource::PawnForward);
+			InputData.AimDir = TargetTransform.GetUnitAxis(EAxis::X);
+			InputData.StartTrace = TargetTransform.GetTranslation();
+		}
 
 		InputData.EndAim = InputData.StartTrace + InputData.AimDir * WeaponData->GetMaxDamageRange();
 

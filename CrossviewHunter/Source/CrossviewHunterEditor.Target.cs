@@ -9,7 +9,7 @@ public class CrossviewHunterEditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 
-		ExtraModuleNames.AddRange(new string[] { "CrossviewHunter","LyraGame", "LyraEditor" });
+		ExtraModuleNames.AddRange(new string[] { "CrossviewHunter","LyraGame", "LyraEditor", "CrossviewHunterEditor" });
 
 		if (!bBuildAllModules)
 		{
